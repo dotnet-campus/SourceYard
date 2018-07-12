@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Pack for Test": {
+      "commandName": "Project",
+      "commandLineArgs": " -p dotnetCampus.SourceYard.Tests.csproj -i obj\\SourcePacking\\ -n bin -v 0.5.2-debug",
+      "workingDirectory": "..\\..\\tests\\dotnetCampus.SourceYard.Tests"
+    }
+  }
+}

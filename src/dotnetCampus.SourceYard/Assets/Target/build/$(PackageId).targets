@@ -1,0 +1,16 @@
+﻿<Project>
+
+  <PropertyGroup Condition=" !$(DefineConstants.Contains('SOURCE_REFERENCE')) ">
+    <DefineConstants>$(DefineConstants);SOURCE_REFERENCE</DefineConstants>
+  </PropertyGroup>
+
+  <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Compile Include="$(MSBuildThisFileDirectory)..\src\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\src\bin\**\*.cs;$(MSBuildThisFileDirectory)..\src\obj\**\*.cs;" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_#(PackageGuid)IncludeXamlCodes" BeforeTargets="XamlPreCompile">
+  </Target>
+
+</Project>
