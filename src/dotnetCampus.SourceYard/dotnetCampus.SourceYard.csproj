@@ -21,4 +21,8 @@
     <PackageTags>source;dotnet;nuget;msbuild</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>
