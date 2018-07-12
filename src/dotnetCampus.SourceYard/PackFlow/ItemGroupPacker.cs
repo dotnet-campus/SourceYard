@@ -7,7 +7,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using dotnetCampus.SourceYard.Context;
-using dotnetCampus.SourceYard.Logger;
 
 namespace dotnetCampus.SourceYard.PackFlow
 {

@@ -1,4 +1,4 @@
-﻿namespace dotnetCampus.SourceYard.Logger
+﻿namespace dotnetCampus.SourceYard
 {
     internal interface ILogger
     {

@@ -1,5 +1,4 @@
-﻿using dotnetCampus.SourceYard.Logger;
-using dotnetCampus.SourceYard.Utils;
+﻿using dotnetCampus.SourceYard.Utils;
 
 namespace dotnetCampus.SourceYard.Context
 {

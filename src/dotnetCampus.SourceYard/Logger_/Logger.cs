@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace dotnetCampus.SourceYard.Logger
+namespace dotnetCampus.SourceYard
 {
     internal class Logger : ILogger
     {

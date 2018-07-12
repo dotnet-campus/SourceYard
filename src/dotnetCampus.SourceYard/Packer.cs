@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using dotnetCampus.SourceYard.Context;
-using dotnetCampus.SourceYard.Logger;
 using dotnetCampus.SourceYard.PackFlow;
 using dotnetCampus.SourceYard.Utils;
 
@@ -11,22 +10,20 @@ namespace dotnetCampus.SourceYard
     internal class Packer
     {
         private readonly ILogger _logger;
-        private readonly string _selfProjectFile;
+        private readonly string _projectFile;
+        private readonly string _intermediateDirectory;
         private readonly string _packageOutputPath;
         private readonly string _packageVersion;
-        private readonly string _intermediateOutputPath;
-        private readonly string[] _projectFiles;
         private readonly IPackFlow[] _packers;
 
-        public Packer(string selfProjectFile, string intermediateOutputPath, string packageOutputPath,
-            string packageVersion, string[] projectFiles)
+        public Packer(string projectFile, string intermediateDirectory,
+            string packageOutputPath, string packageVersion)
         {
-            _logger = new Logger.Logger();
-            _selfProjectFile = selfProjectFile;
+            _logger = new Logger();
+            _projectFile = Path.GetFullPath(projectFile);
+            _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
             _packageVersion = packageVersion;
-            _intermediateOutputPath = Path.GetFullPath(intermediateOutputPath);
-            _projectFiles = projectFiles.Select(Path.GetFullPath).ToArray();
 
             _packers = new IPackFlow[]
             {
@@ -40,49 +37,48 @@ namespace dotnetCampus.SourceYard
 
         internal void Pack()
         {
-            PrepareEmptyDirectory(_intermediateOutputPath);
+            PrepareEmptyDirectory(_intermediateDirectory);
 
-            foreach (var projectFile in _projectFiles)
+            var projectFile = _projectFile;
+
+            var projectName = Path.GetFileNameWithoutExtension(projectFile);
+            var projectFolder = Path.GetDirectoryName(projectFile);
+            var packingFolder = Path.Combine(_intermediateDirectory, projectName);
+
+            //Directory.Build.props
+            var buildProps = GetBuildProps(new DirectoryInfo(projectFolder));
+
+            if (string.IsNullOrWhiteSpace(projectName))
             {
-                var projectName = Path.GetFileNameWithoutExtension(projectFile);
-                var projectFolder = Path.GetDirectoryName(projectFile);
-                var packingFolder = Path.Combine(_intermediateOutputPath, projectName);
+                _logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
+            }
 
-                //Directory.Build.props
-                var buildProps = GetBuildProps(new DirectoryInfo(projectFolder));
-
-                if (string.IsNullOrWhiteSpace(projectName))
+            IPackFlow current = null;
+            try
+            {
+                foreach (var packer in _packers)
                 {
-                    _logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
-                }
-
-                IPackFlow current = null;
-                try
-                {
-                    foreach (var packer in _packers)
+                    current = packer;
+                    var context = new PackingContext(_logger,
+                        projectFile,
+                        projectFile,
+                        projectName,
+                        _packageVersion,
+                        _packageOutputPath,
+                        packingFolder)
                     {
-                        current = packer;
-                        var context = new PackingContext(_logger,
-                            _selfProjectFile,
-                            projectFile,
-                            projectName,
-                            _packageVersion,
-                            _packageOutputPath,
-                            packingFolder)
-                        {
-                            BuildProps = buildProps,
-                        };
-                        packer.Pack(context);
-                    }
+                        BuildProps = buildProps,
+                    };
+                    packer.Pack(context);
                 }
-                catch (PackingException ex)
-                {
-                    _logger.Error(ex);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error($"生成源码包: {current?.GetType().Name}: {ex}");
-                }
+            }
+            catch (PackingException ex)
+            {
+                _logger.Error(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"生成源码包: {current?.GetType().Name}: {ex}");
             }
         }
 
