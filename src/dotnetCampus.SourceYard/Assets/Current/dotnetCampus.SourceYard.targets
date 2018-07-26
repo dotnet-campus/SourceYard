@@ -1,0 +1,4 @@
+﻿<Project>
+  <Target Name="SourceYard" AfterTargets="CoreCompile">
+  </Target>
+</Project>
