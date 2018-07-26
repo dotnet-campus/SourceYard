@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <!-- NuGet package properties -->
-    <Version>0.1.0-alpha</Version>
+    <Version>0.1.1-alpha</Version>
     <Authors>dotnet-campus</Authors>
     <Company>dotnet-campus</Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -34,7 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--所有的 NuGet 包资产都声明成私有的-->
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--指定自己的在安装 nuget 时修改编译-->
+    <None Include="Assets\Current\**" Pack="True" PackagePath="build\" />
   </ItemGroup>
 
 </Project>
