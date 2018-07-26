@@ -3,12 +3,11 @@
   <PropertyGroup>
     <!-- Project building properties -->
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <!-- NuGet package properties -->
-    <Version>0.1.1-alpha</Version>
+    <Version>0.1.26-alpha</Version>
     <Authors>dotnet-campus</Authors>
     <Company>dotnet-campus</Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -19,6 +18,15 @@
     <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>source;dotnet;nuget;msbuild</PackageTags>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <!-- 因为只把主软件复制过去，依赖的库没有复制，所以不使用这个方法 -->
+    <!-- 在下面可以看到使用的是复制整个文件夹 -->
+    <!--<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +39,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
+   
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework)=='net45'">
+    <PackageReference Include="System.ValueTuple" Version="4.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +54,8 @@
   <ItemGroup>
     <!--指定自己的在安装 nuget 时修改编译-->
     <None Include="Assets\Current\**" Pack="True" PackagePath="build\" />
+    <None Include="Assets\README.md" Pack="True" PackagePath="" />
+    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" />
   </ItemGroup>
 
 </Project>
