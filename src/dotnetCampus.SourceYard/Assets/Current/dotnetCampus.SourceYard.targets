@@ -1,4 +1,15 @@
 ﻿<Project>
   <Target Name="SourceYard" AfterTargets="CoreCompile">
+    <PropertyGroup>
+      <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
+
+      <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
+      <ResourceTextFile>$(SourcePackingDirectory)ResourceFile.txt</ResourceTextFile>
+    </PropertyGroup>
+
+    <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
+
+    <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
+    <WriteLinesToFile File="$(ResourceTextFile)" Lines="@(Resource)" Overwrite="true" />
   </Target>
 </Project>
