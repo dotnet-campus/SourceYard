@@ -16,5 +16,20 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option('v', "package-version", Required = true, HelpText = "The package version value.")]
         public string PackageVersion { get; set; }
+
+        [Option(longName: "Compile", HelpText = "编译的文件")]
+        public string CompileFile { get; set; }
+
+        [Option(longName: "Resource", HelpText = "资源文件")]
+        public string ResourceFile { get; set; }
+
+        [Option(longName: "Content")]
+        public string ContentFile { get; set; }
+
+        [Option(longName: "Page")]
+        public string Page { get; set; }
+
+        [Option(longName: "ApplicationDefinition")]
+        public string ApplicationDefinition { get; set; }
     }
 }
