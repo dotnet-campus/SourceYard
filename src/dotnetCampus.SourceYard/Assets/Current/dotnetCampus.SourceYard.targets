@@ -11,7 +11,7 @@
 
     <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
     <WriteLinesToFile File="$(ResourceTextFile)" Lines="@(Resource)" Overwrite="true" />
-    
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe"></Exec>
+   
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(IntermediateOutputPath) -n $(OutputPath) -v $(Version)"></Exec>
   </Target>
 </Project>
