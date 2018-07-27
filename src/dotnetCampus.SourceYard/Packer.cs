@@ -9,17 +9,10 @@ namespace dotnetCampus.SourceYard
 {
     internal class Packer
     {
-        private readonly ILogger _logger;
-        private readonly string _projectFile;
-        private readonly string _intermediateDirectory;
-        private readonly string _packageOutputPath;
-        private readonly string _packageVersion;
-        private readonly IPackFlow[] _packers;
-
         public Packer(string projectFile, string intermediateDirectory,
             string packageOutputPath, string packageVersion)
         {
-            _logger = new Logger();
+            Logger = new Logger();
             _projectFile = Path.GetFullPath(projectFile);
             _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
@@ -34,6 +27,7 @@ namespace dotnetCampus.SourceYard
                 new NuGetPacker(),
             };
         }
+
 
         internal void Pack()
         {
@@ -50,7 +44,7 @@ namespace dotnetCampus.SourceYard
 
             if (string.IsNullOrWhiteSpace(projectName))
             {
-                _logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
+                Logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
             }
 
             IPackFlow current = null;
@@ -59,7 +53,7 @@ namespace dotnetCampus.SourceYard
                 foreach (var packer in _packers)
                 {
                     current = packer;
-                    var context = new PackingContext(_logger,
+                    var context = new PackingContext(Logger,
                         projectFile,
                         projectFile,
                         projectName,
@@ -74,13 +68,21 @@ namespace dotnetCampus.SourceYard
             }
             catch (PackingException ex)
             {
-                _logger.Error(ex);
+                Logger.Error(ex);
             }
             catch (Exception ex)
             {
-                _logger.Error($"生成源码包: {current?.GetType().Name}: {ex}");
+                Logger.Error($"生成源码包: {current?.GetType().Name}: {ex}");
             }
         }
+
+        private ILogger Logger { get; }
+
+        private readonly string _projectFile;
+        private readonly string _intermediateDirectory;
+        private readonly string _packageOutputPath;
+        private readonly string _packageVersion;
+        private readonly IPackFlow[] _packers;
 
         private BuildProps GetBuildProps(DirectoryInfo projectFolder)
         {
@@ -100,7 +102,7 @@ namespace dotnetCampus.SourceYard
             }
             catch (Exception e)
             {
-                _logger.Error(e.Message);
+                Logger.Error(e.Message);
             }
 
             return null;
@@ -142,7 +144,7 @@ namespace dotnetCampus.SourceYard
                     }
                     catch (Exception e)
                     {
-                        _logger.Error(e.Message);
+                        Logger.Error(e.Message);
                     }
                 }
             }
