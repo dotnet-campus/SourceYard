@@ -13,6 +13,32 @@ namespace dotnetCampus.SourceYard
             string packageOutputPath, string packageVersion, string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition)
         {
             Logger = new Logger();
+
+            if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile))
+            {
+                Logger.Error($"无法从{projectFile}找到项目文件");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(intermediateDirectory))
+            {
+                Logger.Error("无法解析临时文件夹 " + intermediateDirectory);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(packageOutputPath))
+            {
+                Logger.Error("打包输出文件夹不能为空");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(packageVersion))
+            {
+                Logger.Error("打包版本不能为空");
+                return;
+            }
+
+
             _projectFile = Path.GetFullPath(projectFile);
             _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
@@ -20,11 +46,13 @@ namespace dotnetCampus.SourceYard
 
             PackagedProjectFile = new PackagedProjectFile
             (
-                compileFile:           Path.GetFullPath(compileFile),
-                resourceFile:          Path.GetFullPath(resourceFile),
-                contentFile:           Path.GetFullPath(contentFile),
-                page:                  Path.GetFullPath(page),
-                applicationDefinition: Path.GetFullPath(applicationDefinition)
+                compileFile: string.IsNullOrWhiteSpace(compileFile) ? "" : Path.GetFullPath(compileFile),
+                resourceFile: string.IsNullOrWhiteSpace(resourceFile) ? "" : Path.GetFullPath(resourceFile),
+                contentFile: string.IsNullOrWhiteSpace(contentFile) ? "" : Path.GetFullPath(contentFile),
+                page: string.IsNullOrWhiteSpace(page) ? "" : Path.GetFullPath(page),
+                applicationDefinition: string.IsNullOrWhiteSpace(applicationDefinition)
+                    ? ""
+                    : Path.GetFullPath(applicationDefinition)
             );
 
             _packers = new IPackFlow[]
@@ -47,8 +75,20 @@ namespace dotnetCampus.SourceYard
 
             var projectName = Path.GetFileNameWithoutExtension(projectFile);
 
+            if (string.IsNullOrEmpty(projectName))
+            {
+                Logger.Error("从项目文件无法拿到项目文件名 " + projectFile);
+                return;
+            }
+
             var projectFolder = Path.GetDirectoryName(projectFile);
             var packingFolder = Path.Combine(_intermediateDirectory, projectName);
+
+            if (string.IsNullOrEmpty(projectFolder))
+            {
+                Logger.Error("无法拿到项目文件所在文件夹");
+                return;
+            }
 
             //Directory.Build.props
             var buildProps = GetBuildProps(new DirectoryInfo(projectFolder));
@@ -56,6 +96,7 @@ namespace dotnetCampus.SourceYard
             if (string.IsNullOrWhiteSpace(projectName))
             {
                 Logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
+                return;
             }
 
             IPackFlow current = null;
