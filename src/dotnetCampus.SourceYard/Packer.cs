@@ -10,7 +10,7 @@ namespace dotnetCampus.SourceYard
     internal class Packer
     {
         public Packer(string projectFile, string intermediateDirectory,
-            string packageOutputPath, string packageVersion, string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition)
+            string packageOutputPath, string packageVersion, string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition, BuildProps buildProps)
         {
             Logger = new Logger();
 
@@ -43,6 +43,7 @@ namespace dotnetCampus.SourceYard
             _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
             _packageVersion = packageVersion;
+            BuildProps = buildProps;
 
             PackagedProjectFile = new PackagedProjectFile
             (
@@ -140,10 +141,11 @@ namespace dotnetCampus.SourceYard
         private readonly IPackFlow[] _packers;
 
         private PackagedProjectFile PackagedProjectFile { get; }
-
+        private BuildProps BuildProps { get; }
 
         private BuildProps GetBuildProps(DirectoryInfo projectFolder)
         {
+            // 寻找文件最近的 Directory.Build.props 文件
             var file = "Directory.Build.props";
 
             try
@@ -169,7 +171,7 @@ namespace dotnetCampus.SourceYard
             {
                 try
                 {
-                    return projectFolder.GetFiles().Any(temp => string.Equals(temp.Name, "dotnetCampus.SourceYard.sln"));
+                    return projectFolder.GetFiles().Any(temp => string.Equals(temp.Name, "file"));
                 }
                 catch (Exception)
                 {

@@ -29,6 +29,28 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "Page")]
         public string Page { get; set; }
 
+        [Option(longName: "Company")]
+
+        public string Company { get; set; }
+
+        [Option(longName: "Authors")]
+        public string Authors { get; set; }
+
+        [Option(longName: "RepositoryUrl")]
+        public string RepositoryUrl { get; set; }
+
+        [Option(longName: "RepositoryType")]
+        public string RepositoryType { get; set; }
+
+        [Option(longName: "PackageProjectUrl")]
+        public string PackageProjectUrl { get; set; }
+
+        [Option(longName: "Copyright")]
+        public string Copyright { get; set; }
+
+        [Option(longName: "Description")]
+        public string Description { get; set; }
+
         [Option(longName: "ApplicationDefinition")]
         public string ApplicationDefinition { get; set; }
     }
