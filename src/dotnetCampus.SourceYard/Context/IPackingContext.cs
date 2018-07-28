@@ -52,6 +52,11 @@ namespace dotnetCampus.SourceYard.Context
         /// </summary>
         string PackingFolder { get; }
 
+        /// <summary>
+        /// 要打包项目的元素
+        /// </summary>
+        PackagedProjectFile PackagedProjectFile { get; }
+
         BuildProps BuildProps { get; }
     }
 }

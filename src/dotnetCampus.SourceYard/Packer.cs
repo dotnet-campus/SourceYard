@@ -10,13 +10,22 @@ namespace dotnetCampus.SourceYard
     internal class Packer
     {
         public Packer(string projectFile, string intermediateDirectory,
-            string packageOutputPath, string packageVersion)
+            string packageOutputPath, string packageVersion, string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition)
         {
             Logger = new Logger();
             _projectFile = Path.GetFullPath(projectFile);
             _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
             _packageVersion = packageVersion;
+
+            PackagedProjectFile = new PackagedProjectFile
+            (
+                compileFile:           Path.GetFullPath(compileFile),
+                resourceFile:          Path.GetFullPath(resourceFile),
+                contentFile:           Path.GetFullPath(contentFile),
+                page:                  Path.GetFullPath(page),
+                applicationDefinition: Path.GetFullPath(applicationDefinition)
+            );
 
             _packers = new IPackFlow[]
             {
@@ -29,6 +38,7 @@ namespace dotnetCampus.SourceYard
         }
 
 
+
         internal void Pack()
         {
             PrepareEmptyDirectory(_intermediateDirectory);
@@ -36,6 +46,7 @@ namespace dotnetCampus.SourceYard
             var projectFile = _projectFile;
 
             var projectName = Path.GetFileNameWithoutExtension(projectFile);
+
             var projectFolder = Path.GetDirectoryName(projectFile);
             var packingFolder = Path.Combine(_intermediateDirectory, projectName);
 
@@ -60,7 +71,9 @@ namespace dotnetCampus.SourceYard
                         projectName,
                         _packageVersion,
                         _packageOutputPath,
-                        packingFolder)
+                        packingFolder,
+                        PackagedProjectFile
+                    )
                     {
                         BuildProps = buildProps,
                     };
@@ -84,6 +97,9 @@ namespace dotnetCampus.SourceYard
         private readonly string _packageOutputPath;
         private readonly string _packageVersion;
         private readonly IPackFlow[] _packers;
+
+        private PackagedProjectFile PackagedProjectFile { get; }
+
 
         private BuildProps GetBuildProps(DirectoryInfo projectFolder)
         {
