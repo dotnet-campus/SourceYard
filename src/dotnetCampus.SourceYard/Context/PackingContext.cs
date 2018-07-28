@@ -6,12 +6,11 @@ namespace dotnetCampus.SourceYard.Context
     /// <inheritdoc />
     internal class PackingContext : IPackingContext
     {
-        public PackingContext(ILogger logger, string selfProjectFile, string projectFile,
+        public PackingContext(ILogger logger, string projectFile,
             string projectName, string packageVersion, string packageOutputPath, string packingFolder)
         {
             Logger = logger;
-            SelfProjectFile = selfProjectFile;
-            SelfProjectFolder = Path.GetDirectoryName(selfProjectFile);
+          
             ProjectFile = projectFile;
             ProjectFolder = Path.GetDirectoryName(projectFile);
             ProjectName = projectName;
@@ -24,12 +23,6 @@ namespace dotnetCampus.SourceYard.Context
 
         /// <inheritdoc />
         public ILogger Logger { get; }
-
-        /// <inheritdoc />
-        public string SelfProjectFile { get; }
-
-        /// <inheritdoc />
-        public string SelfProjectFolder { get; }
 
         /// <inheritdoc />
         public string ProjectFile { get; }

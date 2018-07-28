@@ -53,8 +53,9 @@ namespace dotnetCampus.SourceYard
                 foreach (var packer in _packers)
                 {
                     current = packer;
-                    var context = new PackingContext(Logger,
-                        projectFile,
+                    var context = new PackingContext
+                    (
+                        Logger,
                         projectFile,
                         projectName,
                         _packageVersion,

@@ -7,7 +7,7 @@
     <LangVersion>latest</LangVersion>
 
     <!-- NuGet package properties -->
-    <Version>0.1.26-alpha</Version>
+    <Version>0.1.3501-alpha</Version>
     <Authors>dotnet-campus</Authors>
     <Company>dotnet-campus</Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -49,6 +49,13 @@
   <ItemGroup>
     <!--所有的 NuGet 包资产都声明成私有的-->
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--复制打包用到文件-->
+    <None Update="Assets\Target\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

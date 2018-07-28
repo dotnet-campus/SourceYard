@@ -16,17 +16,31 @@ namespace dotnetCampus.SourceYard
 
         private static void RunOptionsAndReturnExitCode(Options options)
         {
+            var logger = new Logger();
+
             try
             {
+                logger.Message("开始打源码包");
+
                 var projectFile = options.ProjectFile;
                 var intermediateDirectory = options.IntermediateDirectory;
                 var packageOutputPath = options.PackageOutputPath;
                 var packageVersion = options.PackageVersion;
-                new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion).Pack();
+
+                logger.Message($@"项目文件 {projectFile}
+临时文件{intermediateDirectory}
+输出文件{packageOutputPath}
+版本{packageVersion}
+编译的文件{options.CompileFile}
+资源文件{options.ResourceFile}
+内容{options.ContentFile}
+页面{options.Page}");
+
+                new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion); //.Pack();
             }
             catch (Exception e)
             {
-                new Logger().Error(e.Message);
+                logger.Error(e.Message);
             }
         }
 
