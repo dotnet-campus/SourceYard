@@ -19,21 +19,16 @@
     <WriteLinesToFile File="$(ApplicationDefinitionTextFile)" Lines="@(ApplicationDefinition)" Overwrite="true" />
 
     <PropertyGroup>
-      <SourceYardOutputPath Condition="'$(PackageOutputPath)' != ''">$(PackageOutputPath)</SourceYardOutputPath>
-      <SourceYardOutputPath Condition="'$(PackageOutputPath)' == ''">$(OutputPath)</SourceYardOutputPath>
-
-      <SourceYardVersion Condition="'$(PackageVersion)' == ''">$(PackageVersion)</SourceYardVersion>
-      <SourceYardVersion Condition="'$(PackageVersion)' == ''">$(Version)</SourceYardVersion>
-
-      <SourceYardAuthors Condition="'$(Authors)' == ''"> --Authors $(Authors) </SourceYardAuthors>
-      <SourceYardRepositoryUrl Condition="'$(RepositoryUrl)' == ''" > --RepositoryUrl $(RepositoryUrl)</SourceYardRepositoryUrl>
-      <SourceYardRepositoryType Condition="'$(RepositoryType)' == ''" > --RepositoryType $(RepositoryType)</SourceYardRepositoryType>
-      <SourceYardPackageProjectUrl Condition="'$(PackageProjectUrl)' == ''" > --PackageProjectUrl $(PackageProjectUrl)</SourceYardPackageProjectUrl>
-      <SourceYardCopyright Condition="'$(Copyright)' == ''" > --Copyright $(Copyright)</SourceYardCopyright>
-      <SourceYardDescription Condition="'$(Description)' == ''" > --Description $(Description)</SourceYardDescription>
+   
+      <SourceYardAuthors Condition="$(Authors) != ''"> --Authors $(Authors) </SourceYardAuthors>
+      <SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''" > --RepositoryUrl $(RepositoryUrl)</SourceYardRepositoryUrl>
+      <SourceYardRepositoryType Condition="$(RepositoryType) != ''" > --RepositoryType $(RepositoryType)</SourceYardRepositoryType>
+      <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''" > --PackageProjectUrl $(PackageProjectUrl)</SourceYardPackageProjectUrl>
+      <SourceYardCopyright Condition="$(Copyright) != ''" > --Copyright $(Copyright)</SourceYardCopyright>
+      <SourceYardDescription Condition="$(Description) != ''" > --Description $(Description)</SourceYardDescription>
 
     </PropertyGroup>
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(IntermediateOutputPath) -n $(SourceYardOutputPath) -v $(SourceYardVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription)"></Exec>
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(IntermediateOutputPath) -n $(PackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription)"></Exec>
   </Target>
 </Project>
