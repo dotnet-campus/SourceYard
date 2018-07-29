@@ -40,17 +40,17 @@ namespace dotnetCampus.SourceYard
                 var buildProps = new BuildProps()
                 {
                     Authors = options.Authors,
-                    Version = options.PackageVersion,
                     Company = options.Company,
                     Copyright = options.Copyright,
                     Description = options.Description,
-                    PackageOutputPath = options.PackageOutputPath,
                     PackageProjectUrl = options.PackageProjectUrl,
                     RepositoryType = options.RepositoryType,
                     RepositoryUrl = options.RepositoryUrl,
                 };
 
-                new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion,options.CompileFile,options.ResourceFile,options.ContentFile,options.Page,options.ApplicationDefinition, buildProps).Pack();
+                new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion, options.CompileFile,
+                    options.ResourceFile, options.ContentFile, options.Page, options.ApplicationDefinition,
+                    buildProps).Pack();
             }
             catch (Exception e)
             {

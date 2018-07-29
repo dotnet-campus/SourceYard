@@ -8,16 +8,6 @@ namespace dotnetCampus.SourceYard.Utils
     public class BuildProps
     {
         /// <summary>
-        /// 版本号
-        /// </summary>
-        public string Version { get; set; }
-
-        /// <summary>
-        /// 输出文件夹
-        /// </summary>
-        public string PackageOutputPath { get; set; }
-
-        /// <summary>
         /// 公司
         /// </summary>
         public string Company { get; set; }
