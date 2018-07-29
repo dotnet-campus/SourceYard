@@ -22,7 +22,8 @@ namespace dotnetCampus.SourceYard
 
             if (string.IsNullOrEmpty(intermediateDirectory))
             {
-                Logger.Error("无法解析临时文件夹 " + intermediateDirectory);
+                // 这时的文件夹可以不存在
+                Logger.Error("无法解析文件夹 " + intermediateDirectory);
                 return;
             }
 
@@ -70,7 +71,8 @@ namespace dotnetCampus.SourceYard
 
         internal void Pack()
         {
-            PrepareEmptyDirectory(_intermediateDirectory);
+            var packingFolder = _intermediateDirectory;
+            PrepareEmptyDirectory(packingFolder);
 
             var projectFile = _projectFile;
 
@@ -83,7 +85,6 @@ namespace dotnetCampus.SourceYard
             }
 
             var projectFolder = Path.GetDirectoryName(projectFile);
-            var packingFolder = Path.Combine(_intermediateDirectory, projectName);
 
             if (string.IsNullOrEmpty(projectFolder))
             {
@@ -136,6 +137,9 @@ namespace dotnetCampus.SourceYard
 
         private readonly string _projectFile;
         private readonly string _intermediateDirectory;
+        /// <summary>
+        /// 最后输出的文件夹
+        /// </summary>
         private readonly string _packageOutputPath;
         private readonly string _packageVersion;
         private readonly IPackFlow[] _packers;
@@ -143,6 +147,10 @@ namespace dotnetCampus.SourceYard
         private PackagedProjectFile PackagedProjectFile { get; }
         private BuildProps BuildProps { get; }
 
+        /// <summary>
+        /// 准备一个空白的文件夹用来放文件
+        /// </summary>
+        /// <param name="directory"></param>
         private void PrepareEmptyDirectory(string directory)
         {
             if (!Directory.Exists(directory))
