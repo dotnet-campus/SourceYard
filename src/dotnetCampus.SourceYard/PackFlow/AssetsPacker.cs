@@ -11,9 +11,9 @@ namespace dotnetCampus.SourceYard.PackFlow
         public void Pack(IPackingContext context)
         {
             // 将 Assets 文件夹中的所有文件复制到打包文件夹中。
-            
-           
-            var assetsFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Assets","Target","build");
+
+            var assetsFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Assets", "Target",
+                "build");
             FileSystem.CopyFolderContents(assetsFolder, context.PackingFolder, name =>
                 name.Replace("$(PackageId)", context.PackageId));
 
