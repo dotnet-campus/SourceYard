@@ -92,7 +92,7 @@ namespace dotnetCampus.SourceYard
             }
 
             //Directory.Build.props
-            var buildProps = GetBuildProps(new DirectoryInfo(projectFolder));
+            var buildProps = BuildProps;
 
             if (string.IsNullOrWhiteSpace(projectName))
             {
@@ -142,43 +142,6 @@ namespace dotnetCampus.SourceYard
 
         private PackagedProjectFile PackagedProjectFile { get; }
         private BuildProps BuildProps { get; }
-
-        private BuildProps GetBuildProps(DirectoryInfo projectFolder)
-        {
-            // 寻找文件最近的 Directory.Build.props 文件
-            var file = "Directory.Build.props";
-
-            try
-            {
-                while (projectFolder != null)
-                {
-                    if (ContainsFile())
-                    {
-                        return BuildProps.Parse(new FileInfo(Path.Combine(projectFolder.FullName, file)));
-                    }
-
-                    projectFolder = projectFolder.Parent;
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.Message);
-            }
-
-            return null;
-
-            bool ContainsFile()
-            {
-                try
-                {
-                    return projectFolder.GetFiles().Any(temp => string.Equals(temp.Name, "file"));
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-        }
 
         private void PrepareEmptyDirectory(string directory)
         {
