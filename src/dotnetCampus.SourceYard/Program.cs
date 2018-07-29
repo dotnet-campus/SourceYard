@@ -41,11 +41,17 @@ namespace dotnetCampus.SourceYard
                 {
                     Authors = options.Authors,
                     Company = options.Company,
+                    Owner = options.Owner ?? options.Authors,
                     Copyright = options.Copyright,
                     Description = options.Description,
                     PackageProjectUrl = options.PackageProjectUrl,
                     RepositoryType = options.RepositoryType,
                     RepositoryUrl = options.RepositoryUrl,
+                    Title = options.Title,
+                    PackageIconUrl = options.PackageIconUrl,
+                    PackageLicenseUrl = options.PackageLicenseUrl,
+                    PackageReleaseNotes = options.PackageReleaseNotes,
+                    PackageTags = options.PackageTags
                 };
 
                 new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion, options.CompileFile,

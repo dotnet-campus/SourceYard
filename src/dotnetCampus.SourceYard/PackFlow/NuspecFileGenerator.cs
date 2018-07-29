@@ -64,7 +64,12 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageProjectUrl = buildProps.PackageProjectUrl,
                     Version = context.PackageVersion,
                     Id = context.PackageId,
-                    Owner = buildProps.Authors,
+                    Owner = buildProps.Owner,
+                    Title = buildProps.Title,
+                    PackageIconUrl = buildProps.PackageIconUrl,
+                    PackageLicenseUrl = buildProps.PackageLicenseUrl,
+                    PackageTags = buildProps.PackageTags,
+                    PackageReleaseNotes = buildProps.PackageReleaseNotes
                 }
             };
         }

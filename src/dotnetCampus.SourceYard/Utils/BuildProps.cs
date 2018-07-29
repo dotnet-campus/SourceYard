@@ -38,5 +38,18 @@ namespace dotnetCampus.SourceYard.Utils
         /// 描述
         /// </summary>
         public string Description { get; set; }
+
+        public string Owner { get; set; }
+
+        public string Title { get; set; }
+
+        public string PackageLicenseUrl { get; set; }
+
+        public string PackageIconUrl { get; set; }
+
+        public string PackageReleaseNotes { get; set; }
+
+        public string PackageTags { get; set; }
+
     }
 }

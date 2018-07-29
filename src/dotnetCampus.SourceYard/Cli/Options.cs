@@ -53,5 +53,23 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option(longName: "ApplicationDefinition")]
         public string ApplicationDefinition { get; set; }
+
+        [Option(longName: "Owner")]
+        public string Owner { get; set; }
+
+        [Option(longName: "Title")]
+        public string Title { get; set; }
+
+        [Option(longName: "PackageLicenseUrl")]
+        public string PackageLicenseUrl { get; set; }
+
+        [Option(longName: "PackageIconUrl")]
+        public string PackageIconUrl { get; set; }
+
+        [Option(longName: "PackageReleaseNotes")]
+        public string PackageReleaseNotes { get; set; }
+
+        [Option(longName: "PackageTags")]
+        public string PackageTags { get; set; }
     }
 }
