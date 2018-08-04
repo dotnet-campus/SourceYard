@@ -7,5 +7,5 @@ before_build:
 build:
   verbosity: minimal
 test_script: 
-- OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:".\SourceYard\tests\dotnetCampus.SourceYard.Tests\bin\Debug\netcoreapp2.0\dotnetCampus.SourceYard.dll -noshadow" -output:".\coverage.xml"
+- OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test" -output:coverage.xml
 - codecov -f "coverage.xml
