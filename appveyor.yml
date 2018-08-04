@@ -2,8 +2,8 @@ version: 1.0.{build}
 image: Visual Studio 2017
 before_build:
 - cmd: dotnet restore
-- choco: install opencover.portable
-- choco: install codecov
+- choco install opencover.portable
+- choco install codecov
 build:
   verbosity: minimal
 test_script: 
