@@ -7,5 +7,5 @@ before_build:
 build:
   verbosity: minimal
 test_script: 
-- OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test" -output:coverage.xml
-- codecov -f "coverage.xml
+- OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test" -output:coverage.xml -oldStyle
+- codecov -f "coverage.xml"
