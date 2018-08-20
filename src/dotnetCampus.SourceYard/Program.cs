@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using CommandLine;
 using dotnetCampus.SourceYard.Cli;
 using dotnetCampus.SourceYard.Utils;
@@ -17,6 +18,11 @@ namespace dotnetCampus.SourceYard
 
         private static void RunOptionsAndReturnExitCode(Options options)
         {
+            if (options.IsDebug == "true")
+            {
+                Debugger.Launch();
+            }
+
             var logger = new Logger();
 
             try

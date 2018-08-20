@@ -33,8 +33,9 @@
       <SourceYardPackageReleaseNotes Condition="$(PackageReleaseNotes) != ''" > --PackageReleaseNotes $(PackageReleaseNotes)</SourceYardPackageReleaseNotes>
       <SourceYardPackageTags Condition="$(PackageTags) != ''" > --PackageTags $(PackageTags)</SourceYardPackageTags>
 
+      <SourceYardDebug Condition="$(Configuration) == 'DEBUG'"> --debug true </SourceYardDebug>
     </PropertyGroup>
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(SourcePackingDirectory)Package -n $(PackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageTags) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner)"></Exec>
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(SourcePackingDirectory)Package -n $(PackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageTags) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardDebug)"></Exec>
   </Target>
 </Project>

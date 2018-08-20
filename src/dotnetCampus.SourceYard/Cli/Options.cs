@@ -5,6 +5,9 @@ namespace dotnetCampus.SourceYard.Cli
 {
     internal class Options
     {
+        [Option(longName: "debug")]
+        public string IsDebug { get; set; }
+
         [Option('p', "project", Required = true, HelpText = "The full path of the project file.")]
         public string ProjectFile { get; set; }
 
