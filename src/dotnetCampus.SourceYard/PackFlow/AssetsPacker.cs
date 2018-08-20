@@ -14,11 +14,13 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             var assetsFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Assets", "Target",
                 "build");
-            FileSystem.CopyFolderContents(assetsFolder, context.PackingFolder, name =>
+
+            var copyFolder = Path.Combine(context.PackingFolder, "build");
+            FileSystem.CopyFolderContents(assetsFolder, copyFolder, name =>
                 name.Replace("$(PackageId)", context.PackageId));
 
             // 替换 props 和 targets 文件中的占位符。
-            foreach (var file in new DirectoryInfo(Path.Combine(context.PackingFolder, "build"))
+            foreach (var file in new DirectoryInfo(copyFolder)
                 .EnumerateFiles("*.*", SearchOption.AllDirectories))
             {
                 var builder = new StringBuilder(File.ReadAllText(file.FullName, Encoding.UTF8));
