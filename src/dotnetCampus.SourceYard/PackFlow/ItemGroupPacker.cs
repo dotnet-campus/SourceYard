@@ -32,19 +32,13 @@ namespace dotnetCampus.SourceYard.PackFlow
 
         public void Pack(IPackingContext context)
         {
-            var projectFile = context.ProjectFile;
             var buildAssetsFile = Path.Combine(context.PackingFolder, "build", $"{context.PackageId}.props");
 
             // 从原始的项目文件中提取所有的 ItemGroup 中的节点，且节点类型在 IncludingItemTypes 中。
-            var itemsFromProject = ReadProjectItems(projectFile);
-            var itemGroup = itemsFromProject.Where(x => IncludingItemTypes.Contains(x.Name));
-            var itemGroupOfXaml = itemsFromProject.Where(x => XamlItemTypes.Contains(x.Name));
+
+            var (itemGroupElement, itemGroupElementOfXaml) = GetItemGroup(context.PackagedProjectFile, context.ProjectFolder);
 
             // 将提取出来的节点转换成 XElement，以便随后写入 XML 文件。
-            var itemGroupElement = new XElement("ItemGroup",
-                itemGroup.Select(x => ConvertItemElement(XElement.Parse(x.OuterXml))));
-            var itemGroupElementOfXaml = new XElement("ItemGroup",
-                itemGroupOfXaml.Select(x => ConvertItemElement(XElement.Parse(x.OuterXml))));
 
             // 试图从临时路径读取 props 文件，如果读不到，则生成一个。
             var (outputProps, outputItemGroup, outputItemGroupOfXaml) =
@@ -60,6 +54,110 @@ namespace dotnetCampus.SourceYard.PackFlow
                 document.Save(stream);
             }
         }
+
+        public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup(PackagedProjectFile contextPackagedProjectFile, string projectFolder)
+        {
+            var compileFileList = GetFileList(contextPackagedProjectFile.CompileFile);
+            var contentFileList = GetFileList(contextPackagedProjectFile.ContentFile);
+            var resourceFileList = GetFileList(contextPackagedProjectFile.ResourceFile);
+            var pageFileList = GetFileList(contextPackagedProjectFile.Page);
+
+            var elementList = new List<XElement>();
+            elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, "Compile", false));
+            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Resource", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Content", true));
+
+            var itemGroupElement = new XElement("ItemGroup", elementList);
+
+            elementList = new List<XElement>();
+            elementList.AddRange(XamlItemCompileFileToElement(pageFileList, "Page", false));
+
+            var itemGroupElementOfXaml = new XElement("ItemGroup", elementList);
+
+            return (itemGroupElement, itemGroupElementOfXaml);
+        }
+
+        private List<XElement> XamlItemCompileFileToElement(List<string> compileFileList, string includingItemTypes,
+            bool copyToOutputDirectory)
+        {
+            var elementList = new List<XElement>();
+
+            foreach (var temp in compileFileList)
+            {
+                var element = new XElement(includingItemTypes);
+
+                element.SetAttributeValue("Include", SourceFile + temp);
+                element.SetAttributeValue("SubType", "Designer");
+                element.SetAttributeValue("Generator", "MSBuild:Compile");
+                element.SetAttributeValue("Visible", "False");
+                if (copyToOutputDirectory)
+                {
+                    element.SetAttributeValue("CopyToOutputDirectory", "PreserveNewest");
+                }
+            }
+
+            return elementList;
+        }
+
+        private List<XElement> IncludingItemCompileFileToElement(List<string> compileFileList,
+            string includingItemTypes, bool copyToOutputDirectory)
+        {
+            var elementList = new List<XElement>();
+            foreach (var temp in compileFileList)
+            {
+                var element = new XElement(includingItemTypes);
+                element.SetAttributeValue("Include", SourceFile + temp);
+                element.SetAttributeValue("Visible", "False");
+                if (copyToOutputDirectory)
+                {
+                    element.SetAttributeValue("CopyToOutputDirectory", "PreserveNewest");
+                }
+
+                elementList.Add(element);
+            }
+
+            return elementList;
+        }
+
+        private const string SourceFile = @"$(MSBuildThisFileDirectory)..\src\";
+
+
+        private List<string> GetFileList(string file)
+        {
+            if (string.IsNullOrEmpty(file))
+            {
+                return new List<string>();
+            }
+
+            var fileList = File.ReadAllLines(file).ToList();
+
+            fileList = RemoveTempFile(fileList);
+
+            return fileList;
+        }
+
+        private List<string> RemoveTempFile(List<string> fileList)
+        {
+            fileList.RemoveAll
+            (
+                temp => temp.StartsWith("obj\\")
+                        || temp.StartsWith("bin\\")
+            );
+
+            fileList.RemoveAll(temp =>
+            {
+                var pathRoot = Path.GetPathRoot(temp);
+                if (!string.IsNullOrEmpty(pathRoot))
+                {
+                    return temp.StartsWith(pathRoot);
+                }
+
+                return false;
+            });
+
+            return fileList;
+        }
+
 
         private static XElement ConvertItemElement(XElement item)
         {
