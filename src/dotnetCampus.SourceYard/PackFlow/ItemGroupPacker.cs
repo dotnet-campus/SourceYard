@@ -124,7 +124,7 @@ namespace dotnetCampus.SourceYard.PackFlow
 
         private List<string> GetFileList(string file)
         {
-            if (string.IsNullOrEmpty(file))
+            if (string.IsNullOrEmpty(file) || !File.Exists(file))
             {
                 return new List<string>();
             }
