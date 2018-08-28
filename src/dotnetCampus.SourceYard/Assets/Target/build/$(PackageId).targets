@@ -14,19 +14,15 @@
           SourceFiles="$(MSBuildThisFileDirectory)#(PackageId).SourceProject.props" DestinationFiles="$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props"></Copy>
   </Target>
 
-  <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile">
+  <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <!-- 只有在不没有找到本地代码的文件时，才使用 nuget 的库 -->
-    <ItemGroup Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
-      <Compile Include="$(MSBuildThisFileDirectory)..\src\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\src\bin\**\*.cs;$(MSBuildThisFileDirectory)..\src\obj\**\*.cs;" />
-    </ItemGroup>
-
-    <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
-    <ItemGroup Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
-      <Compile Include="$(#(PackageGuid)SourceFolder)\**\*.cs"
-               Exclude="$(#(PackageGuid)SourceFolder)\bin\**\*.cs;$(#(PackageGuid)SourceFolder)\obj\**\*.cs;"></Compile>
-    </ItemGroup>
+    <!--替换ItemGroup-->
   </Target>
 
+  <Target Name="_#(PackageGuid)IncludeSOURCE_REFERENCESourceCodes" BeforeTargets="CoreCompile" Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
+    <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
+    <!--替换 SOURCE_REFERENCE ItemGroup-->
+  </Target>
 
 
   <Target Name="_#(PackageGuid)IncludeXamlCodes" BeforeTargets="XamlPreCompile">

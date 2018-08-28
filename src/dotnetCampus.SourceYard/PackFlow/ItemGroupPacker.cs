@@ -32,27 +32,39 @@ namespace dotnetCampus.SourceYard.PackFlow
 
         public void Pack(IPackingContext context)
         {
-            var buildAssetsFile = Path.Combine(context.PackingFolder, "build", $"{context.PackageId}.props");
+            var buildAssetsFile = Path.Combine(context.PackingFolder, "build", $"{context.PackageId}.targets");
 
             // 从原始的项目文件中提取所有的 ItemGroup 中的节点，且节点类型在 IncludingItemTypes 中。
 
+            // nuget 的源代码
+            var sourceReferenceSourceFolder = @"$(MSBuildThisFileDirectory)..\src\";
+
             var (itemGroupElement, itemGroupElementOfXaml) = GetItemGroup(context.PackagedProjectFile, context.ProjectFolder);
 
-            // 将提取出来的节点转换成 XElement，以便随后写入 XML 文件。
+            var itemGroup = ItemGroupToString(itemGroupElement, itemGroupElementOfXaml);
 
-            // 试图从临时路径读取 props 文件，如果读不到，则生成一个。
-            var (outputProps, outputItemGroup, outputItemGroupOfXaml) =
-                ReadOrCreatePropsFile(buildAssetsFile, context.PackageGuid, context.Logger);
-            outputItemGroup.Add(itemGroupElement);
-            outputItemGroupOfXaml.Add(itemGroupElementOfXaml);
+            // 读取文件
+            var buildfile = File.ReadAllText(buildAssetsFile);
+            var replace = "<!--替换ItemGroup-->";
 
-            // 将新生成的 XML 文件写回 props/targets 文件。
-            using (var stream = new FileInfo(buildAssetsFile).OpenWrite())
-            {
-                var document = new XDocument();
-                document.Add(outputProps);
-                document.Save(stream);
-            }
+
+            // 替换为 nuget 源代码的文件
+            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder));
+
+            // 本地的代码，用于调试本地的代码
+            sourceReferenceSourceFolder = $@"$({context.PackageGuid}SourceFolder)\";
+            replace = "<!--替换 SOURCE_REFERENCE ItemGroup-->";
+            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder));
+
+            // 用户可以选择使用 nuget 源代码，也可以选择使用自己的代码，所以就需要使用两个不同的值
+
+            // 写入文件
+            File.WriteAllText(buildAssetsFile, buildfile);
+        }
+
+        private string ItemGroupToString(XElement itemGroupElement, XElement itemGroupElementOfXaml)
+        {
+            return itemGroupElement.ToString() + "\r\n\r\n\r\n" + itemGroupElementOfXaml.ToString();
         }
 
         public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup(PackagedProjectFile contextPackagedProjectFile, string projectFolder)
@@ -119,8 +131,10 @@ namespace dotnetCampus.SourceYard.PackFlow
             return elementList;
         }
 
-        private const string SourceFile = @"$(MSBuildThisFileDirectory)..\src\";
-
+        /// <summary>
+        /// 用于替换的字符
+        /// </summary>
+        private const string SourceFile = @"-- replace folder --";
 
         private List<string> GetFileList(string file)
         {
