@@ -61,7 +61,7 @@ namespace dotnetCampus.SourceYard
                 };
 
                 new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion, options.CompileFile,
-                    options.ResourceFile, options.ContentFile, options.Page, options.ApplicationDefinition,
+                    options.ResourceFile, options.ContentFile, options.Page, options.ApplicationDefinition,options.None,
                     buildProps).Pack();
             }
             catch (Exception e)

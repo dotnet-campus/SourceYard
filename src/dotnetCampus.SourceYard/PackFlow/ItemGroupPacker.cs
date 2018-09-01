@@ -72,6 +72,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             var compileFileList = GetFileList(contextPackagedProjectFile.CompileFile);
             var contentFileList = GetFileList(contextPackagedProjectFile.ContentFile);
             var resourceFileList = GetFileList(contextPackagedProjectFile.ResourceFile);
+            var noneFileList = GetFileList(contextPackagedProjectFile.NoneFile);
             var pageFileList = GetFileList(contextPackagedProjectFile.Page);
 
             var elementList = new List<XElement>();

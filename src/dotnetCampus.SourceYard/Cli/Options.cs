@@ -36,6 +36,9 @@ namespace dotnetCampus.SourceYard.Cli
 
         public string Company { get; set; }
 
+        [Option(longName: "None")]
+        public string None { get; set; }
+
         [Option(longName: "Authors")]
         public string Authors { get; set; }
 

@@ -10,7 +10,8 @@ namespace dotnetCampus.SourceYard
     internal class Packer
     {
         public Packer(string projectFile, string intermediateDirectory,
-            string packageOutputPath, string packageVersion, string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition, BuildProps buildProps)
+            string packageOutputPath, string packageVersion, string compileFile, string resourceFile,
+            string contentFile, string page, string applicationDefinition, string noneFile, BuildProps buildProps)
         {
             Logger = new Logger();
 
@@ -54,7 +55,10 @@ namespace dotnetCampus.SourceYard
                 page: string.IsNullOrWhiteSpace(page) ? "" : Path.GetFullPath(page),
                 applicationDefinition: string.IsNullOrWhiteSpace(applicationDefinition)
                     ? ""
-                    : Path.GetFullPath(applicationDefinition)
+                    : Path.GetFullPath(applicationDefinition),
+                noneFile: string.IsNullOrWhiteSpace(noneFile)
+                    ? ""
+                    : Path.GetFullPath(noneFile)
             );
 
             _packers = new IPackFlow[]
@@ -66,7 +70,6 @@ namespace dotnetCampus.SourceYard
                 new NuGetPacker(),
             };
         }
-
 
 
         internal void Pack()
@@ -137,10 +140,12 @@ namespace dotnetCampus.SourceYard
 
         private readonly string _projectFile;
         private readonly string _intermediateDirectory;
+
         /// <summary>
         /// 最后输出的文件夹
         /// </summary>
         private readonly string _packageOutputPath;
+
         private readonly string _packageVersion;
         private readonly IPackFlow[] _packers;
 

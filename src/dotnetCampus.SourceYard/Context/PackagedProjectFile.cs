@@ -31,14 +31,17 @@
         /// </summary>
         private string ApplicationDefinition { get; }
 
+        public string NoneFile { get; }
+
         /// <inheritdoc />
-        public PackagedProjectFile(string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition)
+        public PackagedProjectFile(string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition, string noneFile)
         {
             CompileFile = compileFile;
             ResourceFile = resourceFile;
             ContentFile = contentFile;
             Page = page;
             ApplicationDefinition = applicationDefinition;
+            NoneFile = noneFile;
         }
     }
 }

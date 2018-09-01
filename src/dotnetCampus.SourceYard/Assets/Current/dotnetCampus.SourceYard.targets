@@ -6,6 +6,7 @@
       <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
       <ResourceTextFile>$(SourcePackingDirectory)ResourceFile.txt</ResourceTextFile>
       <ContentTextFile>$(SourcePackingDirectory)ContentFile.txt</ContentTextFile>
+      <NoneTextFile>$(SourcePackingDirectory)NoneFile.txt</NoneTextFile>
       <PageTextFile>$(SourcePackingDirectory)PageFile.txt</PageTextFile>
       <ApplicationDefinitionTextFile>$(SourcePackingDirectory)ApplicationDefinitionFile.txt</ApplicationDefinitionTextFile>
     </PropertyGroup>
@@ -15,6 +16,7 @@
     <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
     <WriteLinesToFile File="$(ResourceTextFile)" Lines="@(Resource)" Overwrite="true" />
     <WriteLinesToFile File="$(ContentTextFile)" Lines="@(Content)" Overwrite="true" />
+    <WriteLinesToFile File="$(NoneTextFile)" Lines="@(None)" Overwrite="true" />
     <WriteLinesToFile File="$(PageTextFile)" Lines="@(Page)" Overwrite="true" />
     <WriteLinesToFile File="$(ApplicationDefinitionTextFile)" Lines="@(ApplicationDefinition)" Overwrite="true" />
 
@@ -36,6 +38,6 @@
       <SourceYardDebug Condition="$(Configuration) == 'DEBUG'"> --debug true </SourceYardDebug>
     </PropertyGroup>
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(SourcePackingDirectory)Package -n $(PackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageTags) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardDebug)"></Exec>
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe -p $(MSBuildProjectFullPath) -i $(SourcePackingDirectory)Package -n $(PackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageTags) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardDebug)"></Exec>
   </Target>
 </Project>
