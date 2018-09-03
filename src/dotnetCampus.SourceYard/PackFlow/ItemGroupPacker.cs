@@ -110,6 +110,8 @@ namespace dotnetCampus.SourceYard.PackFlow
                 {
                     element.SetAttributeValue("CopyToOutputDirectory", "PreserveNewest");
                 }
+
+                elementList.Add(element);
             }
 
             return elementList;
