@@ -54,7 +54,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             // 本地的代码，用于调试本地的代码
             sourceReferenceSourceFolder = $@"$({context.PackageGuid}SourceFolder)\";
             replace = "<!--替换 SOURCE_REFERENCE ItemGroup-->";
-            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder));
+            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder).Replace("Visible=\"False\"", "Visible=\"True\""));
 
             // 用户可以选择使用 nuget 源代码，也可以选择使用自己的代码，所以就需要使用两个不同的值
 
