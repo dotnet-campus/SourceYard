@@ -39,6 +39,9 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "None")]
         public string None { get; set; }
 
+        [Option(longName: "EmbeddedResource")]
+        public string EmbeddedResource { get; set; }
+
         [Option(longName: "Authors")]
         public string Authors { get; set; }
 

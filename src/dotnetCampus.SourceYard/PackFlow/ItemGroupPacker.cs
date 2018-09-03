@@ -73,12 +73,15 @@ namespace dotnetCampus.SourceYard.PackFlow
             var contentFileList = GetFileList(contextPackagedProjectFile.ContentFile);
             var resourceFileList = GetFileList(contextPackagedProjectFile.ResourceFile);
             var noneFileList = GetFileList(contextPackagedProjectFile.NoneFile);
+            var embeddedResource = GetFileList(contextPackagedProjectFile.EmbeddedResource);
             var pageFileList = GetFileList(contextPackagedProjectFile.Page);
 
             var elementList = new List<XElement>();
             elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, "Compile", false));
             elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Resource", true));
             elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Content", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(embeddedResource, "EmbeddedResource", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(noneFileList, "None", true));
 
             var itemGroupElement = new XElement("ItemGroup", elementList);
 

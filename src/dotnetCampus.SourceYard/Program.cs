@@ -21,6 +21,7 @@ namespace dotnetCampus.SourceYard
             if (options.IsDebug == "true")
             {
                 Debugger.Launch();
+                Console.WriteLine(Environment.CommandLine);
             }
 
             var logger = new Logger();
@@ -60,9 +61,17 @@ namespace dotnetCampus.SourceYard
                     PackageTags = options.PackageTags
                 };
 
-                new Packer(projectFile, intermediateDirectory, packageOutputPath, packageVersion, options.CompileFile,
-                    options.ResourceFile, options.ContentFile, options.Page, options.ApplicationDefinition,options.None,
-                    buildProps).Pack();
+                new Packer(projectFile: projectFile,
+                    intermediateDirectory, packageOutputPath: packageOutputPath, 
+                    packageVersion: packageVersion, 
+                    compileFile: options.CompileFile,
+                    resourceFile: options.ResourceFile, 
+                    contentFile: options.ContentFile, 
+                    page: options.Page, 
+                    applicationDefinition: options.ApplicationDefinition, 
+                    noneFile: options.None,
+                    embeddedResource: options.EmbeddedResource,
+                    buildProps: buildProps).Pack();
             }
             catch (Exception e)
             {

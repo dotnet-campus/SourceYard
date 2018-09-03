@@ -11,7 +11,8 @@ namespace dotnetCampus.SourceYard
     {
         public Packer(string projectFile, string intermediateDirectory,
             string packageOutputPath, string packageVersion, string compileFile, string resourceFile,
-            string contentFile, string page, string applicationDefinition, string noneFile, BuildProps buildProps)
+            string contentFile, string page, string applicationDefinition, string noneFile, string embeddedResource,
+            BuildProps buildProps)
         {
             Logger = new Logger();
 
@@ -52,6 +53,7 @@ namespace dotnetCampus.SourceYard
                 compileFile: string.IsNullOrWhiteSpace(compileFile) ? "" : Path.GetFullPath(compileFile),
                 resourceFile: string.IsNullOrWhiteSpace(resourceFile) ? "" : Path.GetFullPath(resourceFile),
                 contentFile: string.IsNullOrWhiteSpace(contentFile) ? "" : Path.GetFullPath(contentFile),
+                embeddedResource: string.IsNullOrWhiteSpace(embeddedResource) ? "" : Path.GetFullPath(embeddedResource),
                 page: string.IsNullOrWhiteSpace(page) ? "" : Path.GetFullPath(page),
                 applicationDefinition: string.IsNullOrWhiteSpace(applicationDefinition)
                     ? ""

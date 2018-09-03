@@ -25,6 +25,10 @@
         /// </summary>
         public string Page { get; }
 
+        /// <summary>
+        /// 嵌入文件
+        /// </summary>
+        public string EmbeddedResource { get;}
 
         /// <summary>
         /// 需要做源码包项目的文件
@@ -34,7 +38,7 @@
         public string NoneFile { get; }
 
         /// <inheritdoc />
-        public PackagedProjectFile(string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition, string noneFile)
+        public PackagedProjectFile(string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition, string noneFile, string embeddedResource)
         {
             CompileFile = compileFile;
             ResourceFile = resourceFile;
@@ -42,6 +46,7 @@
             Page = page;
             ApplicationDefinition = applicationDefinition;
             NoneFile = noneFile;
+            EmbeddedResource = embeddedResource;
         }
     }
 }
