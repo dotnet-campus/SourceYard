@@ -26,8 +26,6 @@ namespace dotnetCampus.SourceYard.PackFlow.nuspec
             authors = authors ?? buildProps.Authors ?? buildProps.Company;
             owner = owner ?? authors;
 
-            version = version ?? buildProps.Version;
-
             var description = GetDescription(element) ?? buildProps.Description;
             var copyright = GetCopyright(element) ?? buildProps.Copyright;
             var packageLicenseUrl = GetPackageLicenseUrl(element) ?? buildProps.PackageProjectUrl;

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -52,27 +53,25 @@ namespace dotnetCampus.SourceYard.PackFlow
 
         private NuspecPackage GetNuspec(IPackingContext context)
         {
-            var fileInfo = new FileInfo(context.ProjectFile);
-            var doc = XDocument.Load(fileInfo.OpenRead());
-
-            var element = doc.Root;
-
-            if (element != null)
+            var buildProps = context.BuildProps;
+            return new NuspecPackage()
             {
-                var id = context.PackageId;
-
-                var title = context.ProjectName;
-
-                var version = context.PackageVersion;
-
-                //context.PackingFolder
-                var csprojToNuspecFile = new CsprojToNuspecFile();
-
-                var nuspecPackage = csprojToNuspecFile.Parse(element, id, title, version, context.BuildProps);
-                return nuspecPackage;
-            }
-
-            return null;
+                NuspecMetadata = new NuspecMetadata()
+                {
+                    Authors = buildProps.Authors,
+                    Copyright = buildProps.Copyright,
+                    Description = buildProps.Description,
+                    PackageProjectUrl = buildProps.PackageProjectUrl,
+                    Version = context.PackageVersion,
+                    Id = context.PackageId,
+                    Owner = buildProps.Owner,
+                    Title = buildProps.Title,
+                    PackageIconUrl = buildProps.PackageIconUrl,
+                    PackageLicenseUrl = buildProps.PackageLicenseUrl,
+                    PackageTags = buildProps.PackageTags,
+                    PackageReleaseNotes = buildProps.PackageReleaseNotes
+                }
+            };
         }
     }
 }

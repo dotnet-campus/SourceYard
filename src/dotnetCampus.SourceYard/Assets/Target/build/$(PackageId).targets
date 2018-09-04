@@ -4,13 +4,29 @@
     <DefineConstants>$(DefineConstants);SOURCE_REFERENCE</DefineConstants>
   </PropertyGroup>
 
-  <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Compile Include="$(MSBuildThisFileDirectory)..\src\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\src\bin\**\*.cs;$(MSBuildThisFileDirectory)..\src\obj\**\*.cs;" />
-    </ItemGroup>
+  <Import Condition="Exists('$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props')" Project="$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props" >
+    <!-- 如果存在本地的文件，使用这个文件，在这个文件里写引用本地的代码，这样可以调试本地代码 -->
+  </Import>
+
+  <Target Name="_#(PackageGuid)CopySourceProjectFile" BeforeTargets="CoreCompile">
+    <!-- 尝试复制 #(PackageId).SourceProject.props 文件 -->
+    <Copy Condition="!Exists('$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props')"
+          SourceFiles="$(MSBuildThisFileDirectory)#(PackageId).SourceProject.props" DestinationFiles="$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props"></Copy>
   </Target>
+
+  <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
+    <!-- 只有在不没有找到本地代码的文件时，才使用 nuget 的库 -->
+    <!--替换ItemGroup-->
+  </Target>
+
+  <Target Name="_#(PackageGuid)IncludeSOURCE_REFERENCESourceCodes" BeforeTargets="CoreCompile" Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
+    <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
+    <!--替换 SOURCE_REFERENCE ItemGroup-->
+  </Target>
+
 
   <Target Name="_#(PackageGuid)IncludeXamlCodes" BeforeTargets="XamlPreCompile">
   </Target>
+
 
 </Project>

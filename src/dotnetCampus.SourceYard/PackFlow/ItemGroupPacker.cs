@@ -32,153 +32,161 @@ namespace dotnetCampus.SourceYard.PackFlow
 
         public void Pack(IPackingContext context)
         {
-            var projectFile = context.ProjectFile;
-            var buildAssetsFile = Path.Combine(context.PackingFolder, "build", $"{context.PackageId}.props");
+            var buildAssetsFile = Path.Combine(context.PackingFolder, "build", $"{context.PackageId}.targets");
 
             // 从原始的项目文件中提取所有的 ItemGroup 中的节点，且节点类型在 IncludingItemTypes 中。
-            var itemsFromProject = ReadProjectItems(projectFile);
-            var itemGroup = itemsFromProject.Where(x => IncludingItemTypes.Contains(x.Name));
-            var itemGroupOfXaml = itemsFromProject.Where(x => XamlItemTypes.Contains(x.Name));
 
-            // 将提取出来的节点转换成 XElement，以便随后写入 XML 文件。
-            var itemGroupElement = new XElement("ItemGroup",
-                itemGroup.Select(x => ConvertItemElement(XElement.Parse(x.OuterXml))));
-            var itemGroupElementOfXaml = new XElement("ItemGroup",
-                itemGroupOfXaml.Select(x => ConvertItemElement(XElement.Parse(x.OuterXml))));
+            // nuget 的源代码
+            var sourceReferenceSourceFolder = @"$(MSBuildThisFileDirectory)..\src\";
 
-            // 试图从临时路径读取 props 文件，如果读不到，则生成一个。
-            var (outputProps, outputItemGroup, outputItemGroupOfXaml) =
-                ReadOrCreatePropsFile(buildAssetsFile, context.PackageGuid, context.Logger);
-            outputItemGroup.Add(itemGroupElement);
-            outputItemGroupOfXaml.Add(itemGroupElementOfXaml);
+            var (itemGroupElement, itemGroupElementOfXaml) = GetItemGroup(context.PackagedProjectFile, context.ProjectFolder);
 
-            // 将新生成的 XML 文件写回 props/targets 文件。
-            using (var stream = new FileInfo(buildAssetsFile).OpenWrite())
-            {
-                var document = new XDocument();
-                document.Add(outputProps);
-                document.Save(stream);
-            }
+            var itemGroup = ItemGroupToString(itemGroupElement, itemGroupElementOfXaml);
+
+            // 读取文件
+            var buildfile = File.ReadAllText(buildAssetsFile);
+            var replace = "<!--替换ItemGroup-->";
+
+
+            // 替换为 nuget 源代码的文件
+            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder));
+
+            // 本地的代码，用于调试本地的代码
+            sourceReferenceSourceFolder = $@"$({context.PackageGuid}SourceFolder)\";
+            replace = "<!--替换 SOURCE_REFERENCE ItemGroup-->";
+            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder).Replace("Visible=\"False\"", "Visible=\"True\""));
+
+            // 用户可以选择使用 nuget 源代码，也可以选择使用自己的代码，所以就需要使用两个不同的值
+
+            // 写入文件
+            File.WriteAllText(buildAssetsFile, buildfile);
         }
 
-        private static XElement ConvertItemElement(XElement item)
+        private string ItemGroupToString(XElement itemGroupElement, XElement itemGroupElementOfXaml)
         {
-            RemoveAllNamespaces(item);
-            foreach (var attribute in new[]
-            {
-                item.Attribute("Include"),
-                item.Attribute("Update"),
-                item.Attribute("Remove")
-            }.Where(x => x != null))
-            {
-                var path = attribute.Value;
-                attribute.SetValue($@"$(MSBuildThisFileDirectory)..\src\{path}");
-            }
-
-            item.SetAttributeValue("Visible", "False");
-
-            return item;
+            return itemGroupElement.ToString() + "\r\n\r\n\r\n" + itemGroupElementOfXaml.ToString();
         }
 
-        private static void RemoveAllNamespaces(XElement element)
+        public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup(PackagedProjectFile contextPackagedProjectFile, string projectFolder)
         {
-            element.Attributes().Where(e => e.IsNamespaceDeclaration).Remove();
-            element.Name = element.Name.LocalName;
+            var compileFileList = GetFileList(contextPackagedProjectFile.CompileFile);
+            var contentFileList = GetFileList(contextPackagedProjectFile.ContentFile);
+            var resourceFileList = GetFileList(contextPackagedProjectFile.ResourceFile);
+            var noneFileList = GetFileList(contextPackagedProjectFile.NoneFile);
+            var embeddedResource = GetFileList(contextPackagedProjectFile.EmbeddedResource);
+            var pageFileList = GetFileList(contextPackagedProjectFile.Page);
 
-            foreach (var node in element.DescendantNodes())
-            {
-                if (node is XElement xElement)
-                {
-                    RemoveAllNamespaces(xElement);
-                }
-            }
+            var elementList = new List<XElement>();
+            elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, "Compile", false));
+            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Resource", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Content", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(embeddedResource, "EmbeddedResource", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(noneFileList, "None", true));
+
+            var itemGroupElement = new XElement("ItemGroup", elementList);
+
+            elementList = new List<XElement>();
+            elementList.AddRange(XamlItemCompileFileToElement(pageFileList, "Page", false));
+
+            var itemGroupElementOfXaml = new XElement("ItemGroup", elementList);
+
+            return (itemGroupElement, itemGroupElementOfXaml);
         }
 
-        [Pure]
-        private static List<XPathNavigator> ReadProjectItems(string projectFile)
+        private List<XElement> XamlItemCompileFileToElement(List<string> compileFileList, string includingItemTypes,
+            bool copyToOutputDirectory)
         {
-            List<XPathNavigator> itemGroup;
+            var elementList = new List<XElement>();
 
-            using (var fileStream = new FileInfo(projectFile).OpenRead())
+            foreach (var temp in compileFileList)
             {
-                var document = new XPathDocument(fileStream);
-                var navigator = document.CreateNavigator();
-                itemGroup = navigator.Select("/Project/ItemGroup").OfType<XPathNavigator>()
-                    .SelectMany(x => x.SelectChildren(XPathNodeType.Element).OfType<XPathNavigator>()).ToList();
-                if (itemGroup.Count <= 0)
-                {
-                    navigator.MoveToNamespace("");
-                    var @namespace = new XmlNamespaceManager(new NameTable());
-                    @namespace.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
-                    itemGroup = navigator.Select("/x:Project/x:ItemGroup", @namespace).OfType<XPathNavigator>()
-                        .SelectMany(x => x.SelectChildren(XPathNodeType.Element).OfType<XPathNavigator>()).ToList();
-                }
+                var element = new XElement(includingItemTypes);
+
+                var file = SourceFile + temp;
+
+                SetXmlItemElement(element, copyToOutputDirectory, file);
+
+                elementList.Add(element);
             }
 
-            return itemGroup;
+            return elementList;
+        }
+
+       
+        private List<XElement> IncludingItemCompileFileToElement(List<string> compileFileList,
+            string includingItemTypes, bool copyToOutputDirectory)
+        {
+            var elementList = new List<XElement>();
+            foreach (var temp in compileFileList)
+            {
+                var element = new XElement(includingItemTypes);
+                var file = SourceFile + temp;
+                SetItemElement(element, copyToOutputDirectory, file);
+
+                elementList.Add(element);
+            }
+
+            return elementList;
+        }
+
+        private static void SetXmlItemElement(XElement element, bool copyToOutputDirectory, string file)
+        {
+            element.SetAttributeValue("SubType", "Designer");
+            element.SetAttributeValue("Generator", "MSBuild:Compile");
+
+            SetItemElement(element, copyToOutputDirectory, file);
+        }
+
+
+        private static void SetItemElement(XElement element, bool copyToOutputDirectory, string file)
+        {
+            element.SetAttributeValue("Include", file);
+            element.SetAttributeValue("Visible", "False");
+            if (copyToOutputDirectory)
+            {
+                element.SetAttributeValue("CopyToOutputDirectory", "PreserveNewest");
+            }
         }
 
         /// <summary>
-        /// 读取 csproj/props/targets 文件，然后返回 Project 根节点。
+        /// 用于替换的字符
         /// </summary>
-        [Pure]
-        private static (XElement root, XElement item, XElement xaml) ReadOrCreatePropsFile(string propsFile,
-            string packageGuid, ILogger log)
+        private const string SourceFile = @"-- replace folder --";
+
+        private List<string> GetFileList(string file)
         {
-            var extension = Path.GetExtension(propsFile);
-
-            if (!File.Exists(propsFile))
+            if (string.IsNullOrEmpty(file) || !File.Exists(file))
             {
-                if (extension == ".props")
-                {
-                    var root = new XElement("Project");
-                    return (root, root, root);
-                }
-
-                if (extension == ".targets")
-                {
-                    var target = new XElement("Target",
-                        new XAttribute("Name", $"_{packageGuid}IncludeSourceCodes"),
-                        new XAttribute("BeforeTargets", "CoreCompile")
-                    );
-                    var xamlTarget = new XElement("Target",
-                        new XAttribute("Name", $"_{packageGuid}IncludeXamlCodes"),
-                        new XAttribute("BeforeTargets", "XamlPreCompile")
-                    );
-                    var root = new XElement("Project", target, xamlTarget);
-                    return (root, target, xamlTarget);
-                }
-
-                throw new NotSupportedException("仅支持为 props 和 targets 文件添加编译文件。");
+                return new List<string>();
             }
 
-            using (var stream = new FileInfo(propsFile).OpenRead())
+            var fileList = File.ReadAllLines(file).ToList();
+
+            fileList = RemoveTempFile(fileList);
+
+            return fileList;
+        }
+
+        private List<string> RemoveTempFile(List<string> fileList)
+        {
+            fileList.RemoveAll
+            (
+                temp => temp.StartsWith("obj\\")
+                        || temp.StartsWith("bin\\")
+            );
+
+            fileList.RemoveAll(temp =>
             {
-                var root = XElement.Load(stream);
-
-                XElement item;
-                XElement xaml;
-                if (extension == ".props")
+                var pathRoot = Path.GetPathRoot(temp);
+                if (!string.IsNullOrEmpty(pathRoot))
                 {
-                    item = root;
-                    xaml = root;
-                }
-                else if (extension == ".targets")
-                {
-                    item = root.XPathSelectElement($"Target[@Name='_{packageGuid}IncludeSourceCodes']");
-                    xaml = root.XPathSelectElement($"Target[@Name='_{packageGuid}IncludeXamlCodes']");
-                    if (item == null || xaml == null)
-                    {
-                        log.Error($"{Path.GetFileName(propsFile)} 中需要有一个用于引入源码的 Targets");
-                    }
-                }
-                else
-                {
-                    throw new NotSupportedException("仅支持为 props 和 targets 文件添加编译文件。");
+                    return temp.StartsWith(pathRoot);
                 }
 
-                return (root, item, xaml);
-            }
+                return false;
+            });
+
+            return fileList;
         }
     }
 }

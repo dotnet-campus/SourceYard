@@ -5,39 +5,51 @@ using System.Xml.Serialization;
 
 namespace dotnetCampus.SourceYard.Utils
 {
-    [XmlType("PropertyGroup")]
     public class BuildProps
     {
-        public string Version { get; set; }
-
-        public string PackageOutputPath { get; set; }
-
+        /// <summary>
+        /// 公司
+        /// </summary>
         public string Company { get; set; }
 
+        /// <summary>
+        /// 作者
+        /// </summary>
         public string Authors { get; set; }
 
+        /// <summary>
+        /// 仓库地址
+        /// </summary>
         public string RepositoryUrl { get; set; }
 
         public string RepositoryType { get; set; }
 
+        /// <summary>
+        /// 项目地址
+        /// </summary>
         public string PackageProjectUrl { get; set; }
 
+        /// <summary>
+        /// 版权
+        /// </summary>
         public string Copyright { get; set; }
 
+        /// <summary>
+        /// 描述
+        /// </summary>
         public string Description { get; set; }
 
-        public static BuildProps Parse(FileInfo file)
-        {
-            using (var stream = file.OpenText())
-            {
-                var load = XDocument.Load(stream);
-                var propertyGroup = load.Root.DescendantsAndSelf(XName.Get("PropertyGroup")).FirstOrDefault();
+        public string Owner { get; set; }
 
-                var xmlSerializer = new XmlSerializer(typeof(BuildProps));
-                var buildProps = (BuildProps) xmlSerializer.Deserialize(propertyGroup.CreateReader());
+        public string Title { get; set; }
 
-                return buildProps;
-            }
-        }
+        public string PackageLicenseUrl { get; set; }
+
+        public string PackageIconUrl { get; set; }
+
+        public string PackageReleaseNotes { get; set; }
+
+        public string PackageTags { get; set; }
+
     }
 }

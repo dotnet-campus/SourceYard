@@ -13,16 +13,6 @@ namespace dotnetCampus.SourceYard.Context
         ILogger Logger { get; }
 
         /// <summary>
-        /// 执行打包核心代码的此程序的项目文件路径，即 dotnetCampus.SourceYard 项目的绝对路径。
-        /// </summary>
-        string SelfProjectFile { get; }
-
-        /// <summary>
-        /// 执行打包核心代码的此程序的项目文件所在的文件夹，即 dotnetCampus.SourceYard 项目所在的文件夹。
-        /// </summary>
-        string SelfProjectFolder { get; }
-
-        /// <summary>
         /// 需要进行源码打包的项目文件。
         /// </summary>
         string ProjectFile { get; }
@@ -61,6 +51,11 @@ namespace dotnetCampus.SourceYard.Context
         /// 为了打源码包可以使用的打包临时文件夹。NuGet 包会按照此文件夹的文件夹结构来生成 nupkg 文件。
         /// </summary>
         string PackingFolder { get; }
+
+        /// <summary>
+        /// 要打包项目的元素
+        /// </summary>
+        PackagedProjectFile PackagedProjectFile { get; }
 
         BuildProps BuildProps { get; }
     }
