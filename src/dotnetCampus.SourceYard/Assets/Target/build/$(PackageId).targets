@@ -19,14 +19,19 @@
     <!--替换ItemGroup-->
   </Target>
 
+  <Target Name="_#(PackageGuid)XamlItemGroupIncludeSourceCodes" BeforeTargets="GenerateBindingRedirects" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
+    <!-- 只有在不没有找到本地代码的文件时，才使用 nuget 的库 -->
+    <!--替换XmlItemGroup-->
+  </Target>
+
   <Target Name="_#(PackageGuid)IncludeSOURCE_REFERENCESourceCodes" BeforeTargets="CoreCompile" Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
     <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
     <!--替换 SOURCE_REFERENCE ItemGroup-->
   </Target>
 
-
-  <Target Name="_#(PackageGuid)IncludeXamlCodes" BeforeTargets="XamlPreCompile">
+  <Target Name="_#(PackageGuid)IncludeXamlItemGroupSOURCE_REFERENCESourceCodes" BeforeTargets="GenerateBindingRedirects" Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
+    <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
+    <!--替换 SOURCE_REFERENCE XmlItemGroup-->
   </Target>
-
 
 </Project>
