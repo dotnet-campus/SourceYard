@@ -50,17 +50,13 @@ namespace dotnetCampus.SourceYard
 
             PackagedProjectFile = new PackagedProjectFile
             (
-                compileFile: string.IsNullOrWhiteSpace(compileFile) ? "" : Path.GetFullPath(compileFile),
-                resourceFile: string.IsNullOrWhiteSpace(resourceFile) ? "" : Path.GetFullPath(resourceFile),
-                contentFile: string.IsNullOrWhiteSpace(contentFile) ? "" : Path.GetFullPath(contentFile),
-                embeddedResource: string.IsNullOrWhiteSpace(embeddedResource) ? "" : Path.GetFullPath(embeddedResource),
-                page: string.IsNullOrWhiteSpace(page) ? "" : Path.GetFullPath(page),
-                applicationDefinition: string.IsNullOrWhiteSpace(applicationDefinition)
-                    ? ""
-                    : Path.GetFullPath(applicationDefinition),
-                noneFile: string.IsNullOrWhiteSpace(noneFile)
-                    ? ""
-                    : Path.GetFullPath(noneFile)
+                compileFile: GetFile(compileFile),
+                resourceFile: GetFile(resourceFile),
+                contentFile: GetFile(contentFile),
+                embeddedResource: GetFile(embeddedResource),
+                page: GetFile(page),
+                applicationDefinition: GetFile(applicationDefinition),
+                noneFile: GetFile(noneFile)
             );
 
             _packers = new IPackFlow[]
@@ -73,6 +69,7 @@ namespace dotnetCampus.SourceYard
             };
         }
 
+  
 
         internal void Pack()
         {
@@ -153,6 +150,11 @@ namespace dotnetCampus.SourceYard
 
         private PackagedProjectFile PackagedProjectFile { get; }
         private BuildProps BuildProps { get; }
+
+        private static string GetFile(string file)
+        {
+            return string.IsNullOrWhiteSpace(file) ? "" : Path.GetFullPath(file);
+        }
 
         /// <summary>
         /// 准备一个空白的文件夹用来放文件
