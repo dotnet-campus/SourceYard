@@ -27,8 +27,8 @@ namespace dotnetCampus.SourceYard.Utils
 
             var elementList = new List<XElement>();
             elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, "Compile", false));
-            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Resource", true));
-            elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Content", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Resource", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Content", true));
             elementList.AddRange(IncludingItemCompileFileToElement(embeddedResource, "EmbeddedResource", true));
             elementList.AddRange(IncludingItemCompileFileToElement(noneFileList, "None", true));
 
