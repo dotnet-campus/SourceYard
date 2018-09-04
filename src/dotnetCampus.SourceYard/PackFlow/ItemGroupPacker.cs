@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using dotnetCampus.SourceYard.Context;
+using dotnetCampus.SourceYard.Utils;
 
 namespace dotnetCampus.SourceYard.PackFlow
 {
@@ -39,22 +40,18 @@ namespace dotnetCampus.SourceYard.PackFlow
             // nuget 的源代码
             var sourceReferenceSourceFolder = @"$(MSBuildThisFileDirectory)..\src\";
 
-            var (itemGroupElement, itemGroupElementOfXaml) = GetItemGroup(context.PackagedProjectFile, context.ProjectFolder);
-
-            var itemGroup = ItemGroupToString(itemGroupElement, itemGroupElementOfXaml);
-
             // 读取文件
             var buildfile = File.ReadAllText(buildAssetsFile);
-            var replace = "<!--替换ItemGroup-->";
 
-
-            // 替换为 nuget 源代码的文件
-            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder));
+            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, sourceReferenceSourceFolder, false,
+                "<!--替换ItemGroup-->", "<!--替换XmlItemGroup-->");
 
             // 本地的代码，用于调试本地的代码
+            
             sourceReferenceSourceFolder = $@"$({context.PackageGuid}SourceFolder)\";
-            replace = "<!--替换 SOURCE_REFERENCE ItemGroup-->";
-            buildfile = buildfile.Replace(replace, itemGroup.Replace(SourceFile, sourceReferenceSourceFolder).Replace("Visible=\"False\"", "Visible=\"True\""));
+
+            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, sourceReferenceSourceFolder, true,
+                "<!--替换 SOURCE_REFERENCE ItemGroup-->", "<!--替换 SOURCE_REFERENCE XmlItemGroup-->");
 
             // 用户可以选择使用 nuget 源代码，也可以选择使用自己的代码，所以就需要使用两个不同的值
 
@@ -62,131 +59,14 @@ namespace dotnetCampus.SourceYard.PackFlow
             File.WriteAllText(buildAssetsFile, buildfile);
         }
 
-        private string ItemGroupToString(XElement itemGroupElement, XElement itemGroupElementOfXaml)
+        private string ReplaceString(PackagedProjectFile contextPackagedProjectFile,string str, string filePath, bool isVisible,
+            string replaceItemGroup,string replaceXmlItemGroup)
         {
-            return itemGroupElement.ToString() + "\r\n\r\n\r\n" + itemGroupElementOfXaml.ToString();
-        }
+            var groupElement = new ItemGroupElement(contextPackagedProjectFile, filePath, isVisible);
+            var (itemGroupElement, itemGroupElementOfXaml) = groupElement.GetItemGroup();
 
-        public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup(PackagedProjectFile contextPackagedProjectFile, string projectFolder)
-        {
-            var compileFileList = GetFileList(contextPackagedProjectFile.CompileFile);
-            var contentFileList = GetFileList(contextPackagedProjectFile.ContentFile);
-            var resourceFileList = GetFileList(contextPackagedProjectFile.ResourceFile);
-            var noneFileList = GetFileList(contextPackagedProjectFile.NoneFile);
-            var embeddedResource = GetFileList(contextPackagedProjectFile.EmbeddedResource);
-            var pageFileList = GetFileList(contextPackagedProjectFile.Page);
-
-            var elementList = new List<XElement>();
-            elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, "Compile", false));
-            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Resource", true));
-            elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Content", true));
-            elementList.AddRange(IncludingItemCompileFileToElement(embeddedResource, "EmbeddedResource", true));
-            elementList.AddRange(IncludingItemCompileFileToElement(noneFileList, "None", true));
-
-            var itemGroupElement = new XElement("ItemGroup", elementList);
-
-            elementList = new List<XElement>();
-            elementList.AddRange(XamlItemCompileFileToElement(pageFileList, "Page", false));
-
-            var itemGroupElementOfXaml = new XElement("ItemGroup", elementList);
-
-            return (itemGroupElement, itemGroupElementOfXaml);
-        }
-
-        private List<XElement> XamlItemCompileFileToElement(List<string> compileFileList, string includingItemTypes,
-            bool copyToOutputDirectory)
-        {
-            var elementList = new List<XElement>();
-
-            foreach (var temp in compileFileList)
-            {
-                var element = new XElement(includingItemTypes);
-
-                var file = SourceFile + temp;
-
-                SetXmlItemElement(element, copyToOutputDirectory, file);
-
-                elementList.Add(element);
-            }
-
-            return elementList;
-        }
-
-       
-        private List<XElement> IncludingItemCompileFileToElement(List<string> compileFileList,
-            string includingItemTypes, bool copyToOutputDirectory)
-        {
-            var elementList = new List<XElement>();
-            foreach (var temp in compileFileList)
-            {
-                var element = new XElement(includingItemTypes);
-                var file = SourceFile + temp;
-                SetItemElement(element, copyToOutputDirectory, file);
-
-                elementList.Add(element);
-            }
-
-            return elementList;
-        }
-
-        private static void SetXmlItemElement(XElement element, bool copyToOutputDirectory, string file)
-        {
-            element.SetAttributeValue("SubType", "Designer");
-            element.SetAttributeValue("Generator", "MSBuild:Compile");
-
-            SetItemElement(element, copyToOutputDirectory, file);
-        }
-
-
-        private static void SetItemElement(XElement element, bool copyToOutputDirectory, string file)
-        {
-            element.SetAttributeValue("Include", file);
-            element.SetAttributeValue("Visible", "False");
-            if (copyToOutputDirectory)
-            {
-                element.SetAttributeValue("CopyToOutputDirectory", "PreserveNewest");
-            }
-        }
-
-        /// <summary>
-        /// 用于替换的字符
-        /// </summary>
-        private const string SourceFile = @"-- replace folder --";
-
-        private List<string> GetFileList(string file)
-        {
-            if (string.IsNullOrEmpty(file) || !File.Exists(file))
-            {
-                return new List<string>();
-            }
-
-            var fileList = File.ReadAllLines(file).ToList();
-
-            fileList = RemoveTempFile(fileList);
-
-            return fileList;
-        }
-
-        private List<string> RemoveTempFile(List<string> fileList)
-        {
-            fileList.RemoveAll
-            (
-                temp => temp.StartsWith("obj\\")
-                        || temp.StartsWith("bin\\")
-            );
-
-            fileList.RemoveAll(temp =>
-            {
-                var pathRoot = Path.GetPathRoot(temp);
-                if (!string.IsNullOrEmpty(pathRoot))
-                {
-                    return temp.StartsWith(pathRoot);
-                }
-
-                return false;
-            });
-
-            return fileList;
+            return str.Replace(replaceItemGroup, itemGroupElement.ToString())
+                .Replace(replaceXmlItemGroup, itemGroupElementOfXaml.ToString());
         }
     }
 }
