@@ -6,6 +6,6 @@ before_build:
 - choco install codecov
 build:
   verbosity: minimal
-test_script: 
+test_script:
 - OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test" -output:coverage.xml -oldStyle
 - codecov -f "coverage.xml"
