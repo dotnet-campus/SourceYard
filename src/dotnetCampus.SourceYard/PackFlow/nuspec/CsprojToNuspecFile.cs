@@ -149,8 +149,6 @@ namespace dotnetCampus.SourceYard.PackFlow.nuspec
 
             return str.ToString();
         }
-
-
         private string GetPackageReleaseNotes(XElement element)
         {
             return GetString(element, "PackageReleaseNotes");
