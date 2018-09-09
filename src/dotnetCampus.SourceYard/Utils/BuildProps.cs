@@ -50,6 +50,5 @@ namespace dotnetCampus.SourceYard.Utils
         public string PackageReleaseNotes { get; set; }
 
         public string PackageTags { get; set; }
-
     }
 }
