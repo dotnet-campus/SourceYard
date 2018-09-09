@@ -41,7 +41,6 @@ namespace dotnetCampus.SourceYard
                 return;
             }
 
-
             _projectFile = Path.GetFullPath(projectFile);
             _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
@@ -68,8 +67,6 @@ namespace dotnetCampus.SourceYard
                 new NuGetPacker(),
             };
         }
-
-  
 
         internal void Pack()
         {
