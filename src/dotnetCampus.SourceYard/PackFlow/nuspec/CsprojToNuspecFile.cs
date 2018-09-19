@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using dotnetCampus.SourceYard.Utils;
 
-namespace dotnetCampus.SourceYard.PackFlow.nuspec
+namespace dotnetCampus.SourceYard.PackFlow.Nuspec
 {
     public class CsprojToNuspecFile
     {
