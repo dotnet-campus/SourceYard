@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace dotnetCampus.SourceYard.PackFlow.nuspec
+namespace dotnetCampus.SourceYard.PackFlow.Nuspec
 {
     [XmlType("package")]
     public class NuspecPackage

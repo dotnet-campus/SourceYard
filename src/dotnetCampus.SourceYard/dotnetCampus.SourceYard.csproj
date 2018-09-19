@@ -4,20 +4,6 @@
     <!-- Project building properties -->
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-
-    <!-- NuGet package properties -->
-    <Version>0.1.5136-alpha</Version>
-    <Authors>dotnet-campus</Authors>
-    <Company>dotnet-campus</Company>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Add a NuGet package only for dll reference? By using dotnetCampus.SourceYard, you can pack a NuGet package with source code. By installing the new source code package, all source codes behaviors just like it is in your project.</Description>
-    <Copyright>Copyright (c) 2018 dotnet-campus</Copyright>
-    <PackageLicenseUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>source;dotnet;nuget;msbuild</PackageTags>
   </PropertyGroup>
   
   <PropertyGroup>

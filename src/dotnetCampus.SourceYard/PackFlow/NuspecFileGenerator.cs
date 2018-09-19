@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using dotnetCampus.SourceYard.Context;
-using dotnetCampus.SourceYard.PackFlow.nuspec;
+using dotnetCampus.SourceYard.PackFlow.Nuspec;
 
 namespace dotnetCampus.SourceYard.PackFlow
 {
