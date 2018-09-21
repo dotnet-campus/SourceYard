@@ -6,15 +6,16 @@ Add a NuGet package only for dll reference? By using dotnetCampus.SourceYard, yo
 
 ## Build Status
 
-<!-- Build status & Community status -->
 Appveyor|Codecov
 :-:|:-:
-[![Build status][1i]][1l]|[![codecov][2i]][2l]
+[![Build status][ai]][al]|[![codecov][ci]][cl]
 
-[1i]: https://ci.appveyor.com/api/projects/status/kxn9iakcittmvrcj?svg=true
-[1l]: https://ci.appveyor.com/project/xinyuehtx/sourceyard
-[2i]: https://codecov.io/gh/dotnet-campus/SourceYard/branch/master/graph/badge.svg
-[2l]: https://codecov.io/gh/dotnet-campus/SourceYard
+<!-- a and c are the first letter of CI plugins. i is icon and l is link. -->
+
+[ai]: https://ci.appveyor.com/api/projects/status/kxn9iakcittmvrcj?svg=true
+[al]: https://ci.appveyor.com/project/xinyuehtx/sourceyard
+[ci]: https://codecov.io/gh/dotnet-campus/SourceYard/branch/master/graph/badge.svg
+[cl]: https://codecov.io/gh/dotnet-campus/SourceYard
 
 ## NuGet Package
 
