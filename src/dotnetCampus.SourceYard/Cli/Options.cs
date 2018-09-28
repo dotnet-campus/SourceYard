@@ -54,11 +54,11 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "PackageProjectUrl")]
         public string PackageProjectUrl { get; set; }
 
-        [Option(longName: "Copyright")]
-        public string Copyright { get; set; }
+        [Option(longName: "CopyrightFile")]
+        public string CopyrightFile { get; set; }
 
-        [Option(longName: "Description")]
-        public string Description { get; set; }
+        [Option(longName: "DescriptionFile")]
+        public string DescriptionFile { get; set; }
 
         [Option(longName: "ApplicationDefinition")]
         public string ApplicationDefinition { get; set; }
@@ -75,8 +75,8 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "PackageIconUrl")]
         public string PackageIconUrl { get; set; }
 
-        [Option(longName: "PackageReleaseNotes")]
-        public string PackageReleaseNotes { get; set; }
+        [Option(longName: "PackageReleaseNotesFile")]
+        public string PackageReleaseNotesFile { get; set; }
 
         [Option(longName: "PackageTags")]
         public string PackageTags { get; set; }
