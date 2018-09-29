@@ -45,7 +45,6 @@ namespace dotnetCampus.SourceYard
 内容{options.ContentFile}
 页面{options.Page}");
 
-
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
