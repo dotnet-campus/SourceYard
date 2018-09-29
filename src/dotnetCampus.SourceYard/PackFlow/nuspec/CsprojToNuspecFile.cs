@@ -84,7 +84,6 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             return packageList;
         }
 
-
         private List<NuspecDependency> GetDependencies(IEnumerable<Package> packageList)
         {
             //return new List<NugetTargetFramework>()
@@ -105,7 +104,6 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
                 Version = GetPackageVersion(temp.ReferenceVersion),
             }).ToList();
         }
-
 
         private string GetPackageVersion(ReferenceVersion version)
         {
@@ -149,7 +147,6 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
 
             return str.ToString();
         }
-
 
         private string GetPackageReleaseNotes(XElement element)
         {
