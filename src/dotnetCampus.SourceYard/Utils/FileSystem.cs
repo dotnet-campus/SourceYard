@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -26,6 +27,12 @@ namespace dotnetCampus.SourceYard.Utils
         {
             foreach (var file in new DirectoryInfo(sourceFolder).EnumerateFiles("*", searchOption))
             {
+                // 如果是忽略的文件夹，就直接忽略
+                if (IsIgnoreFolder(file) || IsIgnoreFile(file))
+                {
+                    continue;
+                }
+
                 var relativePath = MakeRelativePath(sourceFolder, file.FullName);
                 var targetFile = Path.GetFullPath(Path.Combine(targetFolder, relativePath));
                 var directory = Path.GetDirectoryName(targetFile);
@@ -43,6 +50,57 @@ namespace dotnetCampus.SourceYard.Utils
 
                 File.Copy(file.FullName, targetFile, true);
             }
+        }
+
+        /// <summary>
+        /// 是否是忽略的文件
+        /// </summary>
+        /// <param name="file"></param>
+        private static bool IsIgnoreFile(FileInfo file)
+        {
+            var name = file.Name;
+
+            var ignoreFileEndList = new List<string>()
+            {
+                ".csproj.DotSettings",".suo",".user",".sln.docstates",".nupkg"
+            };
+
+            foreach (var temp in ignoreFileEndList)
+            {
+                if (name.EndsWith(temp, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsIgnoreFolder(FileInfo file)
+        {
+            var directory = file.Directory;
+            Debug.Assert(directory != null);
+            var name = directory?.Name;
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            var ignoreFolderList = new List<string>()
+            {
+                ".vs","bin","obj",".git","x64","x86"
+            };
+
+            foreach (var temp in ignoreFolderList)
+            {
+                if (name.Equals(temp, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static string MakeRelativePath(string fromPath, string toPath)
