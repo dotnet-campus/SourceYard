@@ -22,6 +22,10 @@ namespace dotnetCampus.SourceYard.Utils
             CopyFiles(sourceDirectory.FullName, targetFolder, SearchOption.TopDirectoryOnly, nameConverter);
         }
 
+        internal static IList<string> IgnoreFolderList { set; get; } = new List<string>();
+
+        internal static IList<string> IgnoreFileEndList { set; get; } = new List<string>();
+
         private static void CopyFiles(string sourceFolder, string targetFolder, SearchOption searchOption,
             Func<string, string> nameConverter = null)
         {
@@ -60,12 +64,12 @@ namespace dotnetCampus.SourceYard.Utils
         {
             var name = file.Name;
 
-            var ignoreFileEndList = new List<string>()
+            if (IgnoreFileEndList == null)
             {
-                ".csproj.DotSettings",".suo",".user",".sln.docstates",".nupkg"
-            };
+                return false;
+            }
 
-            foreach (var temp in ignoreFileEndList)
+            foreach (var temp in IgnoreFileEndList)
             {
                 if (name.EndsWith(temp, StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -87,12 +91,12 @@ namespace dotnetCampus.SourceYard.Utils
                 return false;
             }
 
-            var ignoreFolderList = new List<string>()
+            if (IgnoreFolderList == null)
             {
-                ".vs","bin","obj",".git","x64","x86"
-            };
+                return false;
+            }
 
-            foreach (var temp in ignoreFolderList)
+            foreach (var temp in IgnoreFolderList)
             {
                 if (name.Equals(temp, StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -105,8 +109,15 @@ namespace dotnetCampus.SourceYard.Utils
 
         private static string MakeRelativePath(string fromPath, string toPath)
         {
-            if (string.IsNullOrEmpty(fromPath)) throw new ArgumentNullException(nameof(fromPath));
-            if (string.IsNullOrEmpty(toPath)) throw new ArgumentNullException(nameof(toPath));
+            if (string.IsNullOrEmpty(fromPath))
+            {
+                throw new ArgumentNullException(nameof(fromPath));
+            }
+
+            if (string.IsNullOrEmpty(toPath))
+            {
+                throw new ArgumentNullException(nameof(toPath));
+            }
 
             var fromUri = new Uri(fromPath);
             var toUri = new Uri(toPath);
