@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using CommandLine;
 using dotnetCampus.SourceYard.Cli;
 using dotnetCampus.SourceYard.Utils;
@@ -44,20 +45,23 @@ namespace dotnetCampus.SourceYard
 内容{options.ContentFile}
 页面{options.Page}");
 
+                var description = ReadFile(options.DescriptionFile);
+                var copyright = ReadFile(options.CopyrightFile);
+
                 var buildProps = new BuildProps()
                 {
                     Authors = options.Authors,
                     Company = options.Company,
                     Owner = options.Owner ?? options.Authors,
-                    Copyright = options.Copyright,
-                    Description = options.Description,
+                    Copyright = copyright,
+                    Description = description,
                     PackageProjectUrl = options.PackageProjectUrl,
                     RepositoryType = options.RepositoryType,
                     RepositoryUrl = options.RepositoryUrl,
                     Title = options.Title,
                     PackageIconUrl = options.PackageIconUrl,
                     PackageLicenseUrl = options.PackageLicenseUrl,
-                    PackageReleaseNotes = options.PackageReleaseNotes,
+                    PackageReleaseNotes = options.PackageReleaseNotesFile,
                     PackageTags = options.PackageTags
                 };
 
@@ -77,10 +81,38 @@ namespace dotnetCampus.SourceYard
             {
                 logger.Error(e.Message);
             }
+
+            string ReadFile(string file)
+            {
+                if (string.IsNullOrEmpty(file))
+                {
+                    return "";
+                }
+
+                file = Path.GetFullPath(file);
+                if (File.Exists(file))
+                {
+                    try
+                    {
+                        return File.ReadAllText(file);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
+                }
+
+                return "";
+            }
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)
         {
+            var logger = new Logger();
+            foreach (var temp in errors)
+            {
+                logger.Error(temp.ToString());
+            }
         }
     }
 }

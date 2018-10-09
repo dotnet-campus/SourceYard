@@ -96,7 +96,7 @@ namespace dotnetCampus.SourceYard.Utils
         private void SetItemElement(XElement element, bool copyToOutputDirectory, string file)
         {
             element.SetAttributeValue("Include", file);
-            element.SetAttributeValue("Link", "%(RecursiveDir)%(Filename)%(Extension)");
+            //element.SetAttributeValue("Link", "%(RecursiveDir)%(Filename)%(Extension)");
 
             if (_isVisible)
             {

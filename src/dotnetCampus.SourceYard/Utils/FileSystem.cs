@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -21,11 +22,27 @@ namespace dotnetCampus.SourceYard.Utils
             CopyFiles(sourceDirectory.FullName, targetFolder, SearchOption.TopDirectoryOnly, nameConverter);
         }
 
+        /// <summary>
+        /// 忽略的文件夹列表
+        /// </summary>
+        internal static IList<string> IgnoreFolderList { set; get; } = new List<string>();
+
+        /// <summary>
+        /// 忽略的文件后缀列表
+        /// </summary>
+        internal static IList<string> IgnoreFileEndList { set; get; } = new List<string>();
+
         private static void CopyFiles(string sourceFolder, string targetFolder, SearchOption searchOption,
             Func<string, string> nameConverter = null)
         {
             foreach (var file in new DirectoryInfo(sourceFolder).EnumerateFiles("*", searchOption))
             {
+                // 如果是忽略的文件夹，就直接忽略
+                if (IsIgnoreFolder(file) || IsIgnoredFile(file))
+                {
+                    continue;
+                }
+
                 var relativePath = MakeRelativePath(sourceFolder, file.FullName);
                 var targetFile = Path.GetFullPath(Path.Combine(targetFolder, relativePath));
                 var directory = Path.GetDirectoryName(targetFile);
@@ -38,17 +55,75 @@ namespace dotnetCampus.SourceYard.Utils
                 if (nameConverter != null)
                 {
                     fileName = nameConverter(fileName);
-                    targetFile = Path.Combine(Path.GetDirectoryName(targetFile), fileName);
+                    targetFile = Path.Combine(Path.GetDirectoryName(targetFile) ?? throw new InvalidOperationException(), fileName);
                 }
 
                 File.Copy(file.FullName, targetFile, true);
             }
         }
 
+        /// <summary>
+        /// 是否是忽略的文件
+        /// </summary>
+        /// <param name="file"></param>
+        private static bool IsIgnoredFile(FileInfo file)
+        {
+            var name = file.Name;
+
+            if (IgnoreFileEndList == null)
+            {
+                return false;
+            }
+
+            foreach (var temp in IgnoreFileEndList)
+            {
+                if (name.EndsWith(temp, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsIgnoreFolder(FileInfo file)
+        {
+            var directory = file.Directory;
+            Debug.Assert(directory != null);
+            var name = directory?.Name;
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            if (IgnoreFolderList == null)
+            {
+                return false;
+            }
+
+            foreach (var temp in IgnoreFolderList)
+            {
+                if (name.Equals(temp, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static string MakeRelativePath(string fromPath, string toPath)
         {
-            if (string.IsNullOrEmpty(fromPath)) throw new ArgumentNullException(nameof(fromPath));
-            if (string.IsNullOrEmpty(toPath)) throw new ArgumentNullException(nameof(toPath));
+            if (string.IsNullOrEmpty(fromPath))
+            {
+                throw new ArgumentNullException(nameof(fromPath));
+            }
+
+            if (string.IsNullOrEmpty(toPath))
+            {
+                throw new ArgumentNullException(nameof(toPath));
+            }
 
             var fromUri = new Uri(fromPath);
             var toUri = new Uri(toPath);
