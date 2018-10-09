@@ -30,19 +30,19 @@ namespace dotnetCampus.SourceYard.PackFlow
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
 
-#if DEBUG
+//#if DEBUG
 
-            var str = new StringBuilder();
-            using (var xmlWriter = XmlWriter.Create(str))
-            {
-                var xmlSerializer = new XmlSerializer(typeof(NuspecPackage));
-                xmlSerializer.Serialize(xmlWriter, nuspecPackage, ns);
-            }
+//            var str = new StringBuilder();
+//            using (var xmlWriter = XmlWriter.Create(str))
+//            {
+//                var xmlSerializer = new XmlSerializer(typeof(NuspecPackage));
+//                xmlSerializer.Serialize(xmlWriter, nuspecPackage, ns);
+//            }
 
-            var rawceeyopereSuwhisa = str.ToString();
+//            var rawceeyopereSuwhisa = str.ToString();
 
-            rawceeyopereSuwhisa = rawceeyopereSuwhisa;
-#endif
+//            rawceeyopereSuwhisa = rawceeyopereSuwhisa;
+//#endif
 
             using (var stream = file.OpenWrite())
             {

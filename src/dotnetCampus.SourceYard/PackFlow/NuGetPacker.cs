@@ -5,6 +5,9 @@ using dotnetCampus.SourceYard.Context;
 
 namespace dotnetCampus.SourceYard.PackFlow
 {
+    /// <summary>
+    /// 将文件压缩为 nuget 包
+    /// </summary>
     internal class NuGetPacker : IPackFlow
     {
         public void Pack(IPackingContext context)
@@ -27,6 +30,7 @@ namespace dotnetCampus.SourceYard.PackFlow
                 Directory.CreateDirectory(directory);
             }
 
+            // nuget 包就是一个 zip 压缩包
             ZipFile.CreateFromDirectory(context.PackingFolder, targetPackageFile);
         }
     }

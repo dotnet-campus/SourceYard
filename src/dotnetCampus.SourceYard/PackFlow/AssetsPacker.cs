@@ -12,7 +12,7 @@ namespace dotnetCampus.SourceYard.PackFlow
         {
             // 将 Assets 文件夹中的所有文件复制到打包文件夹中。
 
-            var assetsFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Assets", "Target",
+            var assetsFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location) ?? throw new InvalidOperationException(), "Assets", "Target",
                 "build");
 
             var copyFolder = Path.Combine(context.PackingFolder, "build");

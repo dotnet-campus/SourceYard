@@ -22,8 +22,14 @@ namespace dotnetCampus.SourceYard.Utils
             CopyFiles(sourceDirectory.FullName, targetFolder, SearchOption.TopDirectoryOnly, nameConverter);
         }
 
+        /// <summary>
+        /// 忽略的文件夹列表
+        /// </summary>
         internal static IList<string> IgnoreFolderList { set; get; } = new List<string>();
 
+        /// <summary>
+        /// 忽略的文件后缀列表
+        /// </summary>
         internal static IList<string> IgnoreFileEndList { set; get; } = new List<string>();
 
         private static void CopyFiles(string sourceFolder, string targetFolder, SearchOption searchOption,
