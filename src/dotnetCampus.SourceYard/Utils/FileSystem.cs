@@ -32,7 +32,7 @@ namespace dotnetCampus.SourceYard.Utils
             foreach (var file in new DirectoryInfo(sourceFolder).EnumerateFiles("*", searchOption))
             {
                 // 如果是忽略的文件夹，就直接忽略
-                if (IsIgnoreFolder(file) || IsIgnoreFile(file))
+                if (IsIgnoreFolder(file) || IsIgnoredFile(file))
                 {
                     continue;
                 }
@@ -49,7 +49,7 @@ namespace dotnetCampus.SourceYard.Utils
                 if (nameConverter != null)
                 {
                     fileName = nameConverter(fileName);
-                    targetFile = Path.Combine(Path.GetDirectoryName(targetFile), fileName);
+                    targetFile = Path.Combine(Path.GetDirectoryName(targetFile) ?? throw new InvalidOperationException(), fileName);
                 }
 
                 File.Copy(file.FullName, targetFile, true);
@@ -60,7 +60,7 @@ namespace dotnetCampus.SourceYard.Utils
         /// 是否是忽略的文件
         /// </summary>
         /// <param name="file"></param>
-        private static bool IsIgnoreFile(FileInfo file)
+        private static bool IsIgnoredFile(FileInfo file)
         {
             var name = file.Name;
 
