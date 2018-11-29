@@ -7,7 +7,7 @@ namespace dotnetCampus.SourceYard.Context
     internal class PackingContext : IPackingContext
     {
         public PackingContext(ILogger logger, string projectFile,
-            string projectName, string packageVersion, string packageOutputPath, string packingFolder,
+            string projectName,string packageId, string packageVersion, string packageOutputPath, string packingFolder,
             PackagedProjectFile packagedProjectFile)
         {
             Logger = logger;
@@ -15,7 +15,15 @@ namespace dotnetCampus.SourceYard.Context
             ProjectFile = projectFile;
             ProjectFolder = Path.GetDirectoryName(projectFile);
             ProjectName = projectName;
-            PackageId = projectName + ".Source";
+            if (string.IsNullOrEmpty(packageId))
+            {
+                PackageId = projectName + ".Source";
+            }
+            else
+            {
+                PackageId = packageId;
+            }
+
             PackageGuid = projectName.Replace(".", "");
             PackingFolder = packingFolder;
             PackagedProjectFile = packagedProjectFile;
