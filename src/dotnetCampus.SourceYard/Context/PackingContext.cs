@@ -15,13 +15,14 @@ namespace dotnetCampus.SourceYard.Context
             ProjectFile = projectFile;
             ProjectFolder = Path.GetDirectoryName(projectFile);
             ProjectName = projectName;
+            packageId = packageId.Trim();
             if (string.IsNullOrEmpty(packageId))
             {
                 PackageId = projectName + ".Source";
             }
             else
             {
-                PackageId = packageId;
+                PackageId = packageId + ".Source";
             }
 
             PackageGuid = projectName.Replace(".", "");
