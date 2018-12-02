@@ -5,8 +5,6 @@ namespace dotnetCampus.SourceYard.Cli
 {
     internal class Options
     {
-        [Option(longName: "debug")]
-        public string IsDebug { get; set; }
 
         /// <summary>
         /// 项目文件所在的路径
@@ -103,5 +101,8 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option(longName: "PackageTags")]
         public string PackageTags { get; set; }
+
+        [Option(longName: "PackageId")]
+        public string PackageId { get; set; }
     }
 }

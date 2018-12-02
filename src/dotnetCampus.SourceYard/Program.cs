@@ -19,12 +19,11 @@ namespace dotnetCampus.SourceYard
 
         private static void RunOptionsAndReturnExitCode(Options options)
         {
-            if (options.IsDebug == "true")
-            {
-                Debugger.Launch();
-                Console.WriteLine(Environment.CommandLine);
-            }
 
+#if DEBUG
+            Debugger.Launch();
+            Console.WriteLine(Environment.CommandLine);
+#endif
             var logger = new Logger();
 
             try
@@ -72,9 +71,10 @@ namespace dotnetCampus.SourceYard
                     resourceFile: options.ResourceFile, 
                     contentFile: options.ContentFile, 
                     page: options.Page, 
-                    applicationDefinition: options.ApplicationDefinition, 
+                    applicationDefinition: options.ApplicationDefinition,
                     noneFile: options.None,
                     embeddedResource: options.EmbeddedResource,
+                    packageId: options.PackageId,
                     buildProps: buildProps).Pack();
             }
             catch (Exception e)

@@ -45,9 +45,7 @@
       <SourceYardOwner Condition="$(Owner) != ''" >--Owner "$(Owner)"</SourceYardOwner>
       <SourceYardPackageTags Condition="$(PackageTags) != ''" >--PackageTags "$(PackageTags) "</SourceYardPackageTags>
       <SourceYardPackageReleaseNotes Condition="$(PackageReleaseNotes) != ''" > --PackageReleaseNotesFile $(PackageReleaseNotesFile)</SourceYardPackageReleaseNotes>
-      <SourceYardPackageTags Condition="$(PackageTags) != ''" >--PackageTags "$(PackageTags) "</SourceYardPackageTags>
-
-      <SourceYardDebug Condition="$(Configuration) == 'DEBUG'">--debug true</SourceYardDebug>
+      <SourceYardPackageId Condition="'$(PackageId)' != ''">--PackageId "$(PackageId) "</SourceYardPackageId>
 
       <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath) "</SourceMSBuildProjectFullPath>
       <SourceIntermediateDirectory>-i "$(SourcePackingDirectory)Package "</SourceIntermediateDirectory>
@@ -55,6 +53,6 @@
     </PropertyGroup>
 
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageTags) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardDebug)"></Exec>
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId)"></Exec>
   </Target>
 </Project>

@@ -12,7 +12,7 @@ namespace dotnetCampus.SourceYard
         public Packer(string projectFile, string intermediateDirectory,
             string packageOutputPath, string packageVersion, string compileFile, string resourceFile,
             string contentFile, string page, string applicationDefinition, string noneFile, string embeddedResource,
-            BuildProps buildProps)
+            BuildProps buildProps, string packageId)
         {
             Logger = new Logger();
 
@@ -46,6 +46,7 @@ namespace dotnetCampus.SourceYard
             _packageOutputPath = Path.GetFullPath(packageOutputPath);
             _packageVersion = packageVersion;
             BuildProps = buildProps;
+            PackageId = packageId;
 
             PackagedProjectFile = new PackagedProjectFile
             (
@@ -111,6 +112,7 @@ namespace dotnetCampus.SourceYard
                         Logger,
                         projectFile,
                         projectName,
+                        PackageId,
                         _packageVersion,
                         _packageOutputPath,
                         packingFolder,
@@ -133,6 +135,7 @@ namespace dotnetCampus.SourceYard
         }
 
         private ILogger Logger { get; }
+        private string PackageId { get; }
 
         private readonly string _projectFile;
         private readonly string _intermediateDirectory;
