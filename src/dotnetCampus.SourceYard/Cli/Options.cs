@@ -5,7 +5,6 @@ namespace dotnetCampus.SourceYard.Cli
 {
     internal class Options
     {
-
         /// <summary>
         /// 项目文件所在的路径
         /// </summary>

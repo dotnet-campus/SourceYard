@@ -19,7 +19,6 @@ namespace dotnetCampus.SourceYard
 
         private static void RunOptionsAndReturnExitCode(Options options)
         {
-
 #if DEBUG
             Debugger.Launch();
             Console.WriteLine(Environment.CommandLine);
