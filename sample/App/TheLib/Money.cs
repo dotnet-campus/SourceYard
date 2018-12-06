@@ -78,7 +78,7 @@ namespace TheLib
                 str.Insert(0, Grees[i]);
                 str.Insert(0, Uppers[n]);
                 money = money / 10;
-                money = money - n / 10.0;
+                money = money - (n / 10.0);
             }
 
             str = str.Replace("零亿", "亿零");
