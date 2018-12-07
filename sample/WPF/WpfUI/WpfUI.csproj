@@ -5,9 +5,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>WpfUI</RootNamespace>
     <AssemblyName>WpfUI</AssemblyName>
-    <ApplicationIcon />
-    <StartupObject />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);WPF</DefineConstants>
   </PropertyGroup>
  
   <ItemGroup>
@@ -34,10 +35,6 @@
     <None Remove="obj\**" />
     <Page Remove="obj\**" />
     <Resource Remove="obj\**" />
-  </ItemGroup>
- 
-  <ItemGroup>
-    <None Remove="InterestingControl.xaml" />
   </ItemGroup>
  
   <ItemGroup>
@@ -70,5 +67,11 @@
  
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <None Update="InterestingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
 </Project>
