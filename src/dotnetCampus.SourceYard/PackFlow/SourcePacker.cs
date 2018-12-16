@@ -9,10 +9,13 @@ namespace dotnetCampus.SourceYard.PackFlow
     {
         public void Pack(IPackingContext context)
         {
+            context.Logger.Message("开始复制源代码文件");
             var srcFolder = Path.Combine(context.PackingFolder, "src");
+            context.Logger.Message("源代码临时复制文件夹 " + srcFolder);
             FileSystem.IgnoreFileEndList = IgnoreFileEndList;
             FileSystem.IgnoreFolderList = IgnoreFolderList;
             FileSystem.CopyFolderContents(context.ProjectFolder, srcFolder, excludes: IgnoreFolderList);
+            context.Logger.Message("复制源代码文件完成");
         }
 
         /// <summary>
