@@ -15,7 +15,7 @@ namespace dotnetCampus.SourceYard.Context
             ProjectFile = projectFile;
             ProjectFolder = Path.GetDirectoryName(projectFile);
             ProjectName = projectName;
-            packageId = packageId.Trim();
+            packageId = packageId?.Trim() ?? "";
             if (string.IsNullOrEmpty(packageId))
             {
                 PackageId = projectName + ".Source";

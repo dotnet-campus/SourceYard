@@ -8,10 +8,16 @@
     <!-- 如果存在本地的文件，使用这个文件，在这个文件里写引用本地的代码，这样可以调试本地代码 -->
   </Import>
 
-  <Target Name="_#(PackageGuid)CopySourceProjectFile" BeforeTargets="CoreCompile">
+  <Target Name="_#(PackageGuid)CopySourceProjectFile" BeforeTargets="CoreCompile"
+          Condition="!Exists('$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props')">
     <!-- 尝试复制 #(PackageId).SourceProject.props 文件 -->
-    <Copy Condition="!Exists('$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props')"
-          SourceFiles="$(MSBuildThisFileDirectory)#(PackageId).SourceProject.props" DestinationFiles="$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props"></Copy>
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)#(PackageId).SourceProject.props" DestinationFiles="$(MSBuildProjectDirectory)/SourceProject/#(PackageId).SourceProject.props"></Copy>
+  </Target>
+
+  <Target Name="_#(PackageGuid)GitignoreFile" AfterTargets="_#(PackageGuid)CopySourceProjectFile"
+          Condition="!Exists('$(MSBuildProjectDirectory)/SourceProject/.gitignore')">
+    <!-- 添加忽略文件-->
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)/SourceProject/.gitignore" Lines="/.gitignore;/*.Source.SourceProject.props" Overwrite="true" />
   </Target>
 
   <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">

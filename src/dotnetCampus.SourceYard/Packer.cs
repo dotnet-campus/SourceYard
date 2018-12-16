@@ -16,6 +16,8 @@ namespace dotnetCampus.SourceYard
         {
             Logger = new Logger();
 
+            Logger.Message("初始化打包");
+
             if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile))
             {
                 Logger.Error($"无法从{projectFile}找到项目文件");
@@ -67,10 +69,14 @@ namespace dotnetCampus.SourceYard
                 new NuspecFileGenerator(),
                 new NuGetPacker(),
             };
+
+            Logger.Message("初始化打包完成");
         }
 
         internal void Pack()
         {
+            Logger.Message("开始打包");
+
             var packingFolder = _intermediateDirectory;
             PrepareEmptyDirectory(packingFolder);
 
@@ -123,6 +129,8 @@ namespace dotnetCampus.SourceYard
                     };
                     packer.Pack(context);
                 }
+
+                Logger.Message("打包完成");
             }
             catch (PackingException ex)
             {

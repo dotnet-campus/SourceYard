@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <Import Condition="Exists('obj\WpfApp.csproj.nuget.g.props') " Project="obj\WpfApp.csproj.nuget.g.props" />
+  <PropertyGroup>
+    <LanguageTargets>$(MSBuildToolsPath)\Microsoft.CSharp.targets</LanguageTargets>
+    <TargetFrameworks>net45;</TargetFrameworks>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>WpfApp</RootNamespace>
+    <AssemblyName>WpfApp</AssemblyName>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Page Include="**\*.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+
+    <Resource Include="**\*.png" />
+    <Resource Include="**\*.jpg" />
+    <Resource Include="**\*.cur" />
+    <Resource Include="**\*.ps" />
+    <None Include="**\*.fx" />
+    <None Include="**\*.md" />
+    <None Include="**\*.ruleset" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <PackageReference Include="WpfUI.Source" Version="1.0.3" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <Import Condition="Exists('obj\WpfApp.csproj.nuget.g.targets') " Project="obj\WpfApp.csproj.nuget.g.targets" />
+</Project>
