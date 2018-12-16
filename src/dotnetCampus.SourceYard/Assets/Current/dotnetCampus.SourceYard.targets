@@ -1,5 +1,6 @@
 ﻿<Project>
-  <Target Name="SourceYard" AfterTargets="Build">
+  <Target Name="SourceYard" AfterTargets="Build"
+          Condition="$(PackSource) != 'False'">
     <PropertyGroup>
       <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
 
@@ -31,13 +32,13 @@
     <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="PackageReleaseNotes" Overwrite="true"></WriteLinesToFile>
 
     <PropertyGroup>
-   
+
       <SourceYardAuthors Condition="$(Authors) != ''">--Authors "$(Authors)"</SourceYardAuthors>
       <SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''" >--RepositoryUrl "$(RepositoryUrl)"</SourceYardRepositoryUrl>
       <SourceYardRepositoryType Condition="$(RepositoryType) != ''" >--RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
       <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''" >--PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>
       <SourceYardCopyright Condition="$(Copyright) != ''" >--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
-    
+
       <SourceYardDescription Condition="$(Description) != ''" >--DescriptionFile "$(DescriptionFile) "</SourceYardDescription>
 
       <SourceYardTitle Condition="$(Title) != ''" >--Title "$(Title)"</SourceYardTitle>
@@ -54,5 +55,9 @@
 
 
     <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId)"></Exec>
+  </Target>
+
+  <Target Name="SourceYardFalsePackSource" AfterTargets="Build">
+    <Message Text="因为用户设置 PackSource 为 false 所以没有打包源代码"></Message>
   </Target>
 </Project>
