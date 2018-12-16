@@ -64,7 +64,8 @@ namespace dotnetCampus.SourceYard
                 };
 
                 new Packer(projectFile: projectFile,
-                    intermediateDirectory, packageOutputPath: packageOutputPath, 
+                    intermediateDirectory: intermediateDirectory, 
+                    packageOutputPath: packageOutputPath, 
                     packageVersion: packageVersion, 
                     compileFile: options.CompileFile,
                     resourceFile: options.ResourceFile, 
