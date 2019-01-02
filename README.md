@@ -19,6 +19,8 @@ Appveyor|Codecov
 
 ## NuGet Package
 
+[![](https://img.shields.io/nuget/v/dotnetCampus.SourceYard.svg)](https://www.nuget.org/packages/dotnetCampus.SourceYard)
+
 ## Getting Started
 
 ## Documentation
