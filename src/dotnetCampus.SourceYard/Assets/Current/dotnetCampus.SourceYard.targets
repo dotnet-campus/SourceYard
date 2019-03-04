@@ -63,9 +63,9 @@
 
     <Target Name="_SourceYardClean">
         <PropertyGroup>
-            <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
+            <_SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</_SourcePackingDirectory>
         </PropertyGroup>
-        <RemoveDir Directories="$(SourcePackingDirectory)" />
+        <RemoveDir Directories="$(_SourcePackingDirectory)" />
     </Target>
 
   <Target Name="SourceYardFalsePackSource" AfterTargets="Build">
