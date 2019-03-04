@@ -57,6 +57,17 @@
     <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId)"></Exec>
   </Target>
 
+    <PropertyGroup>
+        <CleanDependsOn>$(CleanDependsOn);_SourceYardClean</CleanDependsOn>
+    </PropertyGroup>
+
+    <Target Name="_SourceYardClean">
+        <PropertyGroup>
+            <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
+        </PropertyGroup>
+        <RemoveDir Directories="$(SourcePackingDirectory)" />
+    </Target>
+
   <Target Name="SourceYardFalsePackSource" AfterTargets="Build">
     <Message Text="因为用户设置 PackSource 为 false 所以没有打包源代码"></Message>
   </Target>
