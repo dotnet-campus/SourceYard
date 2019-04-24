@@ -103,5 +103,8 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option(longName: "PackageId")]
         public string PackageId { get; set; }
+
+        [Option(longName: "PackageReferenceVersion")]
+        public string PackageReferenceVersion { get; set; }
     }
 }
