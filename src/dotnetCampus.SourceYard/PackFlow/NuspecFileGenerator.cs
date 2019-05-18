@@ -111,7 +111,7 @@ namespace dotnetCampus.SourceYard.PackFlow
                     }
                     else
                     {
-                        _log.Warning("无法转换项目引用库 " + line);
+                        _log.Warning($"项目所引用的 NuGet 包包含有无法识别的格式，包信息：{line}");
                     }
                 }
             }
