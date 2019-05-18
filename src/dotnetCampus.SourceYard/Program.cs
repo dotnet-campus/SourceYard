@@ -64,18 +64,19 @@ namespace dotnetCampus.SourceYard
                 };
 
                 new Packer(projectFile: projectFile,
-                    intermediateDirectory: intermediateDirectory, 
-                    packageOutputPath: packageOutputPath, 
-                    packageVersion: packageVersion, 
+                    intermediateDirectory: intermediateDirectory,
+                    packageOutputPath: packageOutputPath,
+                    packageVersion: packageVersion,
                     compileFile: options.CompileFile,
-                    resourceFile: options.ResourceFile, 
-                    contentFile: options.ContentFile, 
-                    page: options.Page, 
+                    resourceFile: options.ResourceFile,
+                    contentFile: options.ContentFile,
+                    page: options.Page,
                     applicationDefinition: options.ApplicationDefinition,
                     noneFile: options.None,
                     embeddedResource: options.EmbeddedResource,
                     packageId: options.PackageId,
-                    buildProps: buildProps).Pack();
+                    buildProps: buildProps,
+                    packageReferenceVersion: options.PackageReferenceVersion).Pack();
             }
             catch (Exception e)
             {

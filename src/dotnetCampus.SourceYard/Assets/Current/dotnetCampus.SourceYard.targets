@@ -15,6 +15,8 @@
       <DescriptionFile>$(SourcePackingDirectory)DescriptionFile.txt</DescriptionFile>
       <CopyrightFile>$(SourcePackingDirectory)CopyrightFile.txt</CopyrightFile>
       <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
+
+      <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
     </PropertyGroup>
 
     <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
@@ -30,7 +32,12 @@
     <WriteLinesToFile File="$(DescriptionFile)" Lines="$(Description)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(CopyrightFile)" Lines="$(Copyright)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="PackageReleaseNotes" Overwrite="true"></WriteLinesToFile>
-
+    
+    <ItemGroup>
+        <_PackageReferenceVersion Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'"></_PackageReferenceVersion>
+    </ItemGroup>
+    <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
+    
     <PropertyGroup>
 
       <SourceYardAuthors Condition="$(Authors) != ''">--Authors "$(Authors)"</SourceYardAuthors>
@@ -51,10 +58,11 @@
       <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath) "</SourceMSBuildProjectFullPath>
       <SourceIntermediateDirectory>-i "$(SourcePackingDirectory)Package "</SourceIntermediateDirectory>
       <SourcePackageOutputPath>-n "$(PackageOutputPath) "</SourcePackageOutputPath>
+      <SourcePackageReferenceVersion>--PackageReferenceVersion $(PackageReferenceVersionFile)</SourcePackageReferenceVersion>
     </PropertyGroup>
 
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId)"></Exec>
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)" ></Exec>
   </Target>
 
     <PropertyGroup>
@@ -68,7 +76,8 @@
         <RemoveDir Directories="$(_SourcePackingDirectory)" />
     </Target>
 
-  <Target Name="SourceYardFalsePackSource" AfterTargets="Build">
+  <Target Name="SourceYardFalsePackSource" AfterTargets="Build"
+          Condition="$(PackSource) == 'False'">
     <Message Text="因为用户设置 PackSource 为 false 所以没有打包源代码"></Message>
   </Target>
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -16,6 +17,7 @@ namespace dotnetCampus.SourceYard.PackFlow
     {
         public void Pack(IPackingContext context)
         {
+            _log = context.Logger;
             var nuspecPackage = GetNuspec(context);
 
             var fileName = $"{context.PackageId}.nuspec";
@@ -23,6 +25,8 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             Write(nuspecPackage, fileName);
         }
+
+        private ILogger _log;
 
         private void Write(NuspecPackage nuspecPackage, string fileName)
         {
@@ -69,9 +73,50 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageIconUrl = buildProps.PackageIconUrl,
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
-                    PackageReleaseNotes = buildProps.PackageReleaseNotes
+                    PackageReleaseNotes = buildProps.PackageReleaseNotes,
+                    Dependencies = GetDependencies(context.PackageReferenceVersion)
                 }
             };
+        }
+
+        private List<NuspecDependency> GetDependencies(string contextPackageVersion)
+        {
+            return ParserPackageVersion(contextPackageVersion);
+        }
+
+        private List<NuspecDependency> ParserPackageVersion(string packageVersionFile)
+        {
+            var nuspecDependencyList = new List<NuspecDependency>();
+            var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
+            using (var stream = File.OpenText(packageVersionFile))
+            {
+                string line;
+                while ((line = stream.ReadLine()) != null)
+                {
+                    var match = packageVersionRegex.Match(line);
+                    if (match.Success)
+                    {
+                        var name = match.Groups[1].Value;
+                        var version = match.Groups[2].Value;
+                        var privateAssets = match.Groups[3].Value;
+
+                        if (!privateAssets.Contains("all"))
+                        {
+                            nuspecDependencyList.Add(new NuspecDependency()
+                            {
+                                Id = name,
+                                Version = version
+                            });
+                        }
+                    }
+                    else
+                    {
+                        _log.Warning($"项目所引用的 NuGet 包包含有无法识别的格式，包信息：{line}");
+                    }
+                }
+            }
+
+            return nuspecDependencyList;
         }
     }
 }
