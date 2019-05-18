@@ -87,7 +87,7 @@ namespace dotnetCampus.SourceYard.PackFlow
         private List<NuspecDependency> ParserPackageVersion(string packageVersionFile)
         {
             var nuspecDependencyList = new List<NuspecDependency>();
-            var packageVersionRegex = new Regex(@"Name='([\S|\.]+)' Version='([\S|\.|\-]+)' PrivateAssets='(\S*)'");
+            var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
             using (var stream = File.OpenText(packageVersionFile))
             {
                 string line;
