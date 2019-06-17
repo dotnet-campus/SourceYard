@@ -1,12 +1,12 @@
 version: 1.0.{build}
-image: Visual Studio 2017
-before_build:
-- cmd: dotnet restore
+image: Visual Studio 2019
 configuration: Release
 platform: Any CPU
 build:
+  project: dotnetCampus.SourceYard.sln
   publish_nuget: true
   publish_nuget_symbols: true
   use_snupkg_format: true
   include_nuget_references: true
+  parallel: true
   verbosity: minimal
