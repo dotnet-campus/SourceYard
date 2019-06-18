@@ -23,7 +23,9 @@ Appveyor|Codecov
 
 ## 快速入门
 
-使用 NuGet 安装完成了 [SourceYard](https://www.nuget.org/packages/dotnetCampus.SourceYard) 将会在每次编译完成生成 xx.source.1.0.0.nupkg 源代码包
+在项目中使用 NuGet 安装 [SourceYard](https://www.nuget.org/packages/dotnetCampus.SourceYard) 完成之后的每次编译生成，都可以在输出文件夹找到生成的 xx.source.1.0.0.nupkg 源代码包文件
+
+将源代码包文件提交到 NuGet 源上，可以将此源代码包作为和普通的 NuGet 包一样在其他项目安装使用
 
 以下是一个例子
 
