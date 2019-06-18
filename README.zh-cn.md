@@ -31,13 +31,13 @@ Appveyor|Codecov
 
 创建一个空白的库程序
 
-```csharp
+```
 dotnet new console -o Foo
 ```
 
 在创建的项目里面安装 SourceYard 库
 
-```csharp
+```
 cd Foo
 dotnet add package dotnetCampus.SourceYard --version  0.1.7213-alpha
 ```
