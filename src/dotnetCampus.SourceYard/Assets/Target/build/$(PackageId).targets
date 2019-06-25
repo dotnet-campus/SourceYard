@@ -17,7 +17,7 @@
   <Target Name="_#(PackageGuid)GitignoreFile" AfterTargets="_#(PackageGuid)CopySourceProjectFile"
           Condition="!Exists('$(MSBuildProjectDirectory)/SourceProject/.gitignore')">
     <!-- 添加忽略文件-->
-    <WriteLinesToFile File="$(MSBuildProjectDirectory)/SourceProject/.gitignore" Lines="/.gitignore;/*.Source.SourceProject.props" Overwrite="true" />
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)/SourceProject/.gitignore" Lines=".gitignore;/*.Source.SourceProject.props" Overwrite="true" />
   </Target>
 
   <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
