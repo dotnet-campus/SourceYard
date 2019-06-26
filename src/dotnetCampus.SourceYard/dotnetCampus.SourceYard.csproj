@@ -16,7 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
     <None Remove="*.DotSettings" />
+    <None Remove="bin\**\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,7 +51,7 @@
     <!--指定自己的在安装 nuget 时修改编译-->
     <None Include="Assets\Current\**" Pack="True" PackagePath="build\" />
     <None Include="Assets\README.md" Pack="True" PackagePath="" />
-    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" />
+    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false"/>
   </ItemGroup>
 
 </Project>
