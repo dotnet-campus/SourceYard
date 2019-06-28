@@ -43,14 +43,16 @@ namespace dotnetCampus.SourceYard.PackFlow
             // 读取文件
             var buildfile = File.ReadAllText(buildAssetsFile);
 
-            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, sourceReferenceSourceFolder, false,
+            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, context.PackageGuid,
+                sourceReferenceSourceFolder, false,
                 "<!--替换ItemGroup-->", "<!--替换XmlItemGroup-->");
 
             // 本地的代码，用于调试本地的代码
-            
+
             sourceReferenceSourceFolder = $@"$({context.PackageGuid}SourceFolder)\";
 
-            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, sourceReferenceSourceFolder, true,
+            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, context.PackageGuid,
+                sourceReferenceSourceFolder, true,
                 "<!--替换 SOURCE_REFERENCE ItemGroup-->", "<!--替换 SOURCE_REFERENCE XmlItemGroup-->");
 
             // 用户可以选择使用 nuget 源代码，也可以选择使用自己的代码，所以就需要使用两个不同的值
@@ -59,10 +61,12 @@ namespace dotnetCampus.SourceYard.PackFlow
             File.WriteAllText(buildAssetsFile, buildfile);
         }
 
-        private string ReplaceString(PackagedProjectFile contextPackagedProjectFile,string str, string filePath, bool isVisible,
-            string replaceItemGroup,string replaceXmlItemGroup)
+        private string ReplaceString(PackagedProjectFile contextPackagedProjectFile, string str,
+            string packageGuid, string filePath, bool isVisible,
+            string replaceItemGroup, string replaceXmlItemGroup)
         {
-            var groupElement = new ItemGroupElement(contextPackagedProjectFile, filePath, isVisible);
+            var groupElement =
+                new ItemGroupElement(contextPackagedProjectFile, filePath, isVisible, packageGuid);
             var (itemGroupElement, itemGroupElementOfXaml) = groupElement.GetItemGroup();
 
             return str.Replace(replaceItemGroup, itemGroupElement.ToString())
