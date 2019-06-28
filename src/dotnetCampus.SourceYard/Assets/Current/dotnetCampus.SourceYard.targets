@@ -1,5 +1,5 @@
 ﻿<Project>
-  <Target Name="SourceYard" AfterTargets="Build"
+  <Target Name="SourceYard" AfterTargets="AfterBuild"
           Condition="$(PackSource) != 'False'">
     <PropertyGroup>
       <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
