@@ -8,11 +8,13 @@ namespace dotnetCampus.SourceYard.Utils
     class ItemGroupElement
     {
         /// <inheritdoc />
-        public ItemGroupElement(PackagedProjectFile contextPackagedProjectFile, string filePath, bool isVisible)
+        public ItemGroupElement(PackagedProjectFile contextPackagedProjectFile, string filePath, bool isVisible,
+            string packageGuid)
         {
             _contextPackagedProjectFile = contextPackagedProjectFile;
             _filePath = filePath;
             _isVisible = isVisible;
+            _packageGuid = packageGuid;
         }
 
         public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup()
@@ -25,17 +27,20 @@ namespace dotnetCampus.SourceYard.Utils
             var embeddedResource = GetFileList(contextPackagedProjectFile.EmbeddedResource);
             var pageFileList = GetFileList(contextPackagedProjectFile.Page);
 
+            var prefix = $"_{_packageGuid}";
+
             var elementList = new List<XElement>();
-            elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, "Compile", false));
-            elementList.AddRange(IncludingItemCompileFileToElement(resourceFileList, "Resource", true));
-            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, "Content", true));
-            elementList.AddRange(IncludingItemCompileFileToElement(embeddedResource, "EmbeddedResource", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(compileFileList, $"{prefix}Compile", false));
+       
+            elementList.AddRange(IncludingItemCompileFileToElement(contentFileList, $"Content", true));
+            elementList.AddRange(IncludingItemCompileFileToElement(embeddedResource, $"EmbeddedResource", true));
             elementList.AddRange(IncludingItemCompileFileToElement(noneFileList, "None", true));
 
             var itemGroupElement = new XElement("ItemGroup", elementList);
 
             elementList = new List<XElement>();
-            elementList.AddRange(XamlItemCompileFileToElement(pageFileList, "Page", false));
+            elementList.AddRange(XamlItemCompileFileToElement(resourceFileList, $"{prefix}Resource", true));
+            elementList.AddRange(XamlItemCompileFileToElement(pageFileList, $"{prefix}Page", false));
 
             var itemGroupElementOfXaml = new XElement("ItemGroup", elementList);
 
@@ -45,6 +50,7 @@ namespace dotnetCampus.SourceYard.Utils
         private readonly PackagedProjectFile _contextPackagedProjectFile;
         private readonly string _filePath;
         private readonly bool _isVisible;
+        private readonly string _packageGuid;
 
         private List<XElement> XamlItemCompileFileToElement(List<string> compileFileList, string includingItemTypes,
             bool copyToOutputDirectory)

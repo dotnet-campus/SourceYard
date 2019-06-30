@@ -1,5 +1,27 @@
 ﻿<Project>
 
+  <PropertyGroup Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
+    <_#(PackageGuid)ImportInWpfTempProjectDependsOn>
+      _#(PackageGuid)IncludeSourceCodes
+    </_#(PackageGuid)ImportInWpfTempProjectDependsOn>
+
+    <_#(PackageGuid)ImportInWpfXamlDependsOn>
+      _#(PackageGuid)XamlItemGroupIncludeSourceCodes
+    </_#(PackageGuid)ImportInWpfXamlDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
+    <_#(PackageGuid)ImportInWpfTempProjectDependsOn>
+      _#(PackageGuid)IncludeSOURCE_REFERENCESourceCodes
+    </_#(PackageGuid)ImportInWpfTempProjectDependsOn>
+
+    <_#(PackageGuid)ImportInWpfXamlDependsOn>
+      _#(PackageGuid)IncludeXamlItemGroupSOURCE_REFERENCESourceCodes
+    </_#(PackageGuid)ImportInWpfXamlDependsOn>
+  </PropertyGroup>
+
+  
+
   <PropertyGroup Condition=" !$(DefineConstants.Contains('SOURCE_REFERENCE')) ">
     <DefineConstants>$(DefineConstants);SOURCE_REFERENCE</DefineConstants>
   </PropertyGroup>
@@ -20,24 +42,64 @@
     <WriteLinesToFile File="$(MSBuildProjectDirectory)/SourceProject/.gitignore" Lines=".gitignore;/*.Source.SourceProject.props" Overwrite="true" />
   </Target>
 
-  <Target Name="_#(PackageGuid)IncludeSourceCodes" BeforeTargets="CoreCompile" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
+  <Target Name="_#(PackageGuid)IncludeSourceCodes" 
+    Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <!-- 只有在不没有找到本地代码的文件时，才使用 nuget 的库 -->
     <!--替换ItemGroup-->
   </Target>
 
-  <Target Name="_#(PackageGuid)XamlItemGroupIncludeSourceCodes" BeforeTargets="GenerateBindingRedirects" Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
+  <Target Name="_#(PackageGuid)XamlItemGroupIncludeSourceCodes" 
+    Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <!-- 只有在不没有找到本地代码的文件时，才使用 nuget 的库 -->
     <!--替换XmlItemGroup-->
   </Target>
 
-  <Target Name="_#(PackageGuid)IncludeSOURCE_REFERENCESourceCodes" BeforeTargets="CoreCompile" Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
+  <Target Name="_#(PackageGuid)IncludeSOURCE_REFERENCESourceCodes" 
+    Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
     <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
     <!--替换 SOURCE_REFERENCE ItemGroup-->
   </Target>
 
-  <Target Name="_#(PackageGuid)IncludeXamlItemGroupSOURCE_REFERENCESourceCodes" BeforeTargets="GenerateBindingRedirects" Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
+  <Target Name="_#(PackageGuid)IncludeXamlItemGroupSOURCE_REFERENCESourceCodes" 
+    Condition="$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE'))">
     <!-- 如果可以找到本地代码，就打开用户代码可以调试 -->
     <!--替换 SOURCE_REFERENCE XmlItemGroup-->
+
+  </Target>
+
+
+
+  <!-- 当生成 WPF 临时项目时，不会自动 Import NuGet 中的 props 和 targets 文件，这使得在临时项目中你现在看到的整个文件都不会参与编译。
+       然而，我们可以通过欺骗的方式在主项目中通过 _GeneratedCodeFiles 集合将需要编译的文件传递到临时项目中以间接参与编译。
+       WPF 临时项目不会 Import NuGet 中的 props 和 targets 可能是 WPF 的 Bug，也可能是刻意如此。
+       所以我们通过一个属性开关 `ShouldFixNuGetImportingBugForWpfProjects` 来决定是否修复这个错误。-->
+
+  <Target Name="_#(PackageGuid)ImportInWpfTempProject"
+          AfterTargets="MarkupCompilePass1"
+          BeforeTargets="GenerateTemporaryTargetAssembly"
+          DependsOnTargets="$(_#(PackageGuid)ImportInWpfTempProjectDependsOn)"
+          Condition=" '$(ShouldFixNuGetImportingBugForWpfProjects)' == 'True' ">
+    <ItemGroup>
+      <_GeneratedCodeFiles Include="@(_#(PackageGuid)Compile)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- 正式项目 -->
+  <Target Name="_#(PackageGuid)ImportInWpfProject"
+     BeforeTargets="CoreCompile" DependsOnTargets="$(_#(PackageGuid)ImportInWpfTempProjectDependsOn)">
+    <ItemGroup>
+      <Compile Include="@(_#(PackageGuid)Compile)"/>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_#(PackageGuid)IncludeWpfFiles"
+          BeforeTargets="MarkupCompilePass1"
+          DependsOnTargets="$(_#(PackageGuid)ImportInWpfXamlDependsOn)">
+    <ItemGroup>
+      <Page Include="@(_#(PackageGuid)Page)"  />
+      <Resource Include="@(_#(PackageGuid)Resource)"  />
+    </ItemGroup>
+    <Message Text="引用 WPF 相关源码：@(_#(PackageGuid)Page);@(_#(PackageGuid)Resource)" />
   </Target>
 
 </Project>
