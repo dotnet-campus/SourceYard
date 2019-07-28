@@ -27,7 +27,6 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             Write(nuspecPackage, fileName);
             _log.Message("完成创建 nuspec 文件");
-
         }
 
         private ILogger _log;
@@ -104,6 +103,8 @@ namespace dotnetCampus.SourceYard.PackFlow
                         var version = match.Groups[2].Value;
                         var privateAssets = match.Groups[3].Value;
 
+                        // 在源代码包如果项目引用的是 private asset 的库，那么就不应该添加引用
+                        // 因为源代码是没有框架的依赖，对 sdk 带的库也不添加
                         if (!privateAssets.Contains("all")
                             && !SDKNuget.Contains(name))
                         {
