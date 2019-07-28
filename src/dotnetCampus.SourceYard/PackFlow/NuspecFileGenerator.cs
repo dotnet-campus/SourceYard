@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -18,12 +19,14 @@ namespace dotnetCampus.SourceYard.PackFlow
         public void Pack(IPackingContext context)
         {
             _log = context.Logger;
+            _log.Message("开始创建 nuspec 文件");
             var nuspecPackage = GetNuspec(context);
 
             var fileName = $"{context.PackageId}.nuspec";
             fileName = Path.Combine(context.PackingFolder, fileName);
 
             Write(nuspecPackage, fileName);
+            _log.Message("完成创建 nuspec 文件");
         }
 
         private ILogger _log;
@@ -100,7 +103,10 @@ namespace dotnetCampus.SourceYard.PackFlow
                         var version = match.Groups[2].Value;
                         var privateAssets = match.Groups[3].Value;
 
-                        if (!privateAssets.Contains("all"))
+                        // 在源代码包如果项目引用的是 private asset 的库，那么就不应该添加引用
+                        // 因为源代码是没有框架的依赖，对 sdk 带的库也不添加
+                        if (!privateAssets.Contains("all")
+                            && !SDKNuget.Contains(name))
                         {
                             nuspecDependencyList.Add(new NuspecDependency()
                             {
@@ -118,5 +124,14 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             return nuspecDependencyList;
         }
+
+        /// <summary>
+        /// 包含在 sdk 的库，这些库不应该加入引用
+        /// </summary>
+        private string[] SDKNuget { get; } = new[]
+        {
+            "Microsoft.NETCore.App",
+            "Microsoft.NETCore.Platforms"
+        };
     }
 }

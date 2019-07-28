@@ -26,8 +26,11 @@ namespace dotnetCampus.SourceYard.Cli
         /// <summary>
         /// 当前项目的打包版本
         /// </summary>
-        [Option('v', "package-version", Required = true, HelpText = "The package version value.")]
-        public string PackageVersion { get; set; }
+        [Option('v', "package-version",
+            // 默认不需要加上打包版本
+            Required = false,
+            HelpText = "The package version value.")]
+        public string PackageVersion { get; set; } = "1.0.0";
 
         /// <summary>
         /// 项目进行编译的文件的列表，因为参数太多，需要将参数写到文件

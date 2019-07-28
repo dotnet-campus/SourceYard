@@ -47,6 +47,12 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
 
         [XmlElement("owners")]
         public string Owner { get; set; }
+
+        /// <summary>
+        /// 通过这个属性可以在安装源代码包的时候默认选 private assets 这样就可以让安装源代码包的项目被引用的时候，引用的项目不需要再安装源代码包
+        /// </summary>
+        [XmlElement("developmentDependency")]
+        public string DevelopmentDependency { get; set; } = "true";
     }
 
     public class NugetTargetFramework
