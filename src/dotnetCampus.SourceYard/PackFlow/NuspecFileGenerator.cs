@@ -130,7 +130,8 @@ namespace dotnetCampus.SourceYard.PackFlow
         /// </summary>
         private string[] SDKNuget { get; } = new[]
         {
-            "Microsoft.NETCore.App"
+            "Microsoft.NETCore.App",
+            "Microsoft.NETCore.Platforms"
         };
     }
 }
