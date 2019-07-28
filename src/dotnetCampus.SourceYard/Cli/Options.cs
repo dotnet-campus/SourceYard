@@ -26,7 +26,10 @@ namespace dotnetCampus.SourceYard.Cli
         /// <summary>
         /// 当前项目的打包版本
         /// </summary>
-        [Option('v', "package-version", HelpText = "The package version value.")]
+        [Option('v', "package-version",
+            // 默认不需要加上打包版本
+            Required = false,
+            HelpText = "The package version value.")]
         public string PackageVersion { get; set; } = "1.0.0";
 
         /// <summary>
