@@ -16,7 +16,7 @@ namespace dotnetCampus.SourceYard.PackFlow
                 $"{context.PackageId}.{context.PackageVersion}.nupkg"));
             if (File.Exists(targetPackageFile))
             {
-                context.Logger.Message($"发现{targetPackageFile}已经存在，将替换原有文件");
+                context.Logger.Message($"发现{targetPackageFile}已经存在，将替换为新的文件");
                 File.Delete(targetPackageFile);
             }
 
