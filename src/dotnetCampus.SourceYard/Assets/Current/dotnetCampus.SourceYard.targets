@@ -1,72 +1,76 @@
 ﻿<Project>
-  <Target Name="SourceYard" AfterTargets="AfterBuild"
-          Condition="$(PackSource) != 'False'">
-    <PropertyGroup>
-      <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
+    <Target Name="SourceYard" AfterTargets="AfterBuild"
+            Condition="$(PackSource) != 'False'">
+        <PropertyGroup>
+            <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
 
-      <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
-      <ResourceTextFile>$(SourcePackingDirectory)ResourceFile.txt</ResourceTextFile>
-      <ContentTextFile>$(SourcePackingDirectory)ContentFile.txt</ContentTextFile>
-      <NoneTextFile>$(SourcePackingDirectory)NoneFile.txt</NoneTextFile>
-      <EmbeddedResourceTextFile>$(SourcePackingDirectory)EmbeddedResourceFile.txt</EmbeddedResourceTextFile>
-      <PageTextFile>$(SourcePackingDirectory)PageFile.txt</PageTextFile>
-      <ApplicationDefinitionTextFile>$(SourcePackingDirectory)ApplicationDefinitionFile.txt</ApplicationDefinitionTextFile>
+            <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
+            <ResourceTextFile>$(SourcePackingDirectory)ResourceFile.txt</ResourceTextFile>
+            <ContentTextFile>$(SourcePackingDirectory)ContentFile.txt</ContentTextFile>
+            <NoneTextFile>$(SourcePackingDirectory)NoneFile.txt</NoneTextFile>
+            <EmbeddedResourceTextFile>$(SourcePackingDirectory)EmbeddedResourceFile.txt</EmbeddedResourceTextFile>
+            <PageTextFile>$(SourcePackingDirectory)PageFile.txt</PageTextFile>
+            <ApplicationDefinitionTextFile>$(SourcePackingDirectory)ApplicationDefinitionFile.txt</ApplicationDefinitionTextFile>
 
-      <DescriptionFile>$(SourcePackingDirectory)DescriptionFile.txt</DescriptionFile>
-      <CopyrightFile>$(SourcePackingDirectory)CopyrightFile.txt</CopyrightFile>
-      <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
+            <DescriptionFile>$(SourcePackingDirectory)DescriptionFile.txt</DescriptionFile>
+            <CopyrightFile>$(SourcePackingDirectory)CopyrightFile.txt</CopyrightFile>
+            <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
 
-      <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
-    </PropertyGroup>
+            <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
+        </PropertyGroup>
 
-    <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
+        <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
 
-    <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
-    <WriteLinesToFile File="$(ResourceTextFile)" Lines="@(Resource)" Overwrite="true" />
-    <WriteLinesToFile File="$(ContentTextFile)" Lines="@(Content)" Overwrite="true" />
-    <WriteLinesToFile File="$(NoneTextFile)" Lines="@(None)" Overwrite="true" />
-    <WriteLinesToFile File="$(EmbeddedResourceTextFile)" Lines="@(EmbeddedResource)" Overwrite="true" />
-    <WriteLinesToFile File="$(PageTextFile)" Lines="@(Page)" Overwrite="true" />
-    <WriteLinesToFile File="$(ApplicationDefinitionTextFile)" Lines="@(ApplicationDefinition)" Overwrite="true" />
+        <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
+        <WriteLinesToFile File="$(ResourceTextFile)" Lines="@(Resource)" Overwrite="true" />
+        <WriteLinesToFile File="$(ContentTextFile)" Lines="@(Content)" Overwrite="true" />
+        <WriteLinesToFile File="$(NoneTextFile)" Lines="@(None)" Overwrite="true" />
+        <WriteLinesToFile File="$(EmbeddedResourceTextFile)" Lines="@(EmbeddedResource)" Overwrite="true" />
+        <WriteLinesToFile File="$(PageTextFile)" Lines="@(Page)" Overwrite="true" />
+        <WriteLinesToFile File="$(ApplicationDefinitionTextFile)" Lines="@(ApplicationDefinition)" Overwrite="true" />
 
-    <WriteLinesToFile File="$(DescriptionFile)" Lines="$(Description)" Overwrite="true"></WriteLinesToFile>
-    <WriteLinesToFile File="$(CopyrightFile)" Lines="$(Copyright)" Overwrite="true"></WriteLinesToFile>
-    <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="PackageReleaseNotes" Overwrite="true"></WriteLinesToFile>
-    
-    <ItemGroup>
-        <_PackageReferenceVersion Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'"></_PackageReferenceVersion>
-    </ItemGroup>
-    <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
-    
-    <PropertyGroup>
+        <WriteLinesToFile File="$(DescriptionFile)" Lines="$(Description)" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile File="$(CopyrightFile)" Lines="$(Copyright)" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="PackageReleaseNotes" Overwrite="true"></WriteLinesToFile>
 
-      <SourceYardAuthors Condition="$(Authors) != ''">--Authors "$(Authors)"</SourceYardAuthors>
-      <SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''" >--RepositoryUrl "$(RepositoryUrl)"</SourceYardRepositoryUrl>
-      <SourceYardRepositoryType Condition="$(RepositoryType) != ''" >--RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
-      <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''" >--PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>
-      <SourceYardCopyright Condition="$(Copyright) != ''" >--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
-        
-        <SourceYardPackageVersion Condition="$(PackageVersion) != ''">-v $(PackageVersion)</SourceYardPackageVersion>
+        <ItemGroup>
+            <_PackageReferenceVersion
+                Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'">
+            </_PackageReferenceVersion>
+        </ItemGroup>
+        <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
 
-      <SourceYardDescription Condition="$(Description) != ''" >--DescriptionFile "$(DescriptionFile) "</SourceYardDescription>
+        <PropertyGroup>
 
-      <SourceYardTitle Condition="$(Title) != ''" >--Title "$(Title)"</SourceYardTitle>
-      <SourceYardPackageLicenseUrl Condition="$(PackageLicenseUrl) != ''" >--PackageLicenseUrl "$(PackageLicenseUrl) "</SourceYardPackageLicenseUrl>
-      <SourceYardOwner Condition="$(Owner) != ''" >--Owner "$(Owner)"</SourceYardOwner>
-      <SourceYardPackageTags Condition="$(PackageTags) != ''" >--PackageTags "$(PackageTags) "</SourceYardPackageTags>
-      <SourceYardPackageReleaseNotes Condition="$(PackageReleaseNotes) != ''" > --PackageReleaseNotesFile $(PackageReleaseNotesFile)</SourceYardPackageReleaseNotes>
-      <SourceYardPackageId Condition="'$(PackageId)' != ''">--PackageId "$(PackageId) "</SourceYardPackageId>
+            <SourceYardAuthors Condition="$(Authors) != ''">--Authors "$(Authors)"</SourceYardAuthors>
+            <SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''">--RepositoryUrl "$(RepositoryUrl)"</SourceYardRepositoryUrl>
+            <SourceYardRepositoryType Condition="$(RepositoryType) != ''">--RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
+            <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''">--PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>
+            <SourceYardCopyright Condition="$(Copyright) != ''">--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
 
-      <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath) "</SourceMSBuildProjectFullPath>
-      <SourceIntermediateDirectory>-i "$(SourcePackingDirectory)Package "</SourceIntermediateDirectory>
-        <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
-        <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
-      <SourcePackageReferenceVersion>--PackageReferenceVersion $(PackageReferenceVersionFile)</SourcePackageReferenceVersion>
-    </PropertyGroup>
+            <SourceYardPackageVersion Condition="$(PackageVersion) != ''">-v $(PackageVersion)</SourceYardPackageVersion>
+
+            <SourceYardDescription Condition="$(Description) != ''">--DescriptionFile "$(DescriptionFile) "</SourceYardDescription>
+
+            <SourceYardTitle Condition="$(Title) != ''">--Title "$(Title)"</SourceYardTitle>
+            <SourceYardPackageLicenseUrl Condition="$(PackageLicenseUrl) != ''">--PackageLicenseUrl "$(PackageLicenseUrl) "</SourceYardPackageLicenseUrl>
+            <SourceYardOwner Condition="$(Owner) != ''">--Owner "$(Owner)"</SourceYardOwner>
+            <SourceYardPackageTags Condition="$(PackageTags) != ''">--PackageTags "$(PackageTags) "</SourceYardPackageTags>
+            <SourceYardPackageReleaseNotes Condition="$(PackageReleaseNotes) != ''"> --PackageReleaseNotesFile $(PackageReleaseNotesFile)</SourceYardPackageReleaseNotes>
+            <SourceYardPackageId Condition="'$(PackageId)' != ''">--PackageId "$(PackageId) "</SourceYardPackageId>
+
+            <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath) "</SourceMSBuildProjectFullPath>
+            <SourceIntermediateDirectory>-i "$(SourcePackingDirectory)Package "</SourceIntermediateDirectory>
+            <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
+            <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
+            <SourcePackageReferenceVersion>--PackageReferenceVersion $(PackageReferenceVersionFile)</SourcePackageReferenceVersion>
+        </PropertyGroup>
 
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)" ></Exec>
-  </Target>
+        <Exec
+            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)">
+        </Exec>
+    </Target>
 
     <PropertyGroup>
         <CleanDependsOn>$(CleanDependsOn);_SourceYardClean</CleanDependsOn>
@@ -79,8 +83,8 @@
         <RemoveDir Directories="$(_SourcePackingDirectory)" />
     </Target>
 
-  <Target Name="SourceYardFalsePackSource" AfterTargets="Build"
-          Condition="$(PackSource) == 'False'">
-    <Message Text="因为用户设置 PackSource 为 false 所以没有打包源代码"></Message>
-  </Target>
+    <Target Name="SourceYardFalsePackSource" AfterTargets="Build"
+            Condition="$(PackSource) == 'False'">
+        <Message Text="因为用户设置 PackSource 为 false 所以没有打包源代码"></Message>
+    </Target>
 </Project>
