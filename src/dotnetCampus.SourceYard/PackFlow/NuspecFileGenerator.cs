@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -103,7 +104,8 @@ namespace dotnetCampus.SourceYard.PackFlow
                         var version = match.Groups[2].Value;
                         var privateAssets = match.Groups[3].Value;
 
-                        if (!privateAssets.Contains("all"))
+                        if (!privateAssets.Contains("all")
+                            && !SDKNuget.Contains(name))
                         {
                             nuspecDependencyList.Add(new NuspecDependency()
                             {
@@ -121,5 +123,13 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             return nuspecDependencyList;
         }
+
+        /// <summary>
+        /// 包含在 sdk 的库，这些库不应该加入引用
+        /// </summary>
+        private string[] SDKNuget { get; } = new[]
+        {
+            "Microsoft.NETCore.App"
+        };
     }
 }
