@@ -45,6 +45,8 @@
       <SourceYardRepositoryType Condition="$(RepositoryType) != ''" >--RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
       <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''" >--PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>
       <SourceYardCopyright Condition="$(Copyright) != ''" >--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
+        
+        <SourceYardPackageVersion Condition="$(PackageVersion) != ''">-v $(PackageVersion)</SourceYardPackageVersion>
 
       <SourceYardDescription Condition="$(Description) != ''" >--DescriptionFile "$(DescriptionFile) "</SourceYardDescription>
 
@@ -62,7 +64,7 @@
     </PropertyGroup>
 
 
-    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) -v $(PackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)" ></Exec>
+    <Exec Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)" ></Exec>
   </Target>
 
     <PropertyGroup>
