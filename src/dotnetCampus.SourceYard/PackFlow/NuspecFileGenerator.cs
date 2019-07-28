@@ -18,12 +18,15 @@ namespace dotnetCampus.SourceYard.PackFlow
         public void Pack(IPackingContext context)
         {
             _log = context.Logger;
+            _log.Message("开始创建 nuspec 文件");
             var nuspecPackage = GetNuspec(context);
 
             var fileName = $"{context.PackageId}.nuspec";
             fileName = Path.Combine(context.PackingFolder, fileName);
 
             Write(nuspecPackage, fileName);
+            _log.Message("完成创建 nuspec 文件");
+
         }
 
         private ILogger _log;
