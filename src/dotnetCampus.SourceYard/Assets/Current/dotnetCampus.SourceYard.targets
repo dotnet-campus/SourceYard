@@ -1,4 +1,14 @@
 ﻿<Project>
+     
+    <!-- 避免依赖传递。 -->
+    <Target Name="_SourceYardPrivateAssets"
+            BeforeTargets="CollectPackageReferences">
+        <ItemGroup>
+            <PackageReference Update="dotnetCampus.SourceYard" PrivateAssets="all" />
+        </ItemGroup>
+        <Message Text="避免 SourceYard 依赖传递导致目标项目也打出源代码包" />
+    </Target>
+     
     <Target Name="SourceYard" AfterTargets="AfterBuild"
             Condition="$(PackSource) != 'False'">
         <PropertyGroup>
