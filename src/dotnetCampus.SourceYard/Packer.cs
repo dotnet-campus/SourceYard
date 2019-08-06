@@ -69,6 +69,7 @@ namespace dotnetCampus.SourceYard
                 new SourcePacker(),
                 new AssetsPacker(),
                 new ItemGroupPacker(),
+                new ProjectPropertiesGenerator(),
                 new NuspecFileGenerator(),
                 new NuGetPacker(),
             };

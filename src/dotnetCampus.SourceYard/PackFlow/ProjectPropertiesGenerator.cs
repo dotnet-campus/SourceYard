@@ -12,7 +12,30 @@ namespace dotnetCampus.SourceYard.PackFlow
     {
         public void Pack(IPackingContext context)
         {
-            // 生成源项目的属性。
+            var configsFolder = Path.Combine(context.PackingFolder, "configs");
+            Directory.CreateDirectory(configsFolder);
+            var configsFile = Path.Combine(configsFolder, "Project.txt");
+            var configsContent = $@">
+RootNamespace
+{context.RootNamespace}
+>";
+
+            const int retryCount = 10;
+            for (int i = 0; i < retryCount; i++)
+            {
+                try
+                {
+                    File.WriteAllText(configsFile, configsContent);
+                    break;
+                }
+                catch (IOException)
+                {
+                    if (i == retryCount - 1)
+                    {
+                        throw;
+                    }
+                }
+            }
         }
     }
 }

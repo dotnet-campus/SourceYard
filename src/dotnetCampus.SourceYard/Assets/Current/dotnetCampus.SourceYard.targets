@@ -18,7 +18,7 @@
 
             <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
           
-            <SourceConfigsRootNamespace>$(SourcePackingDirectory)SourceConfigsRootNamespace.txt</SourceConfigsRootNamespace>
+            <ConfigsRootNamespace>$(SourcePackingDirectory)ConfigsRootNamespace.txt</ConfigsRootNamespace>
         </PropertyGroup>
 
         <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
@@ -43,7 +43,9 @@
         <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
 
         <WriteLinesToFile File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
-
+        <!--<WriteLinesToFile Condition=" '$(RootNamespace)' != '' " File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile Condition=" '$(RootNamespace)' == '' " File="$(ConfigsRootNamespace)" Lines="$(MSBuildProjectName)" Overwrite="true"></WriteLinesToFile>-->
+      
         <PropertyGroup>
 
             <SourceYardAuthors Condition="$(Authors) != ''">--Authors "$(Authors)"</SourceYardAuthors>

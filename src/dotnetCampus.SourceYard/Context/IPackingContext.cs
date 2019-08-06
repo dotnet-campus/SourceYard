@@ -59,5 +59,6 @@ namespace dotnetCampus.SourceYard.Context
 
         BuildProps BuildProps { get; }
         string PackageReferenceVersion { get; }
+        string RootNamespace { get; }
     }
 }
