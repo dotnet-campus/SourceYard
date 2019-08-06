@@ -45,7 +45,7 @@
   <Target Name="_#(PackageGuid)PrepareAllSourceCodes" 
     Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <Exec ConsoleToMSBuild="True"
-          Command="&quot;$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe&quot; apply -s &quot;$(MSBuildThisFileDirectory)..\src&quot; -t $(IntermediateOutputPath)SourcePacking\Apply -n $(RootNamespace) --local $(SYUseLocalNamespace) --internal $(SYInternalAllClasses)">
+          Command="&quot;$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe&quot; apply -s &quot;$(MSBuildThisFileDirectory)..\src&quot; -t $(IntermediateOutputPath)SourcePacking\Apply -c &quot;$(MSBuildThisFileDirectory)..\configs\Project.txt&quot; -n $(RootNamespace) --local $(SYUseLocalNamespace) --internal $(SYInternalAllClasses)">
       <Output TaskParameter="ConsoleOutput" PropertyName="_#(PackageGuid)SourceFolder" />
     </Exec>
   </Target>

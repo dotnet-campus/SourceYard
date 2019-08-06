@@ -23,6 +23,12 @@ namespace dotnetCampus.SourceYard.Cli
         public string TransformedSourceFolder { get; set; }
 
         /// <summary>
+        /// 源项目中已经存储的部分配置
+        /// </summary>
+        [Option('c', "configs", Required = true)]
+        public string OriginalProjectConfigs { get; set; }
+
+        /// <summary>
         /// 目标项目的根命名空间
         /// </summary>
         [Option('n', "namespace", Required = true)]

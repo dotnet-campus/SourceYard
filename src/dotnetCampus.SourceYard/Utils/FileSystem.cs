@@ -22,6 +22,18 @@ namespace dotnetCampus.SourceYard.Utils
             CopyFiles(sourceDirectory.FullName, targetFolder, SearchOption.TopDirectoryOnly, nameConverter);
         }
 
+        internal static void TransformFolderContents(string sourceFolder, string targetFolder,
+            Func<FileInfo, string, string> contentTransformer = null)
+        {
+            var sourceDirectory = new DirectoryInfo(sourceFolder);
+            foreach (var directory in sourceDirectory.EnumerateDirectories())
+            {
+                CopyFiles(directory.FullName, Path.Combine(targetFolder, directory.Name), SearchOption.AllDirectories, contentTransformer: contentTransformer);
+            }
+
+            CopyFiles(sourceDirectory.FullName, targetFolder, SearchOption.TopDirectoryOnly, contentTransformer: contentTransformer);
+        }
+
         /// <summary>
         /// 忽略的文件夹列表
         /// </summary>
@@ -33,7 +45,7 @@ namespace dotnetCampus.SourceYard.Utils
         internal static IList<string> IgnoreFileEndList { set; get; } = new List<string>();
 
         private static void CopyFiles(string sourceFolder, string targetFolder, SearchOption searchOption,
-            Func<string, string> nameConverter = null)
+            Func<string, string> nameConverter = null, Func<FileInfo, string, string> contentTransformer = null)
         {
             foreach (var file in new DirectoryInfo(sourceFolder).EnumerateFiles("*", searchOption))
             {
@@ -58,7 +70,16 @@ namespace dotnetCampus.SourceYard.Utils
                     targetFile = Path.Combine(Path.GetDirectoryName(targetFile) ?? throw new InvalidOperationException(), fileName);
                 }
 
-                File.Copy(file.FullName, targetFile, true);
+                if (contentTransformer == null)
+                {
+                    File.Copy(file.FullName, targetFile, true);
+                }
+                else
+                {
+                    var text = File.ReadAllText(file.FullName);
+                    text = contentTransformer(file, text);
+                    File.WriteAllText(targetFile, text);
+                }
             }
         }
 

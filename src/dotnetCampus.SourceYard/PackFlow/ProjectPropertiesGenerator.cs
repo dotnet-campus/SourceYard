@@ -17,7 +17,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             var configsFile = Path.Combine(configsFolder, "Project.txt");
             var configsContent = $@">
 RootNamespace
-{context.RootNamespace}
+{File.ReadAllText(context.RootNamespace)}
 >";
 
             const int retryCount = 10;
