@@ -66,6 +66,7 @@ namespace dotnetCampus.SourceYard
 
             _packers = new IPackFlow[]
             {
+                new SelfPacker(),
                 new SourcePacker(),
                 new AssetsPacker(),
                 new ItemGroupPacker(),
