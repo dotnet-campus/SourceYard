@@ -38,7 +38,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             // 从原始的项目文件中提取所有的 ItemGroup 中的节点，且节点类型在 IncludingItemTypes 中。
 
             // nuget 的源代码
-            var sourceReferenceSourceFolder = @"$(MSBuildThisFileDirectory)..\src\";
+            var sourceReferenceSourceFolder = @"$(_#(PackageGuid)SourceFolder)\";
 
             // 读取文件
             var buildfile = File.ReadAllText(buildAssetsFile);
