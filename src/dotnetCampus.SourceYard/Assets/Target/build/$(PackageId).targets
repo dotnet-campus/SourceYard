@@ -45,8 +45,10 @@
   <Target Name="_#(PackageGuid)PrepareAllSourceCodes" 
     Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <PropertyGroup>
-      <_SourceYardLocalRootNamespace Condition=" '$(SYLocalRootNamespace)' == '' ">null</_SourceYardLocalRootNamespace>
-      <_SourceYardLocalRootNamespace Condition=" '$(SYLocalRootNamespace)' != '' ">$(SYLocalRootNamespace)</_SourceYardLocalRootNamespace>
+      <_SourceYardLocalRootNamespace Condition=" '$(#(PackageGuid)LocalRootNamespace)' == '' "></_SourceYardLocalRootNamespace>
+      <_SourceYardLocalRootNamespace Condition=" '$(#(PackageGuid)LocalRootNamespace)' != '' ">$(#(PackageGuid)LocalRootNamespace)</_SourceYardLocalRootNamespace>
+      <_SourceYardLocalRootNamespace Condition=" '$(_SourceYardLocalRootNamespace)' == '' And '$(SYLocalRootNamespace)' == '' ">null</_SourceYardLocalRootNamespace>
+      <_SourceYardLocalRootNamespace Condition=" '$(_SourceYardLocalRootNamespace)' == '' And '$(SYLocalRootNamespace)' != '' ">$(SYLocalRootNamespace)</_SourceYardLocalRootNamespace>
     </PropertyGroup>
     <Exec ConsoleToMSBuild="True"
           Command="&quot;$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe&quot; apply -s &quot;$(MSBuildThisFileDirectory)..\src&quot; -t $(IntermediateOutputPath)SourcePacking\Apply -c &quot;$(MSBuildThisFileDirectory)..\configs\Project.txt&quot; --local $(_SourceYardLocalRootNamespace) --internal $(SYInternalAllClasses)">

@@ -6,8 +6,13 @@
 
   <PropertyGroup>
 
-    <!-- 如果设置为一个新的命名空间字符串，那么源码包应用到目标项目中时，会使用此命名空间前缀替代原项目的命名空间前缀。 -->
+    <!-- 源代码包全局命名空间设置：
+         如果设置为一个新的命名空间字符串，那么源码包应用到目标项目中时，会使用此命名空间前缀替代原项目的命名空间前缀。 -->
     <SYLocalRootNamespace Condition=" '$(SYLocalRootNamespace)' == '' "></SYLocalRootNamespace>
+
+    <!-- 单个源代码包命名空间设置（优先级高于全局）：
+         如果设置为一个新的命名空间字符串，那么源码包应用到目标项目中时，会使用此命名空间前缀替代原项目的命名空间前缀。 -->
+    <#(PackageGuid)LocalRootNamespace Condition=" '$(#(PackageGuid)LocalRootNamespace)' == '' "></#(PackageGuid)LocalRootNamespace>
 
     <!-- 如果设置为 True，那么源码包应用到目标项目中时，会将所有类型设置为 internal 访问级别。 -->
     <SYInternalAllClasses Condition=" '$(SYInternalAllClasses)' == '' ">False</SYInternalAllClasses>
