@@ -8,7 +8,8 @@ namespace dotnetCampus.SourceYard.Context
     {
         public PackingContext(ILogger logger, string projectFile,
             string projectName, string packageId, string packageVersion, string packageOutputPath, string packingFolder,
-            PackagedProjectFile packagedProjectFile, string packageReferenceVersion)
+            PackagedProjectFile packagedProjectFile, string packageReferenceVersion,
+            string rootNamespace)
         {
             Logger = logger;
           
@@ -31,6 +32,7 @@ namespace dotnetCampus.SourceYard.Context
             PackageReferenceVersion = packageReferenceVersion;
             PackageVersion = packageVersion;
             PackageOutputPath = packageOutputPath;
+            RootNamespace = rootNamespace;
         }
 
         /// <inheritdoc />
@@ -64,5 +66,7 @@ namespace dotnetCampus.SourceYard.Context
         public string PackageReferenceVersion { get; }
 
         public BuildProps BuildProps { get; set; }
+
+        public string RootNamespace { get; }
     }
 }

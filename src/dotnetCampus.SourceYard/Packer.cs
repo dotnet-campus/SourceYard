@@ -12,7 +12,8 @@ namespace dotnetCampus.SourceYard
         public Packer(string projectFile, string intermediateDirectory,
             string packageOutputPath, string packageVersion, string compileFile, string resourceFile,
             string contentFile, string page, string applicationDefinition, string noneFile, string embeddedResource,
-            BuildProps buildProps, string packageId, string packageReferenceVersion)
+            BuildProps buildProps, string packageId, string packageReferenceVersion,
+            string rootNamespace)
         {
             Logger = new Logger();
 
@@ -50,6 +51,7 @@ namespace dotnetCampus.SourceYard
             _packageReferenceVersion = Path.GetFullPath(packageReferenceVersion);
             BuildProps = buildProps;
             PackageId = packageId;
+            _rootNamespace = rootNamespace;
 
             PackagedProjectFile = new PackagedProjectFile
             (
@@ -124,7 +126,8 @@ namespace dotnetCampus.SourceYard
                         _packageOutputPath,
                         packingFolder,
                         PackagedProjectFile,
-                        _packageReferenceVersion
+                        _packageReferenceVersion,
+                        _rootNamespace
                     )
                     {
                         BuildProps = buildProps,
@@ -158,6 +161,7 @@ namespace dotnetCampus.SourceYard
         private readonly string _packageVersion;
         private readonly string _packageReferenceVersion;
         private readonly IPackFlow[] _packers;
+        private readonly string _rootNamespace;
 
         private PackagedProjectFile PackagedProjectFile { get; }
         private BuildProps BuildProps { get; }

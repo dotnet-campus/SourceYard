@@ -76,7 +76,8 @@ namespace dotnetCampus.SourceYard
                     embeddedResource: options.EmbeddedResource,
                     packageId: options.PackageId,
                     buildProps: buildProps,
-                    packageReferenceVersion: options.PackageReferenceVersion).Pack();
+                    packageReferenceVersion: options.PackageReferenceVersion,
+                    rootNamespace: options.RootNamespace).Pack();
             }
             catch (Exception e)
             {

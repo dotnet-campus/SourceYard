@@ -109,5 +109,11 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option(longName: "PackageReferenceVersion")]
         public string PackageReferenceVersion { get; set; }
+
+        /// <summary>
+        /// 项目的根命名空间
+        /// </summary>
+        [Option(longName: "RootNamespace")]
+        public string RootNamespace { get; set; }
     }
 }

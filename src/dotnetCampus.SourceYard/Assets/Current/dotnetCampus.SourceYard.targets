@@ -17,6 +17,8 @@
             <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
 
             <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
+          
+            <SourceConfigsRootNamespace>$(SourcePackingDirectory)SourceConfigsRootNamespace.txt</SourceConfigsRootNamespace>
         </PropertyGroup>
 
         <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
@@ -39,6 +41,8 @@
             </_PackageReferenceVersion>
         </ItemGroup>
         <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
+
+        <WriteLinesToFile File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
 
         <PropertyGroup>
 
@@ -64,11 +68,13 @@
             <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
             <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
             <SourcePackageReferenceVersion>--PackageReferenceVersion $(PackageReferenceVersionFile)</SourcePackageReferenceVersion>
+
+            <SourceConfigsRootNamespace>--RootNamespace $(ConfigsRootNamespace)</SourceConfigsRootNamespace>
         </PropertyGroup>
 
 
         <Exec
-            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)">
+            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) $(SourceConfigsRootNamespace)">
         </Exec>
     </Target>
 
