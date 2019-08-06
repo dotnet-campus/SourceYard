@@ -42,9 +42,8 @@
         </ItemGroup>
         <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
 
-        <WriteLinesToFile File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
-        <!--<WriteLinesToFile Condition=" '$(RootNamespace)' != '' " File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
-        <WriteLinesToFile Condition=" '$(RootNamespace)' == '' " File="$(ConfigsRootNamespace)" Lines="$(MSBuildProjectName)" Overwrite="true"></WriteLinesToFile>-->
+        <WriteLinesToFile Conditional=" '$(SYPreventRedirectNamespace)' == 'True' " File="$(ConfigsRootNamespace)" Lines="!" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile Conditional=" '$(SYPreventRedirectNamespace)' != 'True' " File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
       
         <PropertyGroup>
 
