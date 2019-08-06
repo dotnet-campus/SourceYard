@@ -29,22 +29,16 @@ namespace dotnetCampus.SourceYard.Cli
         public string OriginalProjectConfigs { get; set; }
 
         /// <summary>
-        /// 目标项目的根命名空间
-        /// </summary>
-        [Option('n', "namespace", Required = true)]
-        public string RootNamespace { get; set; }
-
-        /// <summary>
         /// 是否需要将命名空间修改为本地命名空间。
         /// </summary>
         [Option("local", Required = true)]
-        public string UseLocalNamespaceCore
+        public string LocalRootNamespaceCore
         {
-            get => UseLocalNamespace.ToString();
-            set => UseLocalNamespace = value?.Equals("true", StringComparison.OrdinalIgnoreCase) is true;
+            get => LocalRootNamespace;
+            set => LocalRootNamespace = value?.Equals("null", StringComparison.OrdinalIgnoreCase) == false ? value : null;
         }
 
-        public bool UseLocalNamespace { get; private set; }
+        public string LocalRootNamespace { get; private set; }
 
         /// <summary>
         /// 是否需要将所有的类型改为 internal。

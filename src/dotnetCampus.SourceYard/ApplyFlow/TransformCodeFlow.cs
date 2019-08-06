@@ -15,7 +15,7 @@ namespace dotnetCampus.SourceYard.ApplyFlow
     {
         public void Apply(ApplyOptions options)
         {
-            if (!options.InternalAllClasses && !options.UseLocalNamespace)
+            if (!options.InternalAllClasses && string.IsNullOrWhiteSpace(options.LocalRootNamespace))
             {
                 Console.WriteLine(options.SourceFolder);
             }
@@ -39,11 +39,9 @@ namespace dotnetCampus.SourceYard.ApplyFlow
                 }
             }
 
-            Debugger.Launch();
-
             FileSystem.TransformFolderContents(options.SourceFolder, options.TransformedSourceFolder,
                 (file, content) => TransformCode(file, content,
-                    originalNamespace, options.RootNamespace,
+                    originalNamespace, options.LocalRootNamespace,
                     options.InternalAllClasses));
         }
 
