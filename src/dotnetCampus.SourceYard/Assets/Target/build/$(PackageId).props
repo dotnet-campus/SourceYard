@@ -1,15 +1,22 @@
 ﻿<Project>
 
-    <ItemGroup>
-        <SourceReference Include="#(PackageId)" />
-    </ItemGroup>
+  <ItemGroup>
+    <SourceReference Include="#(PackageId)" />
+  </ItemGroup>
 
-    <PropertyGroup>
-        <!-- 当生成 WPF 临时项目时，不会自动 Import NuGet 中的 props 和 targets 文件，这使得在临时项目中你现在看到的整个文件都不会参与编译。
-          然而，我们可以通过欺骗的方式在主项目中通过 _GeneratedCodeFiles 集合将需要编译的文件传递到临时项目中以间接参与编译。
-          WPF 临时项目不会 Import NuGet 中的 props 和 targets 可能是 WPF 的 Bug，也可能是刻意如此。
-          所以我们通过一个属性开关 `ShouldFixNuGetImportingBugForWpfProjects` 来决定是否修复这个错误。-->
-        <ShouldFixNuGetImportingBugForWpfProjects Condition=" '$(ShouldFixNuGetImportingBugForWpfProjects)' == '' ">True</ShouldFixNuGetImportingBugForWpfProjects>
-    </PropertyGroup>
+  <PropertyGroup>
+
+    <!-- 如果设置为 True，那么源码包应用到目标项目中时，会使用目标项目命名空间前缀替代原项目的命名空间前缀。 -->
+    <SYUseLocalNamespace Condition=" '$(SYUseLocalNamespace)' == '' ">False</SYUseLocalNamespace>
+
+    <!-- 如果设置为 True，那么源码包应用到目标项目中时，会将所有类型设置为 internal 访问级别。 -->
+    <SYInternalAllClasses Condition=" '$(SYInternalAllClasses)' == '' ">False</SYInternalAllClasses>
+
+    <!-- 当生成 WPF 临时项目时，不会自动 Import NuGet 中的 props 和 targets 文件，这使得在临时项目中你现在看到的整个文件都不会参与编译。
+         然而，我们可以通过欺骗的方式在主项目中通过 _GeneratedCodeFiles 集合将需要编译的文件传递到临时项目中以间接参与编译。
+         WPF 临时项目不会 Import NuGet 中的 props 和 targets 可能是 WPF 的 Bug，也可能是刻意如此。
+         所以我们通过一个属性开关 `ShouldFixNuGetImportingBugForWpfProjects` 来决定是否修复这个错误。-->
+    <ShouldFixNuGetImportingBugForWpfProjects Condition=" '$(ShouldFixNuGetImportingBugForWpfProjects)' == '' ">True</ShouldFixNuGetImportingBugForWpfProjects>
+  </PropertyGroup>
 
 </Project>
