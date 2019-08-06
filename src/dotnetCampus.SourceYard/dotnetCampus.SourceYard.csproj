@@ -51,7 +51,7 @@
     <!--指定自己的在安装 nuget 时修改编译-->
     <None Include="Assets\Current\**" Pack="True" PackagePath="build\" />
     <None Include="Assets\README.md" Pack="True" PackagePath="" />
-    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false"/>
+    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
   </ItemGroup>
 
 </Project>

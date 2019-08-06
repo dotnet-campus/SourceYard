@@ -3,7 +3,8 @@ using CommandLine;
 
 namespace dotnetCampus.SourceYard.Cli
 {
-    internal class Options
+    [Verb("pack")]
+    internal class PackOptions
     {
         /// <summary>
         /// 项目文件所在的路径

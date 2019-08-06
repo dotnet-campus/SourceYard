@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using CommandLine;
+using dotnetCampus.SourceYard.ApplyFlow;
 using dotnetCampus.SourceYard.Cli;
 using dotnetCampus.SourceYard.Utils;
 
@@ -12,12 +13,14 @@ namespace dotnetCampus.SourceYard
     {
         private static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(RunOptionsAndReturnExitCode)
-                .WithNotParsed(HandleParseError);
+            Parser.Default.ParseArguments<PackOptions, ApplyOptions>(args)
+                .MapResult(
+                    (PackOptions o) => RunOptionsAndReturnExitCode(o),
+                    (ApplyOptions o) => ApplyAndReturnExitCode(o),
+                    e => HandleParseError(e));
         }
 
-        private static void RunOptionsAndReturnExitCode(Options options)
+        private static int RunOptionsAndReturnExitCode(PackOptions options)
         {
 #if DEBUG
             Debugger.Launch();
@@ -84,6 +87,8 @@ namespace dotnetCampus.SourceYard
                 logger.Error(e.Message);
             }
 
+            return 0;
+
             string ReadFile(string file)
             {
                 if (string.IsNullOrEmpty(file))
@@ -108,13 +113,20 @@ namespace dotnetCampus.SourceYard
             }
         }
 
-        private static void HandleParseError(IEnumerable<Error> errors)
+        private static int ApplyAndReturnExitCode(ApplyOptions options)
+        {
+            new TransformCodeFlow().Apply(options);
+            return 0;
+        }
+
+        private static int HandleParseError(IEnumerable<Error> errors)
         {
             var logger = new Logger();
             foreach (var temp in errors)
             {
                 logger.Error(temp.ToString());
             }
+            return 0;
         }
     }
 }

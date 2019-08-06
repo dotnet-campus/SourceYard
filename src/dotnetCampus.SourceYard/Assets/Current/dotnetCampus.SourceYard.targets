@@ -76,7 +76,7 @@
 
 
         <Exec
-            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) $(SourceConfigsRootNamespace)">
+            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe pack $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) $(SourceConfigsRootNamespace)">
         </Exec>
     </Target>
 
