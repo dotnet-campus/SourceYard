@@ -1,6 +1,10 @@
 ﻿<Project>
 
-  <!-- 如果指定为 True，那么此源代码包在安装到目标项目时，命名空间将不允许被改变。 -->
-  <SYPreventRedirectNamespace Condition=" '$(SYPreventRedirectNamespace)' == '' ">False</SYPreventRedirectNamespace>
+  <PropertyGroup>
+    
+    <!-- 如果指定为 True，那么此源代码包在安装到目标项目时，命名空间将不允许被改变。 -->
+    <SYPreventRedirectNamespace Condition=" '$(SYPreventRedirectNamespace)' == '' ">False</SYPreventRedirectNamespace>
+    
+  </PropertyGroup>
   
 </Project>

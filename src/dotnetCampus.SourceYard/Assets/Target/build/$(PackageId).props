@@ -14,9 +14,14 @@
          如果设置为一个新的命名空间字符串，那么源码包应用到目标项目中时，会使用此命名空间前缀替代原项目的命名空间前缀。 -->
     <#(PackageGuid)LocalRootNamespace Condition=" '$(#(PackageGuid)LocalRootNamespace)' == '' "></#(PackageGuid)LocalRootNamespace>
 
-    <!-- 如果设置为 True，那么源码包应用到目标项目中时，会将所有类型设置为 internal 访问级别。 -->
+    <!-- 源代码包全局命名空间设置：
+         如果设置为 True，那么源码包应用到目标项目中时，会将所有类型设置为 internal 访问级别。 -->
     <SYInternalAllClasses Condition=" '$(SYInternalAllClasses)' == '' ">False</SYInternalAllClasses>
 
+    <!-- 单个源代码包命名空间设置（优先级高于全局）：
+         如果设置为 True，那么源码包应用到目标项目中时，会将所有类型设置为 internal 访问级别。 -->
+    <#(PackageGuid)InternalAllClasses Condition=" '$(#(PackageGuid)InternalAllClasses)' == '' "></#(PackageGuid)InternalAllClasses>
+    
     <!-- 当生成 WPF 临时项目时，不会自动 Import NuGet 中的 props 和 targets 文件，这使得在临时项目中你现在看到的整个文件都不会参与编译。
          然而，我们可以通过欺骗的方式在主项目中通过 _GeneratedCodeFiles 集合将需要编译的文件传递到临时项目中以间接参与编译。
          WPF 临时项目不会 Import NuGet 中的 props 和 targets 可能是 WPF 的 Bug，也可能是刻意如此。

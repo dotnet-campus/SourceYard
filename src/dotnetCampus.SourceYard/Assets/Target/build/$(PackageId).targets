@@ -45,13 +45,20 @@
   <Target Name="_#(PackageGuid)PrepareAllSourceCodes" 
     Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <PropertyGroup>
+      <!-- 按照优先级 #(PackageGuid)LocalRootNamespace > SYLocalRootNamespace 来初始化 _SourceYardLocalRootNamespace。 -->
       <_SourceYardLocalRootNamespace Condition=" '$(#(PackageGuid)LocalRootNamespace)' == '' "></_SourceYardLocalRootNamespace>
       <_SourceYardLocalRootNamespace Condition=" '$(#(PackageGuid)LocalRootNamespace)' != '' ">$(#(PackageGuid)LocalRootNamespace)</_SourceYardLocalRootNamespace>
       <_SourceYardLocalRootNamespace Condition=" '$(_SourceYardLocalRootNamespace)' == '' And '$(SYLocalRootNamespace)' == '' ">null</_SourceYardLocalRootNamespace>
       <_SourceYardLocalRootNamespace Condition=" '$(_SourceYardLocalRootNamespace)' == '' And '$(SYLocalRootNamespace)' != '' ">$(SYLocalRootNamespace)</_SourceYardLocalRootNamespace>
-    </PropertyGroup>
+
+      <!-- 按照优先级 #(PackageGuid)InternalAllClasses > SYInternalAllClasses 来初始化 _SourceYardInternalAllClasses。 -->
+      <_SourceYardInternalAllClasses Condition=" '$(#(PackageGuid)InternalAllClasses)' == '' "></_SourceYardInternalAllClasses>
+      <_SourceYardInternalAllClasses Condition=" '$(#(PackageGuid)InternalAllClasses)' != '' ">$(#(PackageGuid)InternalAllClasses)</_SourceYardInternalAllClasses>
+      <_SourceYardInternalAllClasses Condition=" '$(_SourceYardInternalAllClasses)' == '' And '$(SYInternalAllClasses)' == '' ">False</_SourceYardInternalAllClasses>
+      <_SourceYardInternalAllClasses Condition=" '$(_SourceYardInternalAllClasses)' == '' And '$(SYInternalAllClasses)' != '' ">$(SYInternalAllClasses)</_SourceYardInternalAllClasses>
+  </PropertyGroup>
     <Exec ConsoleToMSBuild="True"
-          Command="&quot;$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe&quot; apply -s &quot;$(MSBuildThisFileDirectory)..\src&quot; -t $(IntermediateOutputPath)SourcePacking\Apply -c &quot;$(MSBuildThisFileDirectory)..\configs\Project.txt&quot; --local $(_SourceYardLocalRootNamespace) --internal $(SYInternalAllClasses)">
+          Command="&quot;$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe&quot; apply -s &quot;$(MSBuildThisFileDirectory)..\src&quot; -t $(IntermediateOutputPath)SourcePacking\Apply -c &quot;$(MSBuildThisFileDirectory)..\configs\Project.txt&quot; --local $(_SourceYardLocalRootNamespace) --internal $(_SourceYardInternalAllClasses)">
       <Output TaskParameter="ConsoleOutput" PropertyName="_#(PackageGuid)SourceFolder" />
     </Exec>
   </Target>

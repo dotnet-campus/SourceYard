@@ -42,8 +42,8 @@
         </ItemGroup>
         <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
 
-        <WriteLinesToFile Conditional=" '$(SYPreventRedirectNamespace)' == 'True' " File="$(ConfigsRootNamespace)" Lines="!" Overwrite="true"></WriteLinesToFile>
-        <WriteLinesToFile Conditional=" '$(SYPreventRedirectNamespace)' != 'True' " File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile Condition=" '$(SYPreventRedirectNamespace)' == 'True' " File="$(ConfigsRootNamespace)" Lines="!" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile Condition=" '$(SYPreventRedirectNamespace)' != 'True' " File="$(ConfigsRootNamespace)" Lines="$(RootNamespace)" Overwrite="true"></WriteLinesToFile>
       
         <PropertyGroup>
 
