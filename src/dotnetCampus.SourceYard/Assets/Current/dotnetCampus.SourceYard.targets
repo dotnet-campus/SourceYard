@@ -31,7 +31,7 @@
 
         <WriteLinesToFile File="$(DescriptionFile)" Lines="$(Description)" Overwrite="true"></WriteLinesToFile>
         <WriteLinesToFile File="$(CopyrightFile)" Lines="$(Copyright)" Overwrite="true"></WriteLinesToFile>
-        <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="PackageReleaseNotes" Overwrite="true"></WriteLinesToFile>
+        <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="$(PackageReleaseNotes)" Overwrite="true"></WriteLinesToFile>
 
         <ItemGroup>
             <_PackageReferenceVersion
