@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.SourceYard", "src\dotnetCampus.SourceYard\dotnetCampus.SourceYard.csproj", "{E0E10F18-8AB9-4DC5-A68C-17726D619F24}"
 EndProject
@@ -11,11 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
 		LICENSE = LICENSE
 		README.md = README.md
+		build\Version.props = build\Version.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetCampus.SourceYard.Tests", "tests\dotnetCampus.SourceYard.Tests\dotnetCampus.SourceYard.Tests.csproj", "{40CA62ED-6DFF-4A65-93D4-A91AB5DCF9DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetCampus.SourceYard.Tests", "tests\dotnetCampus.SourceYard.Tests\dotnetCampus.SourceYard.Tests.csproj", "{40CA62ED-6DFF-4A65-93D4-A91AB5DCF9DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
