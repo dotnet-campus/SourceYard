@@ -20,7 +20,7 @@ namespace dotnetCampus.SourceYard
         private static void RunOptionsAndReturnExitCode(Options options)
         {
 #if DEBUG
-            Debugger.Launch();
+            // Debugger.Launch();
             Console.WriteLine(Environment.CommandLine);
 #endif
             var logger = new Logger();
