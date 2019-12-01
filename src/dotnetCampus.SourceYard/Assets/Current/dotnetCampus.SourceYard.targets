@@ -9,7 +9,7 @@
         <Message Text="避免 SourceYard 依赖传递导致目标项目也打出源代码包" />
     </Target>
      
-    <Target Name="SourceYard" AfterTargets="AfterBuild"
+    <Target Name="SourceYard" AfterTargets="GenerateNuspec"
             Condition="$(PackSource) != 'False'">
         <PropertyGroup>
             <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
