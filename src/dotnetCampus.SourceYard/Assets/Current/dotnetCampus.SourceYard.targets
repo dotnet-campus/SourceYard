@@ -27,6 +27,7 @@
             <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
 
             <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
+			<SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
         </PropertyGroup>
 
         <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
@@ -43,7 +44,15 @@
         <WriteLinesToFile File="$(CopyrightFile)" Lines="$(Copyright)" Overwrite="true"></WriteLinesToFile>
         <WriteLinesToFile File="$(PackageReleaseNotesFile)" Lines="$(PackageReleaseNotes)" Overwrite="true"></WriteLinesToFile>
 
-        <ItemGroup>
+		<!-- 写入通用的信息 -->
+        <!-- 多段写入之前需要先删除文件 -->
+		<Delete Files="$(SourceProjectPackageFile)" Condition="Exists($(SourceProjectPackageFile))"></Delete>
+		<!-- 先写入RepositoryType的值，解析时将会根据此值顺序解析 -->
+		<WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;RepositoryType;$(RepositoryType);"></WriteLinesToFile>
+		<WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;PackageProjectUrl;$(PackageProjectUrl);"></WriteLinesToFile>
+		<WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;RepositoryUrl;$(RepositoryUrl);"></WriteLinesToFile>
+
+		<ItemGroup>
             <_PackageReferenceVersion
                 Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'">
             </_PackageReferenceVersion>
@@ -53,17 +62,20 @@
         <PropertyGroup>
 
             <SourceYardAuthors Condition="$(Authors) != ''">--Authors "$(Authors)"</SourceYardAuthors>
-            <SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''">--RepositoryUrl "$(RepositoryUrl)"</SourceYardRepositoryUrl>
-            <SourceYardRepositoryType Condition="$(RepositoryType) != ''">--RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
-            <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''">--PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>
-            <SourceYardCopyright Condition="$(Copyright) != ''">--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
+           
+	        <!-- 这部分长度太长会让命令行无法输入
+			<SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''">RepositoryUrl "$(RepositoryUrl)"</SourceYardRepositoryUrl>
+            <SourceYardRepositoryType Condition="$(RepositoryType) != ''">RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
+            <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''">PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>-->
+			<SourceYardPackageLicenseUrl Condition="$(PackageLicenseUrl) != ''">--PackageLicenseUrl "$(PackageLicenseUrl) "</SourceYardPackageLicenseUrl>
+
+			<SourceYardCopyright Condition="$(Copyright) != ''">--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
 
             <SourceYardPackageVersion Condition="$(PackageVersion) != ''">-v $(PackageVersion)</SourceYardPackageVersion>
 
             <SourceYardDescription Condition="$(Description) != ''">--DescriptionFile "$(DescriptionFile) "</SourceYardDescription>
 
             <SourceYardTitle Condition="$(Title) != ''">--Title "$(Title)"</SourceYardTitle>
-            <SourceYardPackageLicenseUrl Condition="$(PackageLicenseUrl) != ''">--PackageLicenseUrl "$(PackageLicenseUrl) "</SourceYardPackageLicenseUrl>
             <SourceYardOwner Condition="$(Owner) != ''">--Owner "$(Owner)"</SourceYardOwner>
             <SourceYardPackageTags Condition="$(PackageTags) != ''">--PackageTags "$(PackageTags) "</SourceYardPackageTags>
             <SourceYardPackageReleaseNotes Condition="$(PackageReleaseNotes) != ''"> --PackageReleaseNotesFile $(PackageReleaseNotesFile)</SourceYardPackageReleaseNotes>
@@ -74,11 +86,12 @@
             <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
             <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
             <SourcePackageReferenceVersion>--PackageReferenceVersion $(PackageReferenceVersionFile)</SourcePackageReferenceVersion>
+
         </PropertyGroup>
 
 
         <Exec
-            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion)">
+            Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory)">
         </Exec>
     </Target>
 

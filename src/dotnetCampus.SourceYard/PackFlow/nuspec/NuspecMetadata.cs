@@ -53,6 +53,19 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
         /// </summary>
         [XmlElement("developmentDependency")]
         public string DevelopmentDependency { get; set; } = "true";
+
+        [XmlElement("repository")]
+        public Repository Repository { set; get; }
+    }
+
+    [XmlType(typeName: "repository", Namespace = "")]
+    public class Repository
+    {
+        [XmlAttribute(attributeName: "type")]
+        public string Type { set; get; }
+
+        [XmlAttribute(attributeName: "url")]
+        public string Url { set; get; }
     }
 
     public class NugetTargetFramework

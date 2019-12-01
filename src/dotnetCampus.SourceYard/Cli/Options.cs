@@ -65,14 +65,15 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "Authors")]
         public string Authors { get; set; }
 
-        [Option(longName: "RepositoryUrl")]
-        public string RepositoryUrl { get; set; }
+        // 内容放在 SourceProjectPackageFile 文件
+        //[Option(longName: "RepositoryUrl")]
+        //public string RepositoryUrl { get; set; }
 
-        [Option(longName: "RepositoryType")]
-        public string RepositoryType { get; set; }
+        //[Option(longName: "RepositoryType")]
+        //public string RepositoryType { get; set; }
 
-        [Option(longName: "PackageProjectUrl")]
-        public string PackageProjectUrl { get; set; }
+        //[Option(longName: "PackageProjectUrl")]
+        //public string PackageProjectUrl { get; set; }
 
         /// <summary>
         /// 因为 Copyright 可能很长，有空格，写文件
@@ -109,5 +110,11 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option(longName: "PackageReferenceVersion")]
         public string PackageReferenceVersion { get; set; }
+
+        /// <summary>
+        /// 打包用到的文件夹
+        /// </summary>
+        [Option(longName: "SourcePackingDirectory")]
+        public string SourcePackingDirectory { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace dotnetCampus.SourceYard
         private static void RunOptionsAndReturnExitCode(Options options)
         {
 #if DEBUG
-            // Debugger.Launch();
+            //Debugger.Launch();
             Console.WriteLine(Environment.CommandLine);
 #endif
             var logger = new Logger();
@@ -46,6 +46,8 @@ namespace dotnetCampus.SourceYard
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
+                
+
                 var buildProps = new BuildProps()
                 {
                     Authors = options.Authors,
@@ -53,15 +55,17 @@ namespace dotnetCampus.SourceYard
                     Owner = options.Owner ?? options.Authors,
                     Copyright = copyright,
                     Description = description,
-                    PackageProjectUrl = options.PackageProjectUrl,
-                    RepositoryType = options.RepositoryType,
-                    RepositoryUrl = options.RepositoryUrl,
+                    //PackageProjectUrl = options.PackageProjectUrl,
+                    //RepositoryType = options.RepositoryType,
+                    //RepositoryUrl = options.RepositoryUrl,
                     Title = options.Title,
                     PackageIconUrl = options.PackageIconUrl,
                     PackageLicenseUrl = options.PackageLicenseUrl,
                     PackageReleaseNotes = options.PackageReleaseNotesFile,
                     PackageTags = options.PackageTags
                 };
+
+                buildProps.SetSourcePackingDirectory(Path.GetFullPath(options.SourcePackingDirectory));
 
                 new Packer(projectFile: projectFile,
                     intermediateDirectory: intermediateDirectory,
