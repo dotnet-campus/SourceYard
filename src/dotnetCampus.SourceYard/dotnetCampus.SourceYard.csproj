@@ -10,6 +10,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <DevelopmentDependency>true</DevelopmentDependency>
+    <PackageProjectUrl>https://github.com/dotnet-campus/SourceYard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dotnet-campus/SourceYard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <!-- 因为只把主软件复制过去，依赖的库没有复制，所以不使用这个方法 -->
     <!-- 在下面可以看到使用的是复制整个文件夹 -->
     <!--<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>-->
@@ -51,7 +54,7 @@
     <!--指定自己的在安装 nuget 时修改编译-->
     <None Include="Assets\Current\**" Pack="True" PackagePath="build\" />
     <None Include="Assets\README.md" Pack="True" PackagePath="" />
-    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false"/>
+    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
   </ItemGroup>
 
 </Project>

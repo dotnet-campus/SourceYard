@@ -61,6 +61,17 @@ namespace dotnetCampus.SourceYard.PackFlow
         private NuspecPackage GetNuspec(IPackingContext context)
         {
             var buildProps = context.BuildProps;
+
+            Repository repository = null;
+            if (!string.IsNullOrEmpty(buildProps.RepositoryType) && !string.IsNullOrEmpty(buildProps.RepositoryUrl))
+            {
+                repository = new Repository()
+                {
+                    Type = buildProps.RepositoryType,
+                    Url = buildProps.RepositoryUrl
+                };
+            }
+
             return new NuspecPackage()
             {
                 NuspecMetadata = new NuspecMetadata()
@@ -77,7 +88,8 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = GetDependencies(context.PackageReferenceVersion)
+                    Dependencies = GetDependencies(context.PackageReferenceVersion),
+                    Repository = repository
                 }
             };
         }
