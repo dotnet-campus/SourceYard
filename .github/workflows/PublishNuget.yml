@@ -12,23 +12,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Install Nuget
+      run: |
+        $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+        $targetNugetExe = "nuget.exe"
+        $path = "Path"
+        Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
+        Set-Alias nuget $targetNugetExe -Scope Global -Verbose
+      shell: pwsh
+    - name: Add private GitHub registry to NuGet
+      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/ORGANIZATION_NAME/index.json -Username ORGANIZATION_NAME -Password ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
     - name: Build with dotnet
       run: dotnet pack --configuration Release 
-    - name: Install Nuget
-      run: |
-        $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-        $targetNugetExe = "$rootPath\nuget.exe"
-        $path = "Path"
-        Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
-        Set-Alias nuget $targetNugetExe -Scope Global -Verbose
-        [System.Environment]::SetEnvironmentVariable($path, $targetNugetExe, [System.EnvironmentVariableTarget]::User)
-      shell: pwsh
-    - name: Add private GitHub registry to NuGet
-      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/ORGANIZATION_NAME/index.json -Username ORGANIZATION_NAME -Password ${{ secrets.GITHUB_TOKEN }}
-    
+   
     - name: Push generated package to GitHub registry
       run: nuget push .\bin\release\*.nupkg -Source "GPR" -SkipDuplicate
