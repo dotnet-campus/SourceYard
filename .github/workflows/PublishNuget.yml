@@ -22,8 +22,10 @@ jobs:
       run: |
         $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
         $targetNugetExe = "$rootPath\nuget.exe"
+        $path = "Path"
         Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
         Set-Alias nuget $targetNugetExe -Scope Global -Verbose
+        [System.Environment]::SetEnvironmentVariable($path, $targetNugetExe, [System.EnvironmentVariableTarget]::User)
       shell: pwsh
     - name: Add private GitHub registry to NuGet
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/ORGANIZATION_NAME/index.json -Username ORGANIZATION_NAME -Password ${{ secrets.GITHUB_TOKEN }}
