@@ -85,7 +85,7 @@
             <SourceIntermediateDirectory>-i "$(SourcePackingDirectory)Package "</SourceIntermediateDirectory>
             <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
             <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
-            <SourcePackageReferenceVersion>--PackageReferenceVersion $(PackageReferenceVersionFile)</SourcePackageReferenceVersion>
+            <SourcePackageReferenceVersion>--PackageReferenceVersion "$(PackageReferenceVersionFile)"</SourcePackageReferenceVersion>
 
         </PropertyGroup>
 

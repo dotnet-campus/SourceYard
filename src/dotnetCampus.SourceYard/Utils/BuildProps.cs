@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using dotnetCampus.Configurations;
+using dotnetCampus.Configurations.Core;
 
 namespace dotnetCampus.SourceYard.Utils
 {
@@ -126,107 +128,17 @@ namespace dotnetCampus.SourceYard.Utils
             // 这个文件里面存放使用 fkv 配置
             if (File.Exists(sourceProjectPackageFile))
             {
-                // todo 等待高性能配置发布
-                var configList = DeserializeFile(new FileInfo(sourceProjectPackageFile));
+                var fileConfigurationRepo = new FileConfigurationRepo(sourceProjectPackageFile);
 
-                if (configList.TryGetValue("RepositoryType", out var repositoryType))
-                {
-                    RepositoryType = repositoryType.Trim();
-                }
+                var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
 
-                if (configList.TryGetValue("PackageProjectUrl", out var packageProjectUrl))
-                {
-                    PackageProjectUrl = packageProjectUrl.Trim();
-                }
+                RepositoryType = appConfigurator.Default.GetValue("RepositoryType");
 
-                if (configList.TryGetValue("RepositoryUrl", out var repositoryUrl))
-                {
-                    RepositoryUrl = repositoryUrl.Trim();
-                }
+
+                PackageProjectUrl = appConfigurator.Default.GetValue("PackageProjectUrl");
+
+                RepositoryUrl = appConfigurator.Default.GetValue("RepositoryUrl");
             }
-        }
-
-        // 这里代码从Configurations复制
-        private Dictionary<string, string> DeserializeFile(FileInfo file)
-        {
-            // 一次性读取完的性能最好
-            var str = File.ReadAllText(file.FullName);
-            str = str.Replace("\r\n", "\n");
-            return Deserialize(str);
-        }
-        private static string _splitString = ">";
-
-        private static string _escapeString = "?";
-
-        /// <summary>
-        /// 反序列化的核心实现，反序列化字符串
-        /// </summary>
-        /// <param name="str"></param>
-        private Dictionary<string, string> Deserialize(string str)
-        {
-            var keyValuePairList = str.Split('\n');
-            var keyValue = new Dictionary<string, string>(StringComparer.Ordinal);
-            string? key = null;
-            var splitString = _splitString;
-
-            foreach (var temp in keyValuePairList.Select(temp => temp.Trim()))
-            {
-                if (temp.StartsWith(splitString, StringComparison.Ordinal))
-                {
-                    // 分割，可以作为注释，这一行忽略
-                    // 下一行必须是key
-                    key = null;
-                    continue;
-                }
-
-                var unescapedString = UnescapeString(temp);
-
-                if (key == null)
-                {
-                    key = unescapedString;
-
-                    // 文件存在多个地方都记录相同的值
-                    // 如果有多个地方记录相同的值，使用最后的值替换前面文件
-                    if (keyValue.ContainsKey(key))
-                    {
-                        keyValue.Remove(key);
-                    }
-                }
-                else
-                {
-                    if (keyValue.ContainsKey(key))
-                    {
-                        // key
-                        // v1
-                        // v2
-                        // 返回 {"key","v1\nv2"}
-                        keyValue[key] = keyValue[key] + "\n" + unescapedString;
-                    }
-                    else
-                    {
-                        keyValue.Add(key, unescapedString);
-                    }
-                }
-            }
-
-            return keyValue;
-        }
-
-        /// <summary>
-        /// 存储的反转义
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        private static string UnescapeString(string str)
-        {
-            var escapeString = _escapeString;
-
-            if (str.StartsWith(escapeString, StringComparison.Ordinal))
-            {
-                return str.Substring(1);
-            }
-
-            return str;
         }
     }
 }

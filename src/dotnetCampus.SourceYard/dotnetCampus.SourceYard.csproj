@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.2.1" />
+    <PackageReference Include="dotnetCampus.Configurations.Source" />
    
   </ItemGroup>
 
@@ -41,6 +42,10 @@
   <ItemGroup>
     <!--所有的 NuGet 包资产都声明成私有的-->
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+    <PackageReference Update="dotnetCampus.Configurations.Source" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
