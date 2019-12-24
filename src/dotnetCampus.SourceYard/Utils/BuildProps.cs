@@ -134,7 +134,6 @@ namespace dotnetCampus.SourceYard.Utils
 
                 RepositoryType = appConfigurator.Default.GetValue("RepositoryType");
 
-
                 PackageProjectUrl = appConfigurator.Default.GetValue("PackageProjectUrl");
 
                 RepositoryUrl = appConfigurator.Default.GetValue("RepositoryUrl");
