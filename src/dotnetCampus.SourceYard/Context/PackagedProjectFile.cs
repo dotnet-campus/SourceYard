@@ -1,4 +1,4 @@
-﻿namespace dotnetCampus.SourceYard
+﻿namespace dotnetCampus.SourceYard.Context
 {
     /// <summary>
     /// 被打包项目的文件，包括编译的文件资源文件
