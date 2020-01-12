@@ -67,4 +67,10 @@
     <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
   </ItemGroup>
 
+    <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
+        <ItemGroup>
+            <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
+        </ItemGroup>
+    </Target>
+
 </Project>

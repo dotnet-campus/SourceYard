@@ -23,6 +23,22 @@ Appveyor|Codecov
 
 ## Getting Started
 
+### Packing a source NuGet package
+
+Using NuGet tool to install [dotnetCampus.SourceYard](https://www.nuget.org/packages/dotnetCampus.SourceYard) to your project
+
+```
+PM> Install-Package dotnetCampus.SourceYard 
+```
+
+Or
+
+```
+dotnet add package dotnetCampus.SourceYard
+```
+
+And then you should build your project and you will find the `*.Source.version.nupkg` file in your package output folder
+
 ## Documentation
 
 ## Contributing
