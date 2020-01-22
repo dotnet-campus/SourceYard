@@ -55,22 +55,18 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <!--指定自己的在安装 nuget 时修改编译-->
-    <None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="build\dotnetCampus.SourceYard.props" />
-    <None Include="Assets\Current\dotnetCampus.SourceYard.targets" Pack="True" PackagePath="build\dotnetCampus.SourceYard.targets" />
-    <None Include="Assets\Current\SourceYard.targets" Pack="True" PackagePath="build\SourceYard.targets" />
-
-    <None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.props" />
-    <None Include="Assets\Current\dotnetCampus.SourceYard.BuildMultiTargeting.targets" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.targets" />
-    <None Include="Assets\README.md" Pack="True" PackagePath="" />
-    <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
-  </ItemGroup>
-
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
-        <ItemGroup>
-            <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
-        </ItemGroup>
+      <ItemGroup>
+       <!--指定自己的在安装 nuget 时修改编译-->
+        <None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="build\dotnetCampus.SourceYard.props" />
+        <None Include="Assets\Current\dotnetCampus.SourceYard.targets" Pack="True" PackagePath="build\dotnetCampus.SourceYard.targets" />
+        <None Include="Assets\Current\SourceYard.targets" Pack="True" PackagePath="build\SourceYard.targets" />
+
+        <None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.props" />
+        <None Include="Assets\Current\dotnetCampus.SourceYard.BuildMultiTargeting.targets" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.targets" />
+        <None Include="Assets\README.md" Pack="True" PackagePath="" />
+        <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
+      </ItemGroup>
     </Target>
 
 </Project>
