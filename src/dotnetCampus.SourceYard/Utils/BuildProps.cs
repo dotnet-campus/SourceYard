@@ -132,11 +132,11 @@ namespace dotnetCampus.SourceYard.Utils
 
                 var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
 
-                RepositoryType = appConfigurator.Default.GetValue("RepositoryType");
+                RepositoryType = appConfigurator.Default.GetValue("RepositoryType").Trim();
 
-                PackageProjectUrl = appConfigurator.Default.GetValue("PackageProjectUrl");
+                PackageProjectUrl = appConfigurator.Default.GetValue("PackageProjectUrl").Trim();
 
-                RepositoryUrl = appConfigurator.Default.GetValue("RepositoryUrl");
+                RepositoryUrl = appConfigurator.Default.GetValue("RepositoryUrl").Trim();
             }
         }
     }
