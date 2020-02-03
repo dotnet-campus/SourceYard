@@ -10,9 +10,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <DevelopmentDependency>true</DevelopmentDependency>
-    <PackageProjectUrl>https://github.com/dotnet-campus/SourceYard</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/dotnet-campus/SourceYard</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
+ 
     <!-- 因为只把主软件复制过去，依赖的库没有复制，所以不使用这个方法 -->
     <!-- 在下面可以看到使用的是复制整个文件夹 -->
     <!--<BuildOutputTargetFolder>tools</BuildOutputTargetFolder>-->
