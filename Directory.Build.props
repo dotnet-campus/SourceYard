@@ -9,11 +9,11 @@
     <!-- 默认是 true，如果指定为 false，那么项目编译输出的 dll 文件将不会被打包到 NuGet 包中。 -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <Description>Add a NuGet package only for dll reference? By using dotnetCampus.SourceYard, you can pack a NuGet package with source code. By installing the new source code package, all source codes behaviors just like it is in your project.</Description>
-    <Copyright>Copyright (c) 2019 dotnet-campus</Copyright>
-    <PackageLicenseUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright (c) 2020 dotnet-campus</Copyright>
     <PackageProjectUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotnet-campus/dotnetCampus.SourceYard.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>source;dotnet;nuget;msbuild</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 </Project>
