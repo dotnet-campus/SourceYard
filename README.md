@@ -1,25 +1,10 @@
-<!-- Icon here -->
-
 # dotnetCampus.SourceYard
 
+| Build | NuGet |
+|--|--|
+|![](https://github.com/dotnet-campus/SourceYard/workflows/.NET%20Core/badge.svg)|[![](https://img.shields.io/nuget/v/dotnetCampus.SourceYard.svg)](https://www.nuget.org/packages/dotnetCampus.SourceYard)|
+
 Add a NuGet package only for dll reference? By using dotnetCampus.SourceYard, you can pack a NuGet package with source code. By installing the new source code package, all source codes behaviors just like it is in your project.
-
-## Build Status
-
-Appveyor|Codecov
-:-:|:-:
-[![Build status][ai]][al]|[![codecov][ci]][cl]
-
-<!-- a and c are the first letter of CI plugins. i is icon and l is link. -->
-
-[ai]: https://ci.appveyor.com/api/projects/status/kxn9iakcittmvrcj?svg=true
-[al]: https://ci.appveyor.com/project/xinyuehtx/sourceyard
-[ci]: https://codecov.io/gh/dotnet-campus/SourceYard/branch/master/graph/badge.svg
-[cl]: https://codecov.io/gh/dotnet-campus/SourceYard
-
-## NuGet Package
-
-[![](https://img.shields.io/nuget/v/dotnetCampus.SourceYard.svg)](https://www.nuget.org/packages/dotnetCampus.SourceYard)
 
 ## Getting Started
 
@@ -41,6 +26,14 @@ And then you should build your project and you will find the `*.Source.version.n
 
 ## Documentation
 
+[简体中文](README.zh-cn.md)
+
 ## Contributing
 
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/dotnet-campus/SourceYard/pulls)
+
+If you would like to contribute, feel free to create a [Pull Request](https://github.com/dotnet-campus/SourceYard/pulls), or give us [Bug Report](https://github.com/dotnet-campus/SourceYard/issues/new).
+
 ## Roadmap
+
+Check out this [Roadmap](https://github.com/dotnet-campus/SourceYard/projects/1) to learn about our development plans for 2020.
