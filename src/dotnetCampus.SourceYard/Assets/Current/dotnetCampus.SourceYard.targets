@@ -4,7 +4,7 @@
 
     <Target Name="BuildSourceNuGet" AfterTargets="Build"
             DependsOnTargets="SourceYard"
-            Condition="$(PackSource) != 'False' And '$(TargetFrameworks)' == ''">
+            Condition="$(PackSource) != 'False'">
 
     </Target>
 
