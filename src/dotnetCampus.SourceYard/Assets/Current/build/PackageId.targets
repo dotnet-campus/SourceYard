@@ -1,0 +1,29 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <Import Project="..\build\Core.targets"/>
+
+  <!-- 单框架项目入口 -->
+  <Target Name="BuildSourceNuGet" AfterTargets="Build"
+          Condition="$(PackSource) != 'False' And '$(TargetFrameworks)' == '' ">
+    <Message Text="单框架项目，源代码打包第一步：" />
+    <CallTarget Targets="SourceYardStep1" />
+    <Message Text="单框架项目，源代码打包第二步：" />
+    <CallTarget Targets="SourceYardStep2" />
+    <Message Text="单框架项目，源代码打包第三步：" />
+    <CallTarget Targets="SourceYardStep3" />
+  </Target>
+  
+  <!-- 多框架项目入口 -->
+  <Target Name="BuildSourceNuGetForMultiTargeting" AfterTargets="Build"
+          Condition="$(PackSource) != 'False' And '$(TargetFrameworks)' != '' ">
+    <Message Text="多框架项目，源代码打包第一步（$(TargetFramework)）：" />
+    <CallTarget Targets="SourceYardStep1" />
+    <Message Text="多框架项目，源代码打包第二步（$(TargetFramework)）：" />
+    <CallTarget Targets="SourceYardStep2" />
+  </Target>
+
+</Project>

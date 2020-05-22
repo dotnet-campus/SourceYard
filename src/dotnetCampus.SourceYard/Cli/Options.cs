@@ -116,5 +116,11 @@ namespace dotnetCampus.SourceYard.Cli
         /// </summary>
         [Option(longName: "SourcePackingDirectory")]
         public string SourcePackingDirectory { get; set; }
+
+        [Option(longName: "TargetFramework")]
+        public string TargetFramework { get; set; }
+
+        [Option(longName: "TargetFrameworks")]
+        public string TargetFrameworks { get; set; }
     }
 }

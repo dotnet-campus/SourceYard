@@ -3,6 +3,8 @@
   <PropertyGroup>
     <!-- Project building properties -->
     <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
     <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
   
@@ -28,22 +30,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.2.1" />
-    <PackageReference Include="dotnetCampus.Configurations.Source" />
-   
+    <PackageReference Include="CommandLineParser" Version="2.8.0" PrivateAssets="All" />
+    <PackageReference Include="dotnetCampus.CommandLine.Source" Version="1.3.2" PrivateAssets="All" />
+    <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.2.7" PrivateAssets="All" />
+    <PackageReference Include="Walterlv.NullableAttributes.Source" Version="2.1.2" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework)=='net45'">
-    <PackageReference Include="System.ValueTuple" Version="4.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!--所有的 NuGet 包资产都声明成私有的-->
-    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
-    <PackageReference Update="dotnetCampus.Configurations.Source" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <Reference Include="System.Web" />
+    <PackageReference Include="System.ValueTuple" Version="4.5" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,17 +50,20 @@
 
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
       <ItemGroup>
-       <!--指定自己的在安装 nuget 时修改编译-->
-        <None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="build\dotnetCampus.SourceYard.props" />
-        <None Include="Assets\Current\dotnetCampus.SourceYard.targets" Pack="True" PackagePath="build\dotnetCampus.SourceYard.targets" />
-        <None Include="Assets\Current\SourceYard.targets" Pack="True" PackagePath="build\SourceYard.targets" />
+       <!-- 编译目标项目 -->
+        <None Include="Assets\Current\Core.targets" Pack="True" PackagePath="build\Core.targets" />
+        <None Include="Assets\Current\build\PackageId.props" Pack="True" PackagePath="build\$(PackageId).props" />
+        <None Include="Assets\Current\build\PackageId.targets" Pack="True" PackagePath="build\$(PackageId).targets" />
 
-        <!--去掉 BuildMultiTargeting 因为不会记录 Compile 列表-->
-        <!--解决多框架 TargetFrameworks 打包，输出没有引用任何文件-->
-        <!--<None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.props" />
-        <None Include="Assets\Current\dotnetCampus.SourceYard.BuildMultiTargeting.targets" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.targets" />-->
-        <None Include="Assets\README.md" Pack="True" PackagePath="" />
+        <!-- 编译多框架的目标项目 -->
+        <None Include="Assets\Current\buildMultiTargeting\PackageId.props" Pack="True" PackagePath="buildMultiTargeting\$(PackageId).props" />
+        <None Include="Assets\Current\buildMultiTargeting\PackageId.targets" Pack="True" PackagePath="buildMultiTargeting\$(PackageId).targets" />
+
+        <!-- 准备编译工具 -->
         <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
+        
+        <!-- 其他杂项 -->
+        <None Include="Assets\README.md" Pack="True" PackagePath="" />
       </ItemGroup>
     </Target>
 
