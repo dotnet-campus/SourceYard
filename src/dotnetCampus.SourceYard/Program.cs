@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+
 using CommandLine;
 using dotnetCampus.SourceYard.Cli;
 using dotnetCampus.SourceYard.Utils;
@@ -12,9 +14,30 @@ namespace dotnetCampus.SourceYard
     {
         private static void Main(string[] args)
         {
+            MagicTransformMultiTargetingToFirstTarget(args);
+
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(RunOptionsAndReturnExitCode)
                 .WithNotParsed(HandleParseError);
+        }
+
+        private static void MagicTransformMultiTargetingToFirstTarget(string[] args)
+        {
+            var argDict = dotnetCampus.Cli.CommandLine.Parse(args).ToDictionary(
+                            x => x.Key,
+                            x => x.Value?.FirstOrDefault()?.Trim());
+            var targetFrameworks = argDict["TargetFrameworks"];
+            if (targetFrameworks != null && !string.IsNullOrWhiteSpace(argDict["TargetFrameworks"]))
+            {
+                var first = targetFrameworks.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                if (first != null && !string.IsNullOrWhiteSpace(first))
+                {
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        args[i] = args[i].Replace("\\SourcePacking\\", $"\\{first}\\SourcePacking\\");
+                    }
+                }
+            }
         }
 
         private static void RunOptionsAndReturnExitCode(Options options)
