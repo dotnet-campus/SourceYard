@@ -55,17 +55,20 @@
 
     <Target Name="IncludeAllDependencies" BeforeTargets="_GetPackageFiles">
       <ItemGroup>
-       <!--指定自己的在安装 nuget 时修改编译-->
-        <None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="build\dotnetCampus.SourceYard.props" />
-        <None Include="Assets\Current\dotnetCampus.SourceYard.targets" Pack="True" PackagePath="build\dotnetCampus.SourceYard.targets" />
-        <None Include="Assets\Current\SourceYard.targets" Pack="True" PackagePath="build\SourceYard.targets" />
+       <!-- 编译目标项目 -->
+        <None Include="Assets\Current\Core.targets" Pack="True" PackagePath="build\Core.targets" />
+        <None Include="Assets\Current\build\PackageId.props" Pack="True" PackagePath="build\$(PackageId).props" />
+        <None Include="Assets\Current\build\PackageId.targets" Pack="True" PackagePath="build\$(PackageId).targets" />
 
-        <!--去掉 BuildMultiTargeting 因为不会记录 Compile 列表-->
-        <!--解决多框架 TargetFrameworks 打包，输出没有引用任何文件-->
-        <!--<None Include="Assets\Current\dotnetCampus.SourceYard.props" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.props" />
-        <None Include="Assets\Current\dotnetCampus.SourceYard.BuildMultiTargeting.targets" Pack="True" PackagePath="buildMultiTargeting\dotnetCampus.SourceYard.targets" />-->
-        <None Include="Assets\README.md" Pack="True" PackagePath="" />
+        <!-- 编译多框架的目标项目 -->
+        <None Include="Assets\Current\buildMultiTargeting\PackageId.props" Pack="True" PackagePath="buildMultiTargeting\$(PackageId).props" />
+        <None Include="Assets\Current\buildMultiTargeting\PackageId.targets" Pack="True" PackagePath="buildMultiTargeting\$(PackageId).targets" />
+
+        <!-- 准备编译工具 -->
         <None Include="$(OutputPath)**\**" Pack="True" PackagePath="tools\" Visible="false" />
+        
+        <!-- 其他杂项 -->
+        <None Include="Assets\README.md" Pack="True" PackagePath="" />
       </ItemGroup>
     </Target>
 

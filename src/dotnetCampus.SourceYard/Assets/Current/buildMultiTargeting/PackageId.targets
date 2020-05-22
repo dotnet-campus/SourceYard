@@ -1,0 +1,13 @@
+﻿<Project>
+
+  <Import Project="..\build\Core.targets"/>
+
+  <Target Name="BuildSourceNuGetMultiTargeting" AfterTargets="Build"
+          Condition="$(PackSource) != 'False'">
+    <Message Text="多框架项目，源代码打包第一步（$(TargetFrameworks)）：" />
+    <CallTarget Targets="SourceYardStep1" />
+    <Message Text="多框架项目，源代码打包第三步：" />
+    <CallTarget Targets="SourceYardStep3" />
+  </Target>
+
+</Project>
