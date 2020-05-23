@@ -19,7 +19,7 @@ jobs:
         dotnet-version: 3.1.202
 
     - name: Install tool
-      run: dotnet install -g dotnetCampus.TagToVersion
+      run: dotnet tool install -g dotnetCampus.TagToVersion
 
     - name: Set tag to version
       run: dotnet TagToVersion -t ${{ github.ref }}  
