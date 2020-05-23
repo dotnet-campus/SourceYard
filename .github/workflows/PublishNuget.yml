@@ -2,8 +2,8 @@ name: publish nuget
 
 on: 
   push:
-    branches: 
-      - master
+    tags:
+    - '*'
 
 jobs:
   build:
@@ -16,7 +16,14 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.201
+        dotnet-version: 3.1.202
+
+    - name: Install tool
+      run: dotnet install -g dotnetCampus.TagToVersion
+
+    - name: Set tag to version
+      run: dotnet TagToVersion -t ${{ github.ref }}  
+
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: Install Nuget
