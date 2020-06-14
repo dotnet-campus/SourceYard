@@ -33,6 +33,7 @@
 
       <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
       <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
+      <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -98,7 +99,7 @@
     <WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;RepositoryUrl;$(RepositoryUrl);"></WriteLinesToFile>
 
     <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
-
+    <WriteLinesToFile File="$(SourceYardPackageReferenceFile)" Lines="$(SourceYardPackageReference)" Overwrite="true"></WriteLinesToFile>
   </Target>
   
   <Target Name="SourceYardStep3">

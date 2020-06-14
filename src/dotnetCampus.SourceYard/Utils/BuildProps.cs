@@ -138,6 +138,17 @@ namespace dotnetCampus.SourceYard.Utils
 
                 RepositoryUrl = appConfigurator.Default.GetValue("RepositoryUrl").Trim();
             }
+
+            var sourceYardPackageReferenceFile = Path.Combine(packingDirectory, "SourceYardPackageReferenceFile.txt");
+
+            List<string> sourceYardPackageReferenceList = File.ReadAllLines(sourceYardPackageReferenceFile).Where(temp=>!string.IsNullOrEmpty(temp)).ToList();
+            SourceYardPackageReferenceList = sourceYardPackageReferenceList;
         }
+
+        /// <summary>
+        /// 安装的源代码包列表
+        /// </summary>
+        /// 用于解决 https://github.com/dotnet-campus/SourceYard/issues/60
+        public List<string> SourceYardPackageReferenceList { get; private set; }
     }
 }
