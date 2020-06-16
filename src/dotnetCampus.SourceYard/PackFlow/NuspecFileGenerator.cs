@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,19 +38,19 @@ namespace dotnetCampus.SourceYard.PackFlow
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
 
-//#if DEBUG
+            //#if DEBUG
 
-//            var str = new StringBuilder();
-//            using (var xmlWriter = XmlWriter.Create(str))
-//            {
-//                var xmlSerializer = new XmlSerializer(typeof(NuspecPackage));
-//                xmlSerializer.Serialize(xmlWriter, nuspecPackage, ns);
-//            }
+            //            var str = new StringBuilder();
+            //            using (var xmlWriter = XmlWriter.Create(str))
+            //            {
+            //                var xmlSerializer = new XmlSerializer(typeof(NuspecPackage));
+            //                xmlSerializer.Serialize(xmlWriter, nuspecPackage, ns);
+            //            }
 
-//            var rawceeyopereSuwhisa = str.ToString();
+            //            var rawceeyopereSuwhisa = str.ToString();
 
-//            rawceeyopereSuwhisa = rawceeyopereSuwhisa;
-//#endif
+            //            rawceeyopereSuwhisa = rawceeyopereSuwhisa;
+            //#endif
 
             using (var stream = file.OpenWrite())
             {
@@ -88,18 +89,20 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = GetDependencies(context.PackageReferenceVersion),
+                    Dependencies = GetDependencies(context.PackageReferenceVersion, buildProps.SourceYardPackageReferenceList),
                     Repository = repository
                 }
             };
         }
 
-        private List<NuspecDependency> GetDependencies(string contextPackageVersion)
+        private List<NuspecDependency> GetDependencies(string contextPackageVersion,
+            List<string> sourceYardPackageReferenceList)
         {
-            return ParserPackageVersion(contextPackageVersion);
+            return ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
         }
 
-        private List<NuspecDependency> ParserPackageVersion(string packageVersionFile)
+        private List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
+            List<string> sourceYardPackageReferenceList)
         {
             var nuspecDependencyList = new List<NuspecDependency>();
             var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
@@ -117,7 +120,14 @@ namespace dotnetCampus.SourceYard.PackFlow
 
                         // 在源代码包如果项目引用的是 private asset 的库，那么就不应该添加引用
                         // 因为源代码是没有框架的依赖，对 sdk 带的库也不添加
-                        if (!privateAssets.Contains("all")
+
+                        var isPrivateAssetsAll = privateAssets.Contains("all");
+
+                        // 解决 https://github.com/dotnet-campus/SourceYard/issues/60
+                        // 即使有某个包标记了使用 private asset 是 All 的，但是这个包是一个源代码包，那么打包的时候就需要添加他的引用依赖
+                        var includeInSourceYardPackageReference = sourceYardPackageReferenceList.Any(temp => temp.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+                        if ((!isPrivateAssetsAll || includeInSourceYardPackageReference)
                             && !SDKNuget.Contains(name))
                         {
                             nuspecDependencyList.Add(new NuspecDependency()

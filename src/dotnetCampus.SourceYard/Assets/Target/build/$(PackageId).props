@@ -12,4 +12,7 @@
         <ShouldFixNuGetImportingBugForWpfProjects Condition=" '$(ShouldFixNuGetImportingBugForWpfProjects)' == '' ">True</ShouldFixNuGetImportingBugForWpfProjects>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <SourceYardPackageReference>$(SourceYardPackageReference);#(PackageId)</SourceYardPackageReference>
+    </PropertyGroup>
 </Project>
