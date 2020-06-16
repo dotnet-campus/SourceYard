@@ -26,10 +26,14 @@ dotnet new console -o Foo
 
 ```
 cd Foo
-dotnet add package dotnetCampus.SourceYard --version  0.1.7213-alpha
+dotnet add package dotnetCampus.SourceYard
 ```
 
 运行 dotnet build 命令进行编译，编译完成可以在 `bin\debug` 文件夹可以找到打包的源代码包
+
+**注意**
+
+版本号是 0.1.19035-alpha 将会影响双包项目的使用，如需支持双包的项目请采用 0.1.19033-alpha 版本
 
 ## 文档
 
