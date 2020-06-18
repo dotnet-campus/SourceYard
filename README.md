@@ -24,6 +24,12 @@ dotnet add package dotnetCampus.SourceYard
 
 And then you should build your project and you will find the `*.Source.version.nupkg` file in your package output folder
 
+**Remark**
+
+The package with 0.1.19035-alpha version will break the double package reference project.
+
+If you want to support the double package reference project, you can use the package with 0.1.19033-alpha version.
+
 ## Documentation
 
 [简体中文](README.zh-cn.md)
