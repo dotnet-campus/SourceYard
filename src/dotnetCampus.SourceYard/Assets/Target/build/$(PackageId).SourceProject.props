@@ -2,17 +2,20 @@
 <Project>
 
   <!--这个文件由代码创建，不建议删除这个文件-->
+  <!-- This file is created by code, please do not delete this file -->
 
   <!--取消下面的注释，并且修改路径为自己对应的 #(PackageId) 文件夹的目录，可以通过修改源代码测试-->
-
+  <!-- If you remove the following comment, and you modify the path to the directory of your corresponding #(PackageId) folder, then you can test by modifying the source code -->
+    
   <!--<PropertyGroup Condition=" !$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <DefineConstants>$(DefineConstants);#(PackageGuid)SOURCE_REFERENCE</DefineConstants>
   </PropertyGroup>-->
   
   <!--修改路径为自己的源代码文件夹-->
-  <!--  <PropertyGroup>
-    <#(PackageGuid)SourceFolder>c:\lindexi\source\ 这是一个示例文件夹，请将这个替换为自己的源代码包文件夹</#(PackageGuid)SourceFolder>
-  </PropertyGroup>  -->
+  <!-- Please modify the path to your source code folder -->
+  <!--<PropertyGroup>
+    <#(PackageGuid)SourceFolder>c:\lindexi\source\ 这是一个示例文件夹，请将这个替换为自己的源代码包文件夹 This is an example folder, please replace this with your own source code package folder </#(PackageGuid)SourceFolder>
+  </PropertyGroup>-->  
 
 
 </Project>
