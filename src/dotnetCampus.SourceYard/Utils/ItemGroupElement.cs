@@ -21,12 +21,12 @@ namespace dotnetCampus.SourceYard.Utils
         public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup()
         {
             var contextPackagedProjectFile = _contextPackagedProjectFile;
-            var compileFileList = GetFileList(contextPackagedProjectFile.CompileFile);
-            var contentFileList = GetFileList(contextPackagedProjectFile.ContentFile);
-            var resourceFileList = GetFileList(contextPackagedProjectFile.ResourceFile);
-            var noneFileList = GetFileList(contextPackagedProjectFile.NoneFile);
-            var embeddedResource = GetFileList(contextPackagedProjectFile.EmbeddedResource);
-            var pageFileList = GetFileList(contextPackagedProjectFile.Page);
+            var compileFileList = contextPackagedProjectFile.CompileFileList;
+            var contentFileList = contextPackagedProjectFile.ContentFileList;
+            var resourceFileList = contextPackagedProjectFile.ResourceFileList;
+            var noneFileList = contextPackagedProjectFile.NoneFileList;
+            var embeddedResource = contextPackagedProjectFile.EmbeddedResourceList;
+            var pageFileList = contextPackagedProjectFile.PageList;
 
             var prefix = $"_{_packageGuid}";
 
@@ -53,7 +53,7 @@ namespace dotnetCampus.SourceYard.Utils
         private readonly bool _isVisible;
         private readonly string _packageGuid;
 
-        private List<XElement> XamlItemCompileFileToElement(List<string> compileFileList, string includingItemTypes,
+        private List<XElement> XamlItemCompileFileToElement(IEnumerable<string> compileFileList, string includingItemTypes,
             bool copyToOutputDirectory)
         {
             var elementList = new List<XElement>();
@@ -72,7 +72,7 @@ namespace dotnetCampus.SourceYard.Utils
             return elementList;
         }
 
-        private List<XElement> IncludingItemCompileFileToElement(List<string> compileFileList,
+        private List<XElement> IncludingItemCompileFileToElement(IReadOnlyList<string> compileFileList,
             string includingItemTypes, bool copyToOutputDirectory)
         {
             var elementList = new List<XElement>();
@@ -118,42 +118,6 @@ namespace dotnetCampus.SourceYard.Utils
             {
                 element.SetAttributeValue("CopyToOutputDirectory", "PreserveNewest");
             }
-        }
-
-        private List<string> GetFileList(string file)
-        {
-            if (string.IsNullOrEmpty(file) || !File.Exists(file))
-            {
-                return new List<string>();
-            }
-
-            var fileList = File.ReadAllLines(file).ToList();
-
-            fileList = RemoveTempFile(fileList);
-
-            return fileList;
-        }
-
-        private List<string> RemoveTempFile(List<string> fileList)
-        {
-            fileList.RemoveAll
-            (
-                temp => temp.StartsWith("obj\\")
-                        || temp.StartsWith("bin\\")
-            );
-
-            fileList.RemoveAll(temp =>
-            {
-                var pathRoot = Path.GetPathRoot(temp);
-                if (!string.IsNullOrEmpty(pathRoot))
-                {
-                    return temp.StartsWith(pathRoot);
-                }
-
-                return false;
-            });
-
-            return fileList;
         }
     }
 }
