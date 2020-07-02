@@ -8,6 +8,28 @@ namespace dotnetCampus.SourceYard.Utils
 {
     internal static class FileSystem
     {
+        /// <summary>
+        /// 复制文件列表
+        /// </summary>
+        /// <param name="sourceFolder"></param>
+        /// <param name="targetFolder"></param>
+        /// <param name="fileList"></param>
+        public static void CopyFileList(string sourceFolder, string targetFolder, List<string> fileList)
+        {
+            foreach (var file in fileList.Select(Path.GetFullPath))
+            {
+                var relativePath = MakeRelativePath(sourceFolder, file);
+                var targetFile = Path.GetFullPath(Path.Combine(targetFolder, relativePath));
+                var directory = Path.GetDirectoryName(targetFile);
+                if (directory != null && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                File.Copy(file, targetFile, true);
+            }
+        }
+
         internal static void CopyFolderContents(string sourceFolder, string targetFolder,
             Func<string, string> nameConverter = null, IList<string> excludes = null)
         {

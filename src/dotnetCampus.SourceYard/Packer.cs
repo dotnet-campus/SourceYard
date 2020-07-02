@@ -59,7 +59,8 @@ namespace dotnetCampus.SourceYard
                 embeddedResource: GetFile(embeddedResource),
                 page: GetFile(page),
                 applicationDefinition: GetFile(applicationDefinition),
-                noneFile: GetFile(noneFile)
+                noneFile: GetFile(noneFile),
+                projectFolder: Path.GetDirectoryName(_projectFile)
             );
 
             _packers = new IPackFlow[]
