@@ -80,7 +80,7 @@ namespace dotnetCampus.SourceYard.Context
 
                 // 如果文件放在项目文件上面，如 Foo\F1\F.csproj 引用文件 Foo\12.txt 那么此时就不添加 12.txt 的引用
                 // 原因是将 F.csproj 所在文件夹放在源代码包的 src 文件夹里面，因此 F1 文件夹是最上层文件夹
-                if (!fullPath.Contains(_projectFolder))
+                if (fullPath.IndexOf(_projectFolder, StringComparison.OrdinalIgnoreCase) < 0)
                 {
                     fileList.RemoveAt(i);
                     i--;
@@ -94,7 +94,7 @@ namespace dotnetCampus.SourceYard.Context
         {
             fileList.RemoveAll
             (
-                temp => IgnoreFolderList.Any(temp.StartsWith)
+                temp => IgnoreFolderList.Any(t => temp.StartsWith(t, StringComparison.OrdinalIgnoreCase))
             );
 
             fileList.RemoveAll(temp =>
@@ -102,13 +102,13 @@ namespace dotnetCampus.SourceYard.Context
                 var pathRoot = Path.GetPathRoot(temp);
                 if (!string.IsNullOrEmpty(pathRoot))
                 {
-                    return temp.StartsWith(pathRoot);
+                    return temp.StartsWith(pathRoot, StringComparison.OrdinalIgnoreCase);
                 }
 
                 return false;
             });
 
-            fileList.RemoveAll(temp => IgnoreFileEndList.Any(temp.EndsWith));
+            fileList.RemoveAll(temp => IgnoreFileEndList.Any(t => temp.EndsWith(t, StringComparison.OrdinalIgnoreCase)));
 
             return fileList;
         }
