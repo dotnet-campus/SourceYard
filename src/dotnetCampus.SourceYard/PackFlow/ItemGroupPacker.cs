@@ -41,9 +41,9 @@ namespace dotnetCampus.SourceYard.PackFlow
             var sourceReferenceSourceFolder = @"$(MSBuildThisFileDirectory)..\src\";
 
             // 读取文件
-            var buildfile = File.ReadAllText(buildAssetsFile);
+            var buildFile = File.ReadAllText(buildAssetsFile);
 
-            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, context.PackageGuid,
+            buildFile = ReplaceString(context.PackagedProjectFile, buildFile, context.PackageGuid,
                 sourceReferenceSourceFolder, false,
                 "<!--替换ItemGroup-->", "<!--替换XmlItemGroup-->");
 
@@ -51,14 +51,14 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             sourceReferenceSourceFolder = $@"$({context.PackageGuid}SourceFolder)\";
 
-            buildfile = ReplaceString(context.PackagedProjectFile, buildfile, context.PackageGuid,
+            buildFile = ReplaceString(context.PackagedProjectFile, buildFile, context.PackageGuid,
                 sourceReferenceSourceFolder, true,
                 "<!--替换 SOURCE_REFERENCE ItemGroup-->", "<!--替换 SOURCE_REFERENCE XmlItemGroup-->");
 
             // 用户可以选择使用 nuget 源代码，也可以选择使用自己的代码，所以就需要使用两个不同的值
 
             // 写入文件
-            File.WriteAllText(buildAssetsFile, buildfile);
+            File.WriteAllText(buildAssetsFile, buildFile);
         }
 
         private string ReplaceString(PackagedProjectFile contextPackagedProjectFile, string str,
