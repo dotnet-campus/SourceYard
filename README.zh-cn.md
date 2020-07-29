@@ -39,6 +39,8 @@ dotnet add package dotnetCampus.SourceYard
 
 [中文文档](./docs/zh-cn)
 
+[微软官方文档 NuGet 共享源代码包](https://docs.microsoft.com/zh-cn/dotnet/standard/library-guidance/dependencies#nuget-shared-source-packages )
+
 ## 例子
 
 [例子代码](./sample)
