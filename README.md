@@ -34,6 +34,8 @@ If you want to support the double package reference project, you can use the pac
 
 [简体中文](README.zh-cn.md)
 
+[NuGet shared source packages Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/dependencies#nuget-shared-source-packages )
+
 ## Contributing
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/dotnet-campus/SourceYard/pulls)
