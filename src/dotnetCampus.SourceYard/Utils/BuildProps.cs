@@ -128,15 +128,16 @@ namespace dotnetCampus.SourceYard.Utils
             // 这个文件里面存放使用 fkv 配置
             if (File.Exists(sourceProjectPackageFile))
             {
-                var fileConfigurationRepo = new FileConfigurationRepo(sourceProjectPackageFile);
+                var fileConfigurationRepo = ConfigurationFactory.FromFile(sourceProjectPackageFile);
 
-                var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
+                IAppConfigurator appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
+                var configuration = appConfigurator.Default;
 
-                RepositoryType = appConfigurator.Default.GetValue("RepositoryType").Trim();
+                RepositoryType = configuration.GetValue("RepositoryType")?.Trim() ?? string.Empty;
 
-                PackageProjectUrl = appConfigurator.Default.GetValue("PackageProjectUrl").Trim();
+                PackageProjectUrl = configuration.GetValue("PackageProjectUrl")?.Trim() ?? string.Empty;
 
-                RepositoryUrl = appConfigurator.Default.GetValue("RepositoryUrl").Trim();
+                RepositoryUrl = configuration.GetValue("RepositoryUrl")?.Trim() ?? string.Empty;
             }
 
             var sourceYardPackageReferenceFile = Path.Combine(packingDirectory, "SourceYardPackageReferenceFile.txt");
