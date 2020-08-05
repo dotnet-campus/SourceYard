@@ -9,6 +9,13 @@
   <!-- 避免依赖传递。 -->
   <Target Name="_SourceYardPrivateAssets"
           BeforeTargets="CollectPackageReferences">
+    <!-- 读取信息，解决 https://github.com/dotnet/sdk/issues/12777 -->
+    <ItemGroup>
+      <_PackageReferenceVersion
+          Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'">
+      </_PackageReferenceVersion>
+    </ItemGroup>
+
     <ItemGroup>
       <PackageReference Update="dotnetCampus.SourceYard" PrivateAssets="all" />
     </ItemGroup>
@@ -35,12 +42,6 @@
       <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
       <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
     </PropertyGroup>
-
-    <ItemGroup>
-      <_PackageReferenceVersion
-          Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'">
-      </_PackageReferenceVersion>
-    </ItemGroup>
 
     <PropertyGroup>
 
