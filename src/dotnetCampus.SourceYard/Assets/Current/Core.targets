@@ -6,7 +6,6 @@
   
   <!-- 打包核心 -->
 
-  <!-- 避免依赖传递。 -->
   <Target Name="_SourceYardPrivateAssets"
           BeforeTargets="CollectPackageReferences">
     <!-- 读取信息，解决 https://github.com/dotnet/sdk/issues/12777 -->
@@ -15,11 +14,6 @@
           Include="Name='%(PackageReference.Identity)' Version='%(PackageReference.Version)' PrivateAssets='%(PackageReference.PrivateAssets)'">
       </_PackageReferenceVersion>
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="dotnetCampus.SourceYard" PrivateAssets="all" />
-    </ItemGroup>
-    <Message Text="避免 SourceYard 依赖传递导致目标项目也打出源代码包" />
   </Target>
 
   <Target Name="SourceYardStep1">
