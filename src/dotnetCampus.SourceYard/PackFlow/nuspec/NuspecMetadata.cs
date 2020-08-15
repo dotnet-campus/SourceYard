@@ -59,7 +59,7 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             }
         }
 
-        [XmlElement("version")] 
+        [XmlElement("version")]
         public string? Version { get; set; }
 
         [XmlElement("projectUrl")]
@@ -94,19 +94,19 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             }
         }
 
-        [XmlElement("tags")] 
+        [XmlElement("tags")]
         public string? PackageTags { get; set; }
 
-        [XmlElement("releaseNotes")] 
+        [XmlElement("releaseNotes")]
         public string? PackageReleaseNotes { get; set; }
 
-        [XmlElement("title")] 
+        [XmlElement("title")]
         public string? Title { get; set; }
 
-        [XmlElement("authors")] 
+        [XmlElement("authors")]
         public string? Authors { get; set; }
 
-        [XmlElement("owners")] 
+        [XmlElement("owners")]
         public string? Owner { get; set; }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
         [XmlElement("developmentDependency")]
         public string? DevelopmentDependency { get; set; } = "true";
 
-        [XmlElement("repository")] 
+        [XmlElement("repository")]
         public Repository? Repository { set; get; }
 
         private string? _copyright;
@@ -133,16 +133,16 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
     [XmlType(typeName: "repository", Namespace = "")]
     public class Repository
     {
-        [XmlAttribute(attributeName: "type")] 
+        [XmlAttribute(attributeName: "type")]
         public string? Type { set; get; }
 
-        [XmlAttribute(attributeName: "url")] 
+        [XmlAttribute(attributeName: "url")]
         public string? Url { set; get; }
     }
 
     public class NugetTargetFramework
     {
-        [XmlAttribute("targetFramework")] 
+        [XmlAttribute("targetFramework")]
         public string TargetFramework { get; set; } = ".NETFramework4.5";
 
         [XmlArray(elementName: "dependencies", Namespace = "")]
