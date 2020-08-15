@@ -16,13 +16,15 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             SourceYardPackage = $"SourceYard {assembly.GetName().Version}";
         }
 
-        [XmlElement("description")] public string? Description { set; get; }
+        [XmlElement("description")] 
+        public string? Description { set; get; }
 
         [XmlArray(elementName: "dependencies", Namespace = "")]
         [XmlArrayItem(elementName: "dependency")]
         public List<NuspecDependency> Dependencies { set; get; } = new List<NuspecDependency>();
 
-        [XmlElement("id")] public string? Id { get; set; }
+        [XmlElement("id")] 
+        public string? Id { get; set; }
 
         [XmlElement("copyright")]
         public string? Copyright
@@ -56,7 +58,8 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             }
         }
 
-        [XmlElement("version")] public string? Version { get; set; }
+        [XmlElement("version")] 
+        public string? Version { get; set; }
 
         [XmlElement("projectUrl")]
         public string? PackageProjectUrl
@@ -129,14 +132,17 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
     [XmlType(typeName: "repository", Namespace = "")]
     public class Repository
     {
-        [XmlAttribute(attributeName: "type")] public string? Type { set; get; }
+        [XmlAttribute(attributeName: "type")] 
+        public string? Type { set; get; }
 
-        [XmlAttribute(attributeName: "url")] public string? Url { set; get; }
+        [XmlAttribute(attributeName: "url")] 
+        public string? Url { set; get; }
     }
 
     public class NugetTargetFramework
     {
-        [XmlAttribute("targetFramework")] public string TargetFramework { get; set; } = ".NETFramework4.5";
+        [XmlAttribute("targetFramework")] 
+        public string TargetFramework { get; set; } = ".NETFramework4.5";
 
         [XmlArray(elementName: "dependencies", Namespace = "")]
         [XmlArrayItem(elementName: "dependency")]
