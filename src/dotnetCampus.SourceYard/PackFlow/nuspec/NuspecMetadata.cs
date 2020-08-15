@@ -33,7 +33,7 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             get => _copyright;
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     // 不使用空字符串，这样才能解决NuGet提示Copyright不能为空
                     value = null;
@@ -49,7 +49,7 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             get => _packageLicenseUrl;
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     // 不使用空字符串，这样才能解决NuGet提示licenseUrl不能为空
                     value = null;
@@ -68,7 +68,7 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             get => _packageProjectUrl;
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     // 不使用空字符串，这样才能解决NuGet提示PackageProjectUrl不能为空
                     value = null;
@@ -84,7 +84,7 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
             get => _packageIconUrl;
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     // 不使用空字符串，这样才能解决NuGet提示PackageProjectUrl不能为空
                     value = null;
