@@ -12,8 +12,9 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
         public NuspecMetadata()
         {
             var assembly = Assembly.GetExecutingAssembly();
+            var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
-            SourceYardPackage = $"SourceYard {assembly.GetName().Version}";
+            SourceYardPackage = $"SourceYard {version}";
         }
 
         [XmlElement("description")] 
