@@ -35,7 +35,12 @@
       <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
       <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
       <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
+      <SourceYardCompilePackageFile>$(SourcePackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
     </PropertyGroup>
+
+    <ItemGroup>
+      <_SourceYardCompilePackage Include="%(SourceYardCompile.Identity)|%(SourceYardCompile.SourcePackagePath)"/>
+    </ItemGroup>
 
     <PropertyGroup>
 
@@ -95,6 +100,8 @@
 
     <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
     <WriteLinesToFile File="$(SourceYardPackageReferenceFile)" Lines="$(SourceYardPackageReference)" Overwrite="true"></WriteLinesToFile>
+
+    <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardCompilePackage)"></WriteLinesToFile>
   </Target>
   
   <Target Name="SourceYardStep3">
