@@ -42,6 +42,9 @@
       <SourceYardContentPackageFile>$(SourcePackingDirectory)SourceYardContentPackageFile.txt</SourceYardContentPackageFile>
       <SourceYardNonePackageFile>$(SourcePackingDirectory)SourceYardNonePackageFile.txt</SourceYardNonePackageFile>
       <SourceYardEmbeddedResourcePackageFile>$(SourcePackingDirectory)SourceYardEmbeddedResourcePackageFile.txt</SourceYardEmbeddedResourcePackageFile>
+
+      <!-- 这是给 SourceFusion 预编译生成的文件加入打包 -->
+      <SourceYardForSourceFusionCompilePackageFile>$(SourcePackingDirectory)SourceYardForSourceFusionCompilePackageFile.txt</SourceYardForSourceFusionCompilePackageFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -50,6 +53,7 @@
       <_SourceYardContentPackage Include="%(SourceYardContent.Identity)|%(SourceYardContent.SourcePackagePath)"/>
       <_SourceYardNonePackage Include="%(SourceYardNone.Identity)|%(SourceYardNone.SourcePackagePath)"/>
       <_SourceYardEmbeddedResourcePackage Include="%(SourceYardEmbeddedResource.Identity)|%(SourceYardEmbeddedResource.SourcePackagePath)"/>
+      <_SourceYardForSourceFusionCompilePackage Include="%(_SourceFusionIncludedCompileFile.Identity)|SourceFusionGeneratedCode\%(_SourceFusionIncludedCompileFile.Identity)"/>
     </ItemGroup>
 
     <PropertyGroup>
@@ -117,6 +121,7 @@
     <WriteLinesToFile File="$(SourceYardContentPackageFile)" Lines="@(_SourceYardContentPackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardNonePackageFile)" Lines="@(_SourceYardNonePackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardEmbeddedResourcePackageFile)" Lines="@(_SourceYardEmbeddedResourcePackage)" Overwrite="true"></WriteLinesToFile>
+    <WriteLinesToFile File="$(SourceYardForSourceFusionCompilePackageFile)" Lines="@(_SourceYardForSourceFusionCompilePackage)" Overwrite="true"></WriteLinesToFile>
   </Target>
   
   <!--打包第三步，无论多框架还是单框架只执行一次-->
