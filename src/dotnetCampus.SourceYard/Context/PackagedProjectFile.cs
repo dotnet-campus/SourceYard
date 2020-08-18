@@ -20,13 +20,20 @@ namespace dotnetCampus.SourceYard.Context
             _buildProps = buildProps;
             ApplicationDefinition = applicationDefinition;
 
-            CompileFileList = GetSourceYardPackageFileList(compileFile, buildProps.CompileSourceYardPackageFile);
-            ResourceFileList = GetFileList(resourceFile);
-            ContentFileList = GetFileList(contentFile);
+            CompileFileList = GetSourceYardPackageFileList(compileFile, SourceYardCompilePackageFile);
+            ResourceFileList = GetSourceYardPackageFileList(resourceFile, SourceYardResourcePackageFile);
+            ContentFileList = GetSourceYardPackageFileList(contentFile, SourceYardContentPackageFile);
             PageList = GetFileList(page);
-            NoneFileList = GetFileList(noneFile);
-            EmbeddedResourceList = GetFileList(embeddedResource);
+            NoneFileList = GetSourceYardPackageFileList(noneFile, SourceYardNonePackageFile);
+            EmbeddedResourceList = GetSourceYardPackageFileList(embeddedResource, SourceYardEmbeddedResourcePackageFile);
         }
+
+        private const string
+            SourceYardCompilePackageFile = "SourceYardCompilePackageFile.txt",
+            SourceYardResourcePackageFile = "SourceYardResourcePackageFile.txt",
+            SourceYardContentPackageFile = "SourceYardContentPackageFile.txt",
+            SourceYardNonePackageFile = "SourceYardNonePackageFile.txt",
+            SourceYardEmbeddedResourcePackageFile = "SourceYardEmbeddedResourcePackageFile.txt";
 
         /// <summary>
         /// 需要做源码包的项目的编译的文件
@@ -68,10 +75,36 @@ namespace dotnetCampus.SourceYard.Context
         }
 
         private List<SourceYardPackageFile> GetSourceYardPackageFileList(string file,
-            List<SourceYardPackageFile> sourceYardPackageFileList)
+            string sourceYardPackageFile)
         {
+            sourceYardPackageFile = Path.Combine(_buildProps.SourcePackingDirectory, sourceYardPackageFile);
+            var sourceYardPackageFileList = ParseSourceYardPackageFile(sourceYardPackageFile);
+
             var fileList = GetFileList(file);
             return new CombineReadonlyList<SourceYardPackageFile>(sourceYardPackageFileList, fileList).Distinct(new SourceYardPackageFileEqualityComparer()).ToList();
+        }
+
+        private List<SourceYardPackageFile> ParseSourceYardPackageFile(string sourceYardPackageFile)
+        {
+            var sourceYardPackageFileList = new List<SourceYardPackageFile>();
+            var text = File.ReadAllText(sourceYardPackageFile);
+
+            foreach (var line in text.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+            {
+                var package = line.Split('|');
+                if (package.Length == 2)
+                {
+                    var sourceFile = package[0];
+                    var packagePath = package[1];
+
+                    if (!string.IsNullOrEmpty(sourceFile))
+                    {
+                        sourceYardPackageFileList.Add(new SourceYardPackageFile(new FileInfo(sourceFile), packagePath));
+                    }
+                }
+            }
+
+            return sourceYardPackageFileList;
         }
 
         private List<SourceYardPackageFile> GetFileList(string file)

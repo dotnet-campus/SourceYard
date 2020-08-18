@@ -109,8 +109,6 @@ namespace dotnetCampus.SourceYard.Utils
         /// </summary>
         public string SourcePackingDirectory { get; private set; }
 
-        public List<SourceYardPackageFile> CompileSourceYardPackageFile { private set; get; } = null!;
-
         private string _authors;
         private string _company;
 
@@ -149,31 +147,6 @@ namespace dotnetCampus.SourceYard.Utils
             SourceYardPackageReferenceList = sourceYardPackageReferenceList;
 
             var sourceYardCompilePackageFile = Path.Combine(packingDirectory, "SourceYardCompilePackageFile.txt");
-
-            CompileSourceYardPackageFile = ParseSourceYardPackageFile(sourceYardCompilePackageFile);
-        }
-
-        private List<SourceYardPackageFile> ParseSourceYardPackageFile(string sourceYardPackageFile)
-        {
-            var sourceYardPackageFileList = new List<SourceYardPackageFile>();
-            var text = File.ReadAllText(sourceYardPackageFile);
-
-            foreach (var line in text.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-            {
-                var package = line.Split('|');
-                if (package.Length == 2)
-                {
-                    var sourceFile = package[0];
-                    var packagePath = package[1];
-
-                    if (!string.IsNullOrEmpty(sourceFile))
-                    {
-                        sourceYardPackageFileList.Add(new SourceYardPackageFile(new FileInfo(sourceFile), packagePath));
-                    }
-                }
-            }
-
-            return sourceYardPackageFileList;
         }
 
         /// <summary>
