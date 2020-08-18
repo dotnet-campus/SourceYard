@@ -12,12 +12,15 @@ namespace dotnetCampus.SourceYard.Context
     class PackagedProjectFile
     {
         /// <inheritdoc />
-        public PackagedProjectFile(string compileFile, string resourceFile, string contentFile, string page, string applicationDefinition, string noneFile, string embeddedResource, string projectFolder)
+        public PackagedProjectFile(string compileFile, string resourceFile, string contentFile, string page,
+            string applicationDefinition, string noneFile, string embeddedResource, string projectFolder,
+            BuildProps buildProps)
         {
             _projectFolder = projectFolder;
+            _buildProps = buildProps;
             ApplicationDefinition = applicationDefinition;
 
-            CompileFileList = GetFileList(compileFile);
+            CompileFileList = GetSourceYardPackageFileList(compileFile, buildProps.CompileSourceYardPackageFile);
             ResourceFileList = GetFileList(resourceFile);
             ContentFileList = GetFileList(contentFile);
             PageList = GetFileList(page);
@@ -28,46 +31,54 @@ namespace dotnetCampus.SourceYard.Context
         /// <summary>
         /// 需要做源码包的项目的编译的文件
         /// </summary>
-        public IReadOnlyList<string> CompileFileList { get; }
+        public IReadOnlyList<SourceYardPackageFile> CompileFileList { get; }
 
         /// <summary>
         /// 需要做源码包的项目的资源文件
         /// </summary>
-        public IReadOnlyList<string> ResourceFileList { get; }
+        public IReadOnlyList<SourceYardPackageFile> ResourceFileList { get; }
 
         /// <summary>
         /// 需要做源码包项目的文件
         /// </summary>
-        public IReadOnlyList<string> ContentFileList { get; }
+        public IReadOnlyList<SourceYardPackageFile> ContentFileList { get; }
 
         /// <summary>
         /// 需要做源码包项目的页面
         /// </summary>
-        public IReadOnlyList<string> PageList { get; }
+        public IReadOnlyList<SourceYardPackageFile> PageList { get; }
 
         /// <summary>
         /// 嵌入文件
         /// </summary>
-        public IReadOnlyList<string> EmbeddedResourceList { get; }
+        public IReadOnlyList<SourceYardPackageFile> EmbeddedResourceList { get; }
 
         /// <summary>
         /// 需要做源码包项目的文件
         /// </summary>
         private string ApplicationDefinition { get; }
 
-        public IReadOnlyList<string> NoneFileList { get; }
+        public IReadOnlyList<SourceYardPackageFile> NoneFileList { get; }
 
-        public IReadOnlyList<string> GetAllFile()
+        public IReadOnlyList<SourceYardPackageFile> GetAllFile()
         {
-            return new CombineReadonlyList<string>(CompileFileList, ResourceFileList, ContentFileList, PageList,
+            return new CombineReadonlyList<SourceYardPackageFile>(CompileFileList, ResourceFileList, ContentFileList,
+                PageList,
                 NoneFileList, EmbeddedResourceList);
         }
 
-        private List<string> GetFileList(string file)
+        private List<SourceYardPackageFile> GetSourceYardPackageFileList(string file,
+            List<SourceYardPackageFile> sourceYardPackageFileList)
+        {
+            var fileList = GetFileList(file);
+            return new CombineReadonlyList<SourceYardPackageFile>(sourceYardPackageFileList, fileList).Distinct(new SourceYardPackageFileEqualityComparer()).ToList();
+        }
+
+        private List<SourceYardPackageFile> GetFileList(string file)
         {
             if (string.IsNullOrEmpty(file) || !File.Exists(file))
             {
-                return new List<string>();
+                return new List<SourceYardPackageFile>();
             }
 
             var fileList = File.ReadAllLines(file).ToList();
@@ -87,7 +98,7 @@ namespace dotnetCampus.SourceYard.Context
                 }
             }
 
-            return fileList;
+            return fileList.Select(temp => new SourceYardPackageFile(new FileInfo(temp), temp)).ToList();
         }
 
         private List<string> RemoveTempFile(List<string> fileList)
@@ -108,7 +119,8 @@ namespace dotnetCampus.SourceYard.Context
                 return false;
             });
 
-            fileList.RemoveAll(temp => IgnoreFileEndList.Any(t => temp.EndsWith(t, StringComparison.OrdinalIgnoreCase)));
+            fileList.RemoveAll(temp =>
+                IgnoreFileEndList.Any(t => temp.EndsWith(t, StringComparison.OrdinalIgnoreCase)));
 
             return fileList;
         }
@@ -117,6 +129,8 @@ namespace dotnetCampus.SourceYard.Context
         /// 项目文件夹
         /// </summary>
         private readonly string _projectFolder;
+
+        private readonly BuildProps _buildProps;
 
         /// <summary>
         /// 忽略的文件夹列表
@@ -133,5 +147,18 @@ namespace dotnetCampus.SourceYard.Context
         {
             ".csproj.DotSettings", ".suo", ".user", ".sln.docstates", ".nupkg"
         };
+
+        class SourceYardPackageFileEqualityComparer : IEqualityComparer<SourceYardPackageFile>
+        {
+            public bool Equals(SourceYardPackageFile x, SourceYardPackageFile y)
+            {
+                return x.SourceFile.FullName.Equals(y.SourceFile.FullName);
+            }
+
+            public int GetHashCode(SourceYardPackageFile obj)
+            {
+                return obj.SourceFile.FullName.GetHashCode();
+            }
+        }
     }
 }

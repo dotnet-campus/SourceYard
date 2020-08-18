@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
+using dotnetCampus.SourceYard.Context;
 
 namespace dotnetCampus.SourceYard.Utils
 {
@@ -108,6 +109,8 @@ namespace dotnetCampus.SourceYard.Utils
         /// </summary>
         public string SourcePackingDirectory { get; private set; }
 
+        public List<SourceYardPackageFile> CompileSourceYardPackageFile { private set; get; } = null!;
+
         private string _authors;
         private string _company;
 
@@ -142,8 +145,35 @@ namespace dotnetCampus.SourceYard.Utils
 
             var sourceYardPackageReferenceFile = Path.Combine(packingDirectory, "SourceYardPackageReferenceFile.txt");
 
-            List<string> sourceYardPackageReferenceList = File.ReadAllLines(sourceYardPackageReferenceFile).Where(temp=>!string.IsNullOrEmpty(temp)).ToList();
+            List<string> sourceYardPackageReferenceList = File.ReadAllLines(sourceYardPackageReferenceFile).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
             SourceYardPackageReferenceList = sourceYardPackageReferenceList;
+
+            var sourceYardCompilePackageFile = Path.Combine(packingDirectory, "SourceYardCompilePackageFile.txt");
+
+            CompileSourceYardPackageFile = ParseSourceYardPackageFile(sourceYardCompilePackageFile);
+        }
+
+        private List<SourceYardPackageFile> ParseSourceYardPackageFile(string sourceYardPackageFile)
+        {
+            var sourceYardPackageFileList = new List<SourceYardPackageFile>();
+            var text = File.ReadAllText(sourceYardPackageFile);
+
+            foreach (var line in text.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+            {
+                var package = line.Split('|');
+                if (package.Length == 2)
+                {
+                    var sourceFile = package[0];
+                    var packagePath = package[1];
+
+                    if (!string.IsNullOrEmpty(sourceFile))
+                    {
+                        sourceYardPackageFileList.Add(new SourceYardPackageFile(new FileInfo(sourceFile), packagePath));
+                    }
+                }
+            }
+
+            return sourceYardPackageFileList;
         }
 
         /// <summary>

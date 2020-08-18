@@ -21,12 +21,18 @@ namespace dotnetCampus.SourceYard.Utils
         public (XElement itemGroupElement, XElement itemGroupElementOfXaml) GetItemGroup()
         {
             var contextPackagedProjectFile = _contextPackagedProjectFile;
-            var compileFileList = contextPackagedProjectFile.CompileFileList;
-            var contentFileList = contextPackagedProjectFile.ContentFileList;
-            var resourceFileList = contextPackagedProjectFile.ResourceFileList;
-            var noneFileList = contextPackagedProjectFile.NoneFileList;
-            var embeddedResource = contextPackagedProjectFile.EmbeddedResourceList;
-            var pageFileList = contextPackagedProjectFile.PageList;
+            var compileFileList = contextPackagedProjectFile.CompileFileList.Select(temp => temp.SourcePackagePath)
+                .ToList();
+            var contentFileList = contextPackagedProjectFile.ContentFileList.Select(temp => temp.SourcePackagePath)
+                .ToList();
+            var resourceFileList = contextPackagedProjectFile.ResourceFileList.Select(temp => temp.SourcePackagePath)
+                .ToList();
+            var noneFileList = contextPackagedProjectFile.NoneFileList.Select(temp => temp.SourcePackagePath)
+                .ToList();
+            var embeddedResource = contextPackagedProjectFile.EmbeddedResourceList.Select(temp => temp.SourcePackagePath)
+                .ToList();
+            var pageFileList = contextPackagedProjectFile.PageList.Select(temp => temp.SourcePackagePath)
+                .ToList();
 
             var prefix = $"_{_packageGuid}";
 

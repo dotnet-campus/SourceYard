@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using dotnetCampus.SourceYard.Context;
 
 namespace dotnetCampus.SourceYard.Utils
 {
@@ -14,19 +15,19 @@ namespace dotnetCampus.SourceYard.Utils
         /// <param name="sourceFolder"></param>
         /// <param name="targetFolder"></param>
         /// <param name="fileList"></param>
-        public static void CopyFileList(string sourceFolder, string targetFolder, List<string> fileList)
+        public static void CopyFileList(string sourceFolder, string targetFolder, List<SourceYardPackageFile> fileList)
         {
-            foreach (var file in fileList.Select(Path.GetFullPath))
+            foreach (var file in fileList)
             {
-                var relativePath = MakeRelativePath(sourceFolder, file);
-                var targetFile = Path.GetFullPath(Path.Combine(targetFolder, relativePath));
+                //var relativePath = MakeRelativePath(sourceFolder, file);
+                var targetFile = Path.GetFullPath(Path.Combine(targetFolder, file.SourcePackagePath));
                 var directory = Path.GetDirectoryName(targetFile);
                 if (directory != null && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
 
-                File.Copy(file, targetFile, true);
+                File.Copy(file.SourceFile.FullName, targetFile, true);
             }
         }
 
