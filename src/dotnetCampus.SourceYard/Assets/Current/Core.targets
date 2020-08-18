@@ -52,7 +52,7 @@
       <_SourceYardEmbeddedResourcePackage Include="%(SourceYardEmbeddedResource.Identity)|%(SourceYardEmbeddedResource.SourcePackagePath)"/>
 
       <!-- 这是给 SourceFusion 预编译生成的文件加入打包 -->
-      <_SourceYardForSourceFusionCompilePackage Include="%(_SourceFusionIncludedCompileFile.Identity)|SourceFusionGeneratedCode\%(_SourceFusionIncludedCompileFile.Identity)"/>
+      <_SourceYardForSourceFusionCompilePackage Include="%(_SourceFusionIncludedCompileFile.Identity)|%(_SourceFusionIncludedCompileFile.Identity)"/>
     </ItemGroup>
 
     <PropertyGroup>
