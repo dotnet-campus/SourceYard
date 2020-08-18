@@ -21,11 +21,6 @@ namespace dotnetCampus.SourceYard.Context
             ApplicationDefinition = applicationDefinition;
 
             CompileFileList = GetSourceYardPackageFileList(compileFile, SourceYardCompilePackageFile);
-
-            // 加上对 SourceFusion 的支持
-            CompileFileList = CombineSourceYardPackageFileList(CompileFileList,
-                ParseSourceYardPackageFile(SourceYardForSourceFusionCompilePackageFile));
-
             ResourceFileList = GetSourceYardPackageFileList(resourceFile, SourceYardResourcePackageFile);
             ContentFileList = GetSourceYardPackageFileList(contentFile, SourceYardContentPackageFile);
             PageList = GetFileList(page);
@@ -38,8 +33,7 @@ namespace dotnetCampus.SourceYard.Context
             SourceYardResourcePackageFile = "SourceYardResourcePackageFile.txt",
             SourceYardContentPackageFile = "SourceYardContentPackageFile.txt",
             SourceYardNonePackageFile = "SourceYardNonePackageFile.txt",
-            SourceYardEmbeddedResourcePackageFile = "SourceYardEmbeddedResourcePackageFile.txt",
-            SourceYardForSourceFusionCompilePackageFile = "SourceYardForSourceFusionCompilePackageFile.txt";
+            SourceYardEmbeddedResourcePackageFile = "SourceYardEmbeddedResourcePackageFile.txt";
 
         /// <summary>
         /// 需要做源码包的项目的编译的文件
@@ -87,14 +81,7 @@ namespace dotnetCampus.SourceYard.Context
             var sourceYardPackageFileList = ParseSourceYardPackageFile(sourceYardPackageFile);
 
             var fileList = GetFileList(file);
-            
-            return CombineSourceYardPackageFileList(sourceYardPackageFileList, fileList);
-        }
-
-        private List<SourceYardPackageFile> CombineSourceYardPackageFileList(
-            params IReadOnlyList<SourceYardPackageFile>[] sourceYardPackageFile)
-        {
-            return new CombineReadonlyList<SourceYardPackageFile>(sourceYardPackageFile).Distinct(new SourceYardPackageFileEqualityComparer()).ToList();
+            return new CombineReadonlyList<SourceYardPackageFile>(sourceYardPackageFileList, fileList).Distinct(new SourceYardPackageFileEqualityComparer()).ToList();
         }
 
         private List<SourceYardPackageFile> ParseSourceYardPackageFile(string sourceYardPackageFile)
