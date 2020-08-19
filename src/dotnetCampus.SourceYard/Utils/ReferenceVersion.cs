@@ -12,7 +12,7 @@ namespace dotnetCampus.SourceYard.Utils
         ///     创建引用版本
         /// </summary>
         /// <param name="version">版本</param>
-        public ReferenceVersion(SemanticVersion version)
+        public ReferenceVersion(SemanticVersion? version)
         {
             Version = version;
             MinVersion = version;
@@ -28,7 +28,7 @@ namespace dotnetCampus.SourceYard.Utils
         /// <param name="maxVersion">最高版本</param>
         /// <param name="isIncludeMinVersion">是否包括最低版本</param>
         /// <param name="isIncludeMaxVersion">是否包括最高版本</param>
-        public ReferenceVersion(SemanticVersion minVersion, SemanticVersion maxVersion, bool isIncludeMinVersion,
+        public ReferenceVersion(SemanticVersion? minVersion, SemanticVersion? maxVersion, bool isIncludeMinVersion,
             bool isIncludeMaxVersion)
         {
             Version = null;
@@ -42,17 +42,17 @@ namespace dotnetCampus.SourceYard.Utils
         /// <summary>
         ///     版本
         /// </summary>
-        public SemanticVersion Version { get; }
+        public SemanticVersion? Version { get; }
 
         /// <summary>
         ///     最低版本
         /// </summary>
-        public SemanticVersion MinVersion { get; }
+        public SemanticVersion? MinVersion { get; }
 
         /// <summary>
         ///     最高版本
         /// </summary>
-        public SemanticVersion MaxVersion { get; }
+        public SemanticVersion? MaxVersion { get; }
 
         /// <summary>
         ///     是否包括最低版本
@@ -97,6 +97,6 @@ namespace dotnetCampus.SourceYard.Utils
             return new ReferenceVersion(SemanticVersion.Parse(str));
         }
 
-        private static Regex _regex;
+        private static Regex? _regex;
     }
 }

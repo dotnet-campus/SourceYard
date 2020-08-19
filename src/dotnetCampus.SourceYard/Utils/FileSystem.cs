@@ -32,7 +32,7 @@ namespace dotnetCampus.SourceYard.Utils
         }
 
         internal static void CopyFolderContents(string sourceFolder, string targetFolder,
-            Func<string, string> nameConverter = null, IList<string> excludes = null)
+            Func<string, string>? nameConverter = null, IList<string>? excludes = null)
         {
             var sourceDirectory = new DirectoryInfo(sourceFolder);
             foreach (var directory in sourceDirectory.EnumerateDirectories().Where(
@@ -56,7 +56,7 @@ namespace dotnetCampus.SourceYard.Utils
         internal static IList<string> IgnoreFileEndList { set; get; } = new List<string>();
 
         private static void CopyFiles(string sourceFolder, string targetFolder, SearchOption searchOption,
-            Func<string, string> nameConverter = null)
+            Func<string, string>? nameConverter = null)
         {
             foreach (var file in new DirectoryInfo(sourceFolder).EnumerateFiles("*", searchOption))
             {
@@ -127,7 +127,7 @@ namespace dotnetCampus.SourceYard.Utils
 
             foreach (var temp in IgnoreFolderList)
             {
-                if (name.Equals(temp, StringComparison.CurrentCultureIgnoreCase))
+                if (name!.Equals(temp, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
                 }

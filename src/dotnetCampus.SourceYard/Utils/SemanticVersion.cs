@@ -56,12 +56,12 @@ namespace dotnetCampus.SourceYard.Utils
         /// </summary>
         public int Minor { set; get; }
         public int Patch { set; get; }
-        public string PreReleaseTag { set; get; }
-        public string BuildMetaData { set; get; }
+        public string? PreReleaseTag { set; get; }
+        public string? BuildMetaData { set; get; }
 
-        public bool Equals(SemanticVersion obj)
+        public bool Equals(SemanticVersion? obj)
         {
-            if (obj == null)
+            if (ReferenceEquals(obj, null))
             {
                 return false;
             }
@@ -128,14 +128,14 @@ namespace dotnetCampus.SourceYard.Utils
 
         public static bool operator >(SemanticVersion v1, SemanticVersion v2)
         {
-            if (v1 == null)
+            if (ReferenceEquals(v1, null))
             {
-                throw new ArgumentNullException("v1");
+                throw new ArgumentNullException(nameof(v1));
             }
 
-            if (v2 == null)
+            if (ReferenceEquals(v2, null))
             {
-                throw new ArgumentNullException("v2");
+                throw new ArgumentNullException(nameof(v2));
             }
 
             return v1.CompareTo(v2) > 0;
@@ -143,14 +143,14 @@ namespace dotnetCampus.SourceYard.Utils
 
         public static bool operator >=(SemanticVersion v1, SemanticVersion v2)
         {
-            if (v1 == null)
+            if (ReferenceEquals(v1, null))
             {
-                throw new ArgumentNullException("v1");
+                throw new ArgumentNullException(nameof(v1));
             }
 
-            if (v2 == null)
+            if (ReferenceEquals(v2, null))
             {
-                throw new ArgumentNullException("v2");
+                throw new ArgumentNullException(nameof(v2));
             }
 
             return v1.CompareTo(v2) >= 0;
@@ -158,35 +158,35 @@ namespace dotnetCampus.SourceYard.Utils
 
         public static bool operator <=(SemanticVersion v1, SemanticVersion v2)
         {
-            if (v1 == null)
+            if (ReferenceEquals(v1, null))
             {
-                throw new ArgumentNullException("v1");
+                throw new ArgumentNullException(nameof(v1));
             }
 
-            if (v2 == null)
+            if (ReferenceEquals(v2, null))
             {
-                throw new ArgumentNullException("v2");
+                throw new ArgumentNullException(nameof(v2));
             }
 
             return v1.CompareTo(v2) <= 0;
         }
 
-        public static bool operator <(SemanticVersion v1, SemanticVersion v2)
+        public static bool operator <(SemanticVersion? v1, SemanticVersion? v2)
         {
-            if (v1 == null)
+            if (ReferenceEquals(v1, null))
             {
-                throw new ArgumentNullException("v1");
+                throw new ArgumentNullException(nameof(v1));
             }
 
-            if (v2 == null)
+            if (ReferenceEquals(v2, null))
             {
-                throw new ArgumentNullException("v2");
+                throw new ArgumentNullException(nameof(v2));
             }
 
             return v1.CompareTo(v2) < 0;
         }
 
-        public static SemanticVersion Parse(string version, string tagPrefixRegex = "[Vv]")
+        public static SemanticVersion? Parse(string version, string tagPrefixRegex = "[Vv]")
         {
             if (!TryParse(version, tagPrefixRegex, out var semanticVersion))
             {
@@ -196,7 +196,7 @@ namespace dotnetCampus.SourceYard.Utils
             return semanticVersion;
         }
 
-        public static bool TryParse(string version, string tagPrefixRegex, out SemanticVersion semanticVersion)
+        public static bool TryParse(string version, string tagPrefixRegex, out SemanticVersion? semanticVersion)
         {
             // 这一句为了替换 EasiNote 中包含占位符的版本号。
             version = version.Replace(".$", "-").Replace("$", "");
@@ -277,9 +277,9 @@ namespace dotnetCampus.SourceYard.Utils
             return new Version(version.Major, version.Minor, version.Patch, 0);
         }
 
-        public int CompareTo(SemanticVersion value)
+        public int CompareTo(SemanticVersion? value)
         {
-            if (value == null)
+            if (ReferenceEquals(value, null))
             {
                 return 1;
             }
@@ -336,22 +336,20 @@ namespace dotnetCampus.SourceYard.Utils
         ///     <para>l - Legacy SemVer tag for systems which do not support SemVer 2.0 properly [1.2.3-beta4]</para>
         ///     <para>lp - Legacy SemVer tag for systems which do not support SemVer 2.0 properly (padded) [1.2.3-beta0004]</para>
         /// </summary>
-        public string ToString(string format, IFormatProvider formatProvider = null)
+        public string ToString(string? format, IFormatProvider? formatProvider = null)
         {
             if (string.IsNullOrEmpty(format))
             {
                 format = "s";
             }
 
-            var formatter = formatProvider?.GetFormat(GetType()) as ICustomFormatter;
-
-            if (formatter != null)
+            if (formatProvider?.GetFormat(GetType()) is ICustomFormatter formatter)
             {
                 return formatter.Format(format, this, formatProvider);
             }
 
             // Check for lp first because the param can varry
-            format = format.ToLower();
+            format = format!.ToLower();
             if (format.StartsWith("lp", StringComparison.Ordinal))
             {
                 // handle the padding

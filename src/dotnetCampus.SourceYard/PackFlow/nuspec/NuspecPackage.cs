@@ -6,6 +6,6 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
     public class NuspecPackage
     {
         [XmlElement("metadata")]
-        public NuspecMetadata NuspecMetadata { get; set; }
+        public NuspecMetadata? NuspecMetadata { get; set; }
     }
 }

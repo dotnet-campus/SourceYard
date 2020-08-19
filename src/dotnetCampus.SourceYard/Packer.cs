@@ -9,10 +9,23 @@ namespace dotnetCampus.SourceYard
 {
     internal class Packer
     {
-        public Packer(string projectFile, string intermediateDirectory,
-            string packageOutputPath, string packageVersion, string compileFile, string resourceFile,
-            string contentFile, string page, string applicationDefinition, string noneFile, string embeddedResource,
-            BuildProps buildProps, string packageId, string packageReferenceVersion)
+        public Packer
+        (
+            string projectFile,
+            string intermediateDirectory,
+            string packageOutputPath,
+            string packageVersion,
+            string? compileFile,
+            string? resourceFile,
+            string? contentFile,
+            string? page,
+            string? applicationDefinition,
+            string? noneFile,
+            string? embeddedResource,
+            BuildProps buildProps,
+            string? packageId,
+            string? packageReferenceVersion
+        )
         {
             Logger = new Logger();
 
@@ -110,7 +123,7 @@ namespace dotnetCampus.SourceYard
                 return;
             }
 
-            IPackFlow current = null;
+            IPackFlow? current = null;
             try
             {
                 foreach (var packer in _packers)
@@ -147,24 +160,24 @@ namespace dotnetCampus.SourceYard
         }
 
         private ILogger Logger { get; }
-        private string PackageId { get; }
+        private string? PackageId { get; }
 
-        private readonly string _projectFile;
-        private readonly string _intermediateDirectory;
+        private readonly string _projectFile = null!;
+        private readonly string _intermediateDirectory = null!;
 
         /// <summary>
         /// 最后输出的文件夹
         /// </summary>
-        private readonly string _packageOutputPath;
+        private readonly string _packageOutputPath = null!;
 
-        private readonly string _packageVersion;
-        private readonly string _packageReferenceVersion;
-        private readonly IPackFlow[] _packers;
+        private readonly string _packageVersion = null!;
+        private readonly string _packageReferenceVersion = null!;
+        private readonly IPackFlow[] _packers = null!;
 
-        private PackagedProjectFile PackagedProjectFile { get; }
-        private BuildProps BuildProps { get; }
+        private PackagedProjectFile PackagedProjectFile { get; } = null!;
+        private BuildProps BuildProps { get; } = null!;
 
-        private static string GetFile(string file)
+        private static string GetFile(string? file)
         {
             return string.IsNullOrWhiteSpace(file) ? "" : Path.GetFullPath(file);
         }

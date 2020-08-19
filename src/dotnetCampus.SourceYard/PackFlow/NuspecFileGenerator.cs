@@ -30,7 +30,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             _log.Message("完成创建 nuspec 文件");
         }
 
-        private ILogger _log;
+        private ILogger _log = null!;
 
         private void Write(NuspecPackage nuspecPackage, string fileName)
         {
@@ -63,7 +63,7 @@ namespace dotnetCampus.SourceYard.PackFlow
         {
             var buildProps = context.BuildProps;
 
-            Repository repository = null;
+            Repository? repository = null;
             if (!string.IsNullOrEmpty(buildProps.RepositoryType) && !string.IsNullOrEmpty(buildProps.RepositoryUrl))
             {
                 repository = new Repository()
