@@ -69,13 +69,12 @@ namespace dotnetCampus.SourceYard
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
-                
 
                 var buildProps = new BuildProps()
                 {
-                    Authors = options.Authors,
-                    Company = options.Company,
-                    Owner = options.Owner ?? options.Authors,
+                    Authors = options.Authors ?? string.Empty,
+                    Company = options.Company ?? string.Empty,
+                    Owner = options.Owner ?? options.Authors ?? string.Empty,
                     Copyright = copyright,
                     Description = description,
                     //PackageProjectUrl = options.PackageProjectUrl,
@@ -110,7 +109,7 @@ namespace dotnetCampus.SourceYard
                 logger.Error(e.Message);
             }
 
-            string ReadFile(string file)
+            string ReadFile(string? file)
             {
                 if (string.IsNullOrEmpty(file))
                 {

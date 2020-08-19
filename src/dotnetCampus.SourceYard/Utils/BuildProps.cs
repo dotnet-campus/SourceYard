@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
-using dotnetCampus.SourceYard.Context;
 
 namespace dotnetCampus.SourceYard.Utils
 {
@@ -22,7 +20,7 @@ namespace dotnetCampus.SourceYard.Utils
                     _company = "dotnet campus";
                 }
 
-                return _company;
+                return _company!;
             }
             set => _company = value;
         }
@@ -39,7 +37,7 @@ namespace dotnetCampus.SourceYard.Utils
                     _authors = Owner;
                 }
 
-                return _authors;
+                return _authors!;
             }
             set => _authors = value;
         }
@@ -48,20 +46,20 @@ namespace dotnetCampus.SourceYard.Utils
         ///     仓库地址
         /// </summary>
         /// 在 SourceProjectPackageFile.txt 设置
-        public string RepositoryUrl { get; private set; }
+        public string? RepositoryUrl { get; private set; }
 
-        public string RepositoryType { get; private set; }
+        public string? RepositoryType { get; private set; }
 
         /// <summary>
         ///     项目地址
         /// </summary>
         /// 在 SourceProjectPackageFile.txt 设置
-        public string PackageProjectUrl { get; private set; }
+        public string? PackageProjectUrl { get; private set; }
 
         /// <summary>
         ///     版权
         /// </summary>
-        public string Copyright { get; set; }
+        public string? Copyright { get; set; }
 
         /// <summary>
         ///     描述
@@ -75,7 +73,7 @@ namespace dotnetCampus.SourceYard.Utils
                     _description = "This package is built by SourceYard";
                 }
 
-                return _description;
+                return _description!;
             }
             set => _description = value;
         }
@@ -89,31 +87,31 @@ namespace dotnetCampus.SourceYard.Utils
                     _owner = "dotnet campus";
                 }
 
-                return _owner;
+                return _owner!;
             }
             set => _owner = value;
         }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string PackageLicenseUrl { get; set; }
+        public string? PackageLicenseUrl { get; set; }
 
-        public string PackageIconUrl { get; set; }
+        public string? PackageIconUrl { get; set; }
 
-        public string PackageReleaseNotes { get; set; }
+        public string? PackageReleaseNotes { get; set; }
 
-        public string PackageTags { get; set; }
+        public string? PackageTags { get; set; }
 
         /// <summary>
         /// 打包用到的文件夹
         /// </summary>
-        public string SourcePackingDirectory { get; private set; }
+        public string SourcePackingDirectory { get; private set; } = null!;
 
-        private string _authors;
-        private string _company;
+        private string? _authors;
+        private string? _company;
 
-        private string _description;
-        private string _owner;
+        private string? _description;
+        private string? _owner;
 
         /// <summary>
         /// 设置打包用到的文件夹，设置时将会自动读取文件
@@ -153,6 +151,6 @@ namespace dotnetCampus.SourceYard.Utils
         /// 安装的源代码包列表
         /// </summary>
         /// 用于解决 https://github.com/dotnet-campus/SourceYard/issues/60
-        public List<string> SourceYardPackageReferenceList { get; private set; }
+        public List<string> SourceYardPackageReferenceList { get; private set; } = null!;
     }
 }

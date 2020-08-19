@@ -7,7 +7,7 @@ namespace dotnetCampus.SourceYard.Context
     internal class PackingContext : IPackingContext
     {
         public PackingContext(ILogger logger, string projectFile,
-            string projectName, string packageId, string packageVersion, string packageOutputPath, string packingFolder,
+            string projectName, string? packageId, string packageVersion, string packageOutputPath, string packingFolder,
             PackagedProjectFile packagedProjectFile, string packageReferenceVersion)
         {
             Logger = logger;
@@ -63,6 +63,6 @@ namespace dotnetCampus.SourceYard.Context
         public PackagedProjectFile PackagedProjectFile { get; }
         public string PackageReferenceVersion { get; }
 
-        public BuildProps BuildProps { get; set; }
+        public BuildProps BuildProps { get; set; } = null!;
     }
 }
