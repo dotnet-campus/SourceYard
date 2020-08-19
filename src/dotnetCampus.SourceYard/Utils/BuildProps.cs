@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
+using dotnetCampus.SourceYard.Context;
 
 namespace dotnetCampus.SourceYard.Utils
 {
@@ -142,8 +143,10 @@ namespace dotnetCampus.SourceYard.Utils
 
             var sourceYardPackageReferenceFile = Path.Combine(packingDirectory, "SourceYardPackageReferenceFile.txt");
 
-            List<string> sourceYardPackageReferenceList = File.ReadAllLines(sourceYardPackageReferenceFile).Where(temp=>!string.IsNullOrEmpty(temp)).ToList();
+            List<string> sourceYardPackageReferenceList = File.ReadAllLines(sourceYardPackageReferenceFile).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
             SourceYardPackageReferenceList = sourceYardPackageReferenceList;
+
+            var sourceYardCompilePackageFile = Path.Combine(packingDirectory, "SourceYardCompilePackageFile.txt");
         }
 
         /// <summary>

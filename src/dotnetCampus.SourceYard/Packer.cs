@@ -16,51 +16,52 @@ namespace dotnetCampus.SourceYard
         {
             Logger = new Logger();
 
-            Logger.Message("初始化打包");
+            Logger.Message(text: "初始化打包");
 
-            if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile))
+            if (string.IsNullOrEmpty(value: projectFile) || !File.Exists(path: projectFile))
             {
-                Logger.Error($"无法从{projectFile}找到项目文件");
+                Logger.Error(text: $"无法从{projectFile}找到项目文件");
                 return;
             }
 
-            if (string.IsNullOrEmpty(intermediateDirectory))
+            if (string.IsNullOrEmpty(value: intermediateDirectory))
             {
                 // 这时的文件夹可以不存在
-                Logger.Error("无法解析文件夹 " + intermediateDirectory);
+                Logger.Error(text: "无法解析文件夹 " + intermediateDirectory);
                 return;
             }
 
-            if (string.IsNullOrEmpty(packageOutputPath))
+            if (string.IsNullOrEmpty(value: packageOutputPath))
             {
-                Logger.Error("打包输出文件夹不能为空");
+                Logger.Error(text: "打包输出文件夹不能为空");
                 return;
             }
 
-            if (string.IsNullOrEmpty(packageVersion))
+            if (string.IsNullOrEmpty(value: packageVersion))
             {
-                Logger.Error("打包版本不能为空");
+                Logger.Error(text: "打包版本不能为空");
                 return;
             }
 
-            _projectFile = Path.GetFullPath(projectFile);
-            _intermediateDirectory = Path.GetFullPath(intermediateDirectory);
-            _packageOutputPath = Path.GetFullPath(packageOutputPath);
+            _projectFile = Path.GetFullPath(path: projectFile);
+            _intermediateDirectory = Path.GetFullPath(path: intermediateDirectory);
+            _packageOutputPath = Path.GetFullPath(path: packageOutputPath);
             _packageVersion = packageVersion;
-            _packageReferenceVersion = Path.GetFullPath(packageReferenceVersion);
+            _packageReferenceVersion = Path.GetFullPath(path: packageReferenceVersion);
             BuildProps = buildProps;
             PackageId = packageId;
 
             PackagedProjectFile = new PackagedProjectFile
             (
-                compileFile: GetFile(compileFile),
-                resourceFile: GetFile(resourceFile),
-                contentFile: GetFile(contentFile),
-                embeddedResource: GetFile(embeddedResource),
-                page: GetFile(page),
-                applicationDefinition: GetFile(applicationDefinition),
-                noneFile: GetFile(noneFile),
-                projectFolder: Path.GetDirectoryName(_projectFile)
+                compileFile: GetFile(file: compileFile),
+                resourceFile: GetFile(file: resourceFile),
+                contentFile: GetFile(file: contentFile),
+                embeddedResource: GetFile(file: embeddedResource),
+                page: GetFile(file: page),
+                applicationDefinition: GetFile(file: applicationDefinition),
+                noneFile: GetFile(file: noneFile),
+                projectFolder: Path.GetDirectoryName(path: _projectFile),
+                buildProps: buildProps
             );
 
             _packers = new IPackFlow[]
@@ -72,7 +73,7 @@ namespace dotnetCampus.SourceYard
                 new NuGetPacker(),
             };
 
-            Logger.Message("初始化打包完成");
+            Logger.Message(text: "初始化打包完成");
         }
 
         internal void Pack()
