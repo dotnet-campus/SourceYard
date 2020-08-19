@@ -121,7 +121,9 @@ namespace dotnetCampus.SourceYard.PackFlow
                         // 在源代码包如果项目引用的是 private asset 的库，那么就不应该添加引用
                         // 因为源代码是没有框架的依赖，对 sdk 带的库也不添加
 
-                        var isPrivateAssetsAll = privateAssets.Contains("all");
+                        var isPrivateAssetsAll = privateAssets.IndexOf("all", StringComparison.OrdinalIgnoreCase) >= 0;
+                        // net45 没有下面方法
+                        //var isPrivateAssetsAll = privateAssets.Contains("all", comparer);
 
                         // 解决 https://github.com/dotnet-campus/SourceYard/issues/60
                         // 即使有某个包标记了使用 private asset 是 All 的，但是这个包是一个源代码包，那么打包的时候就需要添加他的引用依赖
