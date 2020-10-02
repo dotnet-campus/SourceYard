@@ -1,4 +1,4 @@
-﻿using CommandLine;
+﻿using dotnetCampus.Cli;
 
 namespace dotnetCampus.SourceYard.Cli
 {
@@ -7,19 +7,19 @@ namespace dotnetCampus.SourceYard.Cli
         /// <summary>
         /// 项目文件所在的路径
         /// </summary>
-        [Option('p', "project", Required = true, HelpText = "The full path of the project file.")]
+        [Option('p', "project", Description = "The full path of the project file.")]
         public string ProjectFile { get; set; } = null!;
 
         /// <summary>
         /// 临时的文件夹的路径
         /// </summary>
-        [Option('i', "intermediate-directory", Required = true, HelpText = "The relative path of the project intermediate output path, commonly the 'obj' folder and value in 'obj'.")]
+        [Option('i', "intermediate-directory", Description = "The relative path of the project intermediate output path, commonly the 'obj' folder and value in 'obj'.")]
         public string IntermediateDirectory { get; set; } = null!;
 
         /// <summary>
         /// 打包输出的文件夹
         /// </summary>
-        [Option('n', "package-output-path", Required = true, HelpText = "The package output full path of the project.")]
+        [Option('n', "package-output-path", Description = "The package output full path of the project.")]
         public string PackageOutputPath { get; set; } = null!;
 
         /// <summary>
@@ -27,20 +27,19 @@ namespace dotnetCampus.SourceYard.Cli
         /// </summary>
         [Option('v', "package-version",
             // 默认不需要加上打包版本
-            Required = false,
-            HelpText = "The package version value.")]
+            Description = "The package version value.")]
         public string PackageVersion { get; set; } = "1.0.0";
 
         /// <summary>
         /// 项目进行编译的文件的列表，因为参数太多，需要将参数写到文件
         /// </summary>
-        [Option(longName: "Compile", HelpText = "编译的文件")]
+        [Option(longName: "Compile", Description = "编译的文件")]
         public string? CompileFile { get; set; }
 
         /// <summary>
         /// 存放资源文件参数的文件
         /// </summary>
-        [Option(longName: "Resource", HelpText = "资源文件")]
+        [Option(longName: "Resource", Description = "资源文件")]
         public string? ResourceFile { get; set; }
 
         [Option(longName: "Content")]

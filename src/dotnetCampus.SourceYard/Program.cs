@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
-using CommandLine;
+using dotnetCampus.Cli;
+using dotnetCampus.Cli.Standard;
 using dotnetCampus.SourceYard.Cli;
 using dotnetCampus.SourceYard.Utils;
 
@@ -16,9 +16,9 @@ namespace dotnetCampus.SourceYard
         {
             MagicTransformMultiTargetingToFirstTarget(args);
 
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(RunOptionsAndReturnExitCode)
-                .WithNotParsed(HandleParseError);
+            CommandLine.Parse(args).AddStandardHandlers()
+                .AddHandler<Options>(RunOptionsAndReturnExitCode)
+                .Run();
         }
 
         private static void MagicTransformMultiTargetingToFirstTarget(string[] args)
@@ -133,13 +133,13 @@ namespace dotnetCampus.SourceYard
             }
         }
 
-        private static void HandleParseError(IEnumerable<Error> errors)
-        {
-            var logger = new Logger();
-            foreach (var temp in errors)
-            {
-                logger.Error(temp.ToString());
-            }
-        }
+        //private static void HandleParseError(IEnumerable<Error> errors)
+        //{
+        //    var logger = new Logger();
+        //    foreach (var temp in errors)
+        //    {
+        //        logger.Error(temp.ToString());
+        //    }
+        //}
     }
 }
