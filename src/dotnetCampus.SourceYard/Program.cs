@@ -30,7 +30,7 @@ namespace dotnetCampus.SourceYard
             if (targetFrameworks != null && !string.IsNullOrWhiteSpace(argDict["TargetFrameworks"]))
             {
                 var first = targetFrameworks.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
-                if (first != null && !string.IsNullOrWhiteSpace(first))
+                if (!string.IsNullOrWhiteSpace(first))
                 {
                     for (int i = 0; i < args.Length; i++)
                     {
