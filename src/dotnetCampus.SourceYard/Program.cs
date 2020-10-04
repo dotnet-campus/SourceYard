@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
-using CommandLine;
+using dotnetCampus.Cli;
+using dotnetCampus.Cli.Standard;
 using dotnetCampus.SourceYard.Cli;
 using dotnetCampus.SourceYard.Utils;
 
@@ -16,9 +16,9 @@ namespace dotnetCampus.SourceYard
         {
             MagicTransformMultiTargetingToFirstTarget(args);
 
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(RunOptionsAndReturnExitCode)
-                .WithNotParsed(HandleParseError);
+            CommandLine.Parse(args).AddStandardHandlers()
+                .AddHandler<Options>(RunOptionsAndReturnExitCode)
+                .Run();
         }
 
         private static void MagicTransformMultiTargetingToFirstTarget(string[] args)
@@ -30,7 +30,7 @@ namespace dotnetCampus.SourceYard
             if (targetFrameworks != null && !string.IsNullOrWhiteSpace(argDict["TargetFrameworks"]))
             {
                 var first = targetFrameworks.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
-                if (first != null && !string.IsNullOrWhiteSpace(first))
+                if (!string.IsNullOrWhiteSpace(first))
                 {
                     for (int i = 0; i < args.Length; i++)
                     {
@@ -133,13 +133,13 @@ namespace dotnetCampus.SourceYard
             }
         }
 
-        private static void HandleParseError(IEnumerable<Error> errors)
-        {
-            var logger = new Logger();
-            foreach (var temp in errors)
-            {
-                logger.Error(temp.ToString());
-            }
-        }
+        //private static void HandleParseError(IEnumerable<Error> errors)
+        //{
+        //    var logger = new Logger();
+        //    foreach (var temp in errors)
+        //    {
+        //        logger.Error(temp.ToString());
+        //    }
+        //}
     }
 }
