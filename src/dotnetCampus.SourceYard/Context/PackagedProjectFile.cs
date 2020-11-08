@@ -178,7 +178,10 @@ namespace dotnetCampus.SourceYard.Context
         /// </summary>
         private static IList<string> IgnoreFileEndList { get; } = new List<string>()
         {
-            ".csproj.DotSettings", ".suo", ".user", ".sln.docstates", ".nupkg"
+            ".csproj.DotSettings", ".suo", ".user", ".sln.docstates", 
+            ".nupkg",
+            // 忽略原因请看 https://github.com/dotnet-campus/SourceYard/issues/98
+            "launchSettings.json"
         };
 
         class SourceYardPackageFileEqualityComparer : IEqualityComparer<SourceYardPackageFile>

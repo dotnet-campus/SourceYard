@@ -8,8 +8,9 @@ SourceYard 适用于 .NET 项目，无论是 .NET Core 还是 .NET Framework 或
 
 [SourceYard](https://www.nuget.org/packages/SourceYard/) 已发布到 [nuget.org](https://nuget.org/)。
 
-在 Visual Studio 项目中，打开 NuGet 包管理器，搜索 SourceYard，将其安装。这是，当你开始编译项目的时候，即可以在输出目录下找到 *.Source.nupkg 包，这便是源码包。
+在 Visual Studio 项目中，打开 NuGet 包管理器，搜索 SourceYard，将其安装。这是，当你开始编译项目的时候，即可以在输出目录下找到 `*.Source.nupkg` 包，这便是源码包。
 
 关于如何打一个源码包以及如何安装和使用源码包，请阅读：
 
 - [入门](get-started.md)
+
