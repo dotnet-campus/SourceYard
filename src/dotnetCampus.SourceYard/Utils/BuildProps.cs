@@ -6,6 +6,9 @@ using dotnetCampus.Configurations.Core;
 
 namespace dotnetCampus.SourceYard.Utils
 {
+    /// <summary>
+    /// 构建时用到的属性
+    /// </summary>
     public class BuildProps
     {
         /// <summary>

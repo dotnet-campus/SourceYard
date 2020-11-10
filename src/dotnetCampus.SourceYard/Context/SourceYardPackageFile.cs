@@ -7,6 +7,11 @@ namespace dotnetCampus.SourceYard.Context
     /// </summary>
     public class SourceYardPackageFile
     {
+        /// <summary>
+        /// 创建放在源代码包的文件
+        /// </summary>
+        /// <param name="sourceFile"></param>
+        /// <param name="sourcePackagePath"></param>
         public SourceYardPackageFile(FileInfo sourceFile, string sourcePackagePath)
         {
             SourceFile = sourceFile;
