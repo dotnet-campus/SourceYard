@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1138</MSBuildWarningsAsMessages>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -31,8 +32,8 @@
 
   <ItemGroup>
     <PackageReference Include="dotnetCampus.CommandLine.Source" Version="3.3.0" PrivateAssets="All" />
-    <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.3.0" PrivateAssets="All" />
-    <PackageReference Include="Walterlv.NullableAttributes.Source" Version="5.9.0" PrivateAssets="All" />
+    <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.5.1" PrivateAssets="All" />
+    <PackageReference Include="Walterlv.NullableAttributes.Source" Version="5.10.2" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework)=='net45'">

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\src\dotnetCampus.SourceYard\Assets\Current\build\PackageId.props"></Import>
+  <Import Project="..\..\src\dotnetCampus.SourceYard\Assets\Current\build\PackageId.targets"></Import>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SourceYardApplicationFilePath>..\..\src\dotnetCampus.SourceYard\bin\Debug\net45\dotnetCampus.SourceYard.exe</SourceYardApplicationFilePath>
+  </PropertyGroup>
+
+  <!-- 测试排除项 -->
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.3.3" />
+    <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.5.1" PrivateAssets="All" />
+    <SourceYardExcludePackageReference Include="dotnetCampus.Configurations.Source"></SourceYardExcludePackageReference>
+  </ItemGroup>
+</Project>

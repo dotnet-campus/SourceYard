@@ -37,6 +37,9 @@
       <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
       <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
 
+      <!-- 表示不要包含的引用依赖列表 -->
+      <SourceYardExcludePackageReferenceFile>$(SourcePackingDirectory)SourceYardExcludePackageReferenceFile.txt</SourceYardExcludePackageReferenceFile>
+
       <SourceYardCompilePackageFile>$(SourcePackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
       <SourceYardResourcePackageFile>$(SourcePackingDirectory)SourceYardResourcePackageFile.txt</SourceYardResourcePackageFile>
       <SourceYardContentPackageFile>$(SourcePackingDirectory)SourceYardContentPackageFile.txt</SourceYardContentPackageFile>
@@ -45,6 +48,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <!-- 这个 ItemGroup 里面存放的是加入到额外的文件引用里面 -->
+      <!-- 用于支持附加文件功能 -->
+      <!-- 这里面的 ItemGroup 所有的值最终将会写入到 SourceYardCompilePackageFile 文件 -->
+      <!-- 此文件格式为每行一个文件的配置，包括文件所在的源代码路径以及放在源代码包的相对路径 -->
+      <!-- 格式如下： 源代码路径 | 放在源代码包的相对路径 -->
+      <!-- 如在源代码里面的 C:\dotnet-campus\F1\A.cs 需要放在源代码包里面的 F2\A1.cs 文件 -->
+      <!-- 写入到文件内容如下：C:\dotnet-campus\F1\A.cs|F2\A1.cs -->
       <_SourceYardCompilePackage Include="%(SourceYardCompile.Identity)|%(SourceYardCompile.SourcePackagePath)"/>
       <_SourceYardResourcePackage Include="%(SourceYardResource.Identity)|%(SourceYardResource.SourcePackagePath)"/>
       <_SourceYardContentPackage Include="%(SourceYardContent.Identity)|%(SourceYardContent.SourcePackagePath)"/>
@@ -52,6 +62,7 @@
       <_SourceYardEmbeddedResourcePackage Include="%(SourceYardEmbeddedResource.Identity)|%(SourceYardEmbeddedResource.SourcePackagePath)"/>
 
       <!-- 这是给 SourceFusion 预编译生成的文件加入打包 -->
+      <!-- 预编译生成的文件所在源代码包的路径和所在项目路径相同，都是 _SourceFusionIncludedCompileFile.Identity 这个值 -->
       <_SourceYardForSourceFusionCompilePackage Include="%(_SourceFusionIncludedCompileFile.Identity)|%(_SourceFusionIncludedCompileFile.Identity)"/>
     </ItemGroup>
 
@@ -118,6 +129,10 @@
     <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardCompilePackage)" Overwrite="true"></WriteLinesToFile>
     <!-- 这是给 SourceFusion 预编译生成的文件加入打包，写入在 SourceYardCompilePackageFile 文件 -->
     <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardForSourceFusionCompilePackage)"></WriteLinesToFile>
+    <!-- 写入表示不要包含的引用依赖列表，这部分的 NuGet 包依赖将会忽略 -->
+    <WriteLinesToFile File="$(SourceYardExcludePackageReferenceFile)"
+                      Lines="@(SourceYardExcludePackageReference)"
+                      Overwrite="true"/>
 
     <WriteLinesToFile File="$(SourceYardResourcePackageFile)" Lines="@(_SourceYardResourcePackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardContentPackageFile)" Lines="@(_SourceYardContentPackage)" Overwrite="true"></WriteLinesToFile>
@@ -128,8 +143,15 @@
   
   <!--打包第三步，无论多框架还是单框架只执行一次-->
   <Target Name="SourceYardStep3">
+    <PropertyGroup>
+      <!-- 给定默认的 SourceYard 路径名 -->
+      <SourceYardApplicationFilePath Condition="'$(SourceYardApplicationFilePath)' == ''">$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe</SourceYardApplicationFilePath>
+    </PropertyGroup>
+
+    <Error Text="Can not find SourceYardApplicationFilePath $(SourceYardApplicationFilePath)" Condition="!Exists($(SourceYardApplicationFilePath))"/>
+
     <Exec
-        Command="$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
+        Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
     </Exec>
   </Target>
 

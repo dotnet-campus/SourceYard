@@ -142,18 +142,31 @@ namespace dotnetCampus.SourceYard.Utils
                 RepositoryUrl = configuration.GetValue("RepositoryUrl")?.Trim() ?? string.Empty;
             }
 
-            var sourceYardPackageReferenceFile = Path.Combine(packingDirectory, "SourceYardPackageReferenceFile.txt");
+            const string sourceYardPackageReferenceFile = "SourceYardPackageReferenceFile.txt";
+        
+            SourceYardPackageReferenceList = GetList(sourceYardPackageReferenceFile);
 
-            List<string> sourceYardPackageReferenceList = File.ReadAllLines(sourceYardPackageReferenceFile).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
-            SourceYardPackageReferenceList = sourceYardPackageReferenceList;
-
-            var sourceYardCompilePackageFile = Path.Combine(packingDirectory, "SourceYardCompilePackageFile.txt");
+            const string sourceYardExcludePackageReferenceFile =
+                "SourceYardExcludePackageReferenceFile.txt";
+            SourceYardExcludePackageReferenceList = GetList(sourceYardExcludePackageReferenceFile);
         }
+
+        /// <summary>
+        /// 排除的依赖引用列表
+        /// </summary>
+        /// 有某些 NuGet 引用不想作为源代码的依赖，可以添加到 SourceYardExcludePackageReference 列表
+        public List<string> SourceYardExcludePackageReferenceList { get; private set; } = null!;
 
         /// <summary>
         /// 安装的源代码包列表
         /// </summary>
         /// 用于解决 https://github.com/dotnet-campus/SourceYard/issues/60
         public List<string> SourceYardPackageReferenceList { get; private set; } = null!;
+
+        private List<string> GetList(string fileName)
+        {
+            var file = Path.Combine(SourcePackingDirectory, fileName);
+            return File.ReadAllLines(file).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
+        }
     }
 }
