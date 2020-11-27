@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using dotnetCampus.SourceYard.Context;
 using dotnetCampus.SourceYard.PackFlow.Nuspec;
@@ -89,16 +86,34 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = GetDependencies(context.PackageReferenceVersion, buildProps.SourceYardPackageReferenceList),
+                    Dependencies = GetDependencies(context.PackageReferenceVersion, 
+                        buildProps.SourceYardPackageReferenceList,
+                        buildProps.SourceYardExcludePackageReferenceList),
                     Repository = repository
                 }
             };
         }
 
+        /// <summary>
+        /// 获取依赖
+        /// </summary>
+        /// <param name="contextPackageVersion">引用的NuGet包于版本号</param>
+        /// <param name="sourceYardPackageReferenceList">源代码包</param>
+        /// <param name="excludePackageReferenceList">排除的依赖</param>
+        /// <returns></returns>
         private List<NuspecDependency> GetDependencies(string contextPackageVersion,
-            List<string> sourceYardPackageReferenceList)
+            List<string> sourceYardPackageReferenceList, List<string> excludePackageReferenceList)
         {
-            return ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
+            var nuspecDependencyList = ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
+
+            // 如果在排除列表就移除
+            if (excludePackageReferenceList.Count > 0)
+            {
+                var excludeList = new HashSet<string>(excludePackageReferenceList);
+                nuspecDependencyList.RemoveAll(temp => excludeList.Contains(temp.Id));
+            }
+
+            return nuspecDependencyList;
         }
 
         private List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
@@ -108,7 +123,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
             using (var stream = File.OpenText(packageVersionFile))
             {
-                string line;
+                string? line;
                 while ((line = stream.ReadLine()) != null)
                 {
                     var match = packageVersionRegex.Match(line);

@@ -37,6 +37,9 @@
       <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
       <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
 
+      <!-- 表示不要包含的引用依赖列表 -->
+      <SourceYardExcludePackageReferenceFile>$(SourcePackingDirectory)SourceYardExcludePackageReferenceFile.txt</SourceYardExcludePackageReferenceFile>
+
       <SourceYardCompilePackageFile>$(SourcePackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
       <SourceYardResourcePackageFile>$(SourcePackingDirectory)SourceYardResourcePackageFile.txt</SourceYardResourcePackageFile>
       <SourceYardContentPackageFile>$(SourcePackingDirectory)SourceYardContentPackageFile.txt</SourceYardContentPackageFile>
@@ -126,6 +129,10 @@
     <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardCompilePackage)" Overwrite="true"></WriteLinesToFile>
     <!-- 这是给 SourceFusion 预编译生成的文件加入打包，写入在 SourceYardCompilePackageFile 文件 -->
     <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardForSourceFusionCompilePackage)"></WriteLinesToFile>
+    <!-- 写入表示不要包含的引用依赖列表，这部分的 NuGet 包依赖将会忽略 -->
+    <WriteLinesToFile File="$(SourceYardExcludePackageReferenceFile)"
+                      Lines="@(SourceYardExcludePackageReference)"
+                      Overwrite="true"/>
 
     <WriteLinesToFile File="$(SourceYardResourcePackageFile)" Lines="@(_SourceYardResourcePackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardContentPackageFile)" Lines="@(_SourceYardContentPackage)" Overwrite="true"></WriteLinesToFile>
