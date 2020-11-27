@@ -46,7 +46,8 @@
 
     <ItemGroup>
       <!-- 这个 ItemGroup 里面存放的是加入到额外的文件引用里面 -->
-      <!-- 这里面的值最终将会写入到 SourceYardCompilePackageFile 文件 -->
+      <!-- 用于支持附加文件功能 -->
+      <!-- 这里面的 ItemGroup 所有的值最终将会写入到 SourceYardCompilePackageFile 文件 -->
       <!-- 此文件格式为每行一个文件的配置，包括文件所在的源代码路径以及放在源代码包的相对路径 -->
       <!-- 格式如下： 源代码路径 | 放在源代码包的相对路径 -->
       <!-- 如在源代码里面的 C:\dotnet-campus\F1\A.cs 需要放在源代码包里面的 F2\A1.cs 文件 -->

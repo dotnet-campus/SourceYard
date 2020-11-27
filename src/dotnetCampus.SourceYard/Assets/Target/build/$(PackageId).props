@@ -13,6 +13,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <!-- 下面代码用来引用源代码包依赖 -->
         <SourceYardPackageReference>$(SourceYardPackageReference);#(PackageId)</SourceYardPackageReference>
     </PropertyGroup>
 </Project>
