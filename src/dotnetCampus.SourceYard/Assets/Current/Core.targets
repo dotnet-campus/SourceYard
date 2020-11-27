@@ -147,6 +147,9 @@
       <!-- 给定默认的 SourceYard 路径名 -->
       <SourceYardApplicationFilePath Condition="'$(SourceYardApplicationFilePath)' == ''">$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe</SourceYardApplicationFilePath>
     </PropertyGroup>
+
+    <Error Text="Can not find SourceYardApplicationFilePath $(SourceYardApplicationFilePath)" Condition="!Exists($(SourceYardApplicationFilePath))"/>
+
     <Exec
         Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
     </Exec>

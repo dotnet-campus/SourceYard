@@ -4,7 +4,10 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
 
-  <Import Project="..\build\Core.targets"/>
+  <!-- 在调试下的路径是不存在的 -->
+  <Import Project="..\build\Core.targets" Condition="Exists('..\build\Core.targets')" />
+  <!-- 只有调试下在存在此文件 -->
+  <Import Project="..\Core.targets" Condition="Exists('..\Core.targets')" />
 
   <!-- 单框架项目入口 -->
   <Target Name="BuildSourceNuGet" AfterTargets="Build"
