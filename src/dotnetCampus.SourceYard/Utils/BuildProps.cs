@@ -11,7 +11,7 @@ namespace dotnetCampus.SourceYard.Utils
     /// </summary>
     public class BuildProps
     {
-        internal BuildProps(Logger logger)
+        internal BuildProps(ILogger logger)
         {
             _logger = logger;
         }
@@ -186,6 +186,6 @@ namespace dotnetCampus.SourceYard.Utils
             return File.ReadAllLines(file).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
         }
 
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
     }
 }
