@@ -70,7 +70,7 @@ namespace dotnetCampus.SourceYard
                 var copyright = ReadFile(options.CopyrightFile);
 
 
-                var buildProps = new BuildProps()
+                var buildProps = new BuildProps(logger)
                 {
                     Authors = options.Authors ?? string.Empty,
                     Company = options.Company ?? string.Empty,
