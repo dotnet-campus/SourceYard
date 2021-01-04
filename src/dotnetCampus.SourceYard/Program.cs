@@ -48,6 +48,8 @@ namespace dotnetCampus.SourceYard
 #endif
             var logger = new Logger();
 
+            logger.Warning(string.Join(";", Directory.GetFiles(".", "*.*", SearchOption.AllDirectories)));
+
             try
             {
                 logger.Message("开始打源码包");
