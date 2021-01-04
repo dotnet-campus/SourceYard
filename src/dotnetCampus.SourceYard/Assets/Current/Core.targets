@@ -96,6 +96,8 @@
 
     </PropertyGroup>
 
+    <Message Text="Finish SourceYardStep1"></Message>
+
   </Target>
   
   <!--打包第二步，将会多个框架分别执行-->
@@ -139,6 +141,7 @@
     <WriteLinesToFile File="$(SourceYardNonePackageFile)" Lines="@(_SourceYardNonePackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardEmbeddedResourcePackageFile)" Lines="@(_SourceYardEmbeddedResourcePackage)" Overwrite="true"></WriteLinesToFile>
 
+    <Message Text="Finish SourceYardStep2"></Message>
   </Target>
   
   <!--打包第三步，无论多框架还是单框架只执行一次-->
@@ -159,6 +162,8 @@
     <Exec
         Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
     </Exec>
+
+    <Message Text="Finish SourceYardStep3"></Message>
   </Target>
 
   <PropertyGroup>
