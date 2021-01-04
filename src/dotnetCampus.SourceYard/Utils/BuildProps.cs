@@ -129,6 +129,7 @@ namespace dotnetCampus.SourceYard.Utils
         /// <param name="packingDirectory"></param>
         public void SetSourcePackingDirectory(string packingDirectory)
         {
+            _logger.Message($"BuildProps SourcePackingDirectory={packingDirectory}");
             SourcePackingDirectory = packingDirectory;
 
             // 更多信息读取
@@ -178,7 +179,7 @@ namespace dotnetCampus.SourceYard.Utils
             {
                 var sourcePackingDirectory = Directory.CreateDirectory(SourcePackingDirectory);
                 _logger.Warning(
-                    $"BuildProps Can not find file={file}\r\n SourcePackingDirectory FileList={string.Join(";", sourcePackingDirectory.GetFiles().Select(temp => temp.Name))}");
+                    $"BuildProps Can not find file={file}  SourcePackingDirectory FileList={string.Join(";", sourcePackingDirectory.GetFiles().Select(temp => temp.Name))}");
 
                 return new List<string>(0);
             }

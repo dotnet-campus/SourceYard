@@ -64,7 +64,8 @@ namespace dotnetCampus.SourceYard
 编译的文件{options.CompileFile}
 资源文件{options.ResourceFile}
 内容{options.ContentFile}
-页面{options.Page}");
+页面{options.Page}
+SourcePackingDirectory: {options.SourcePackingDirectory}");
 
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
