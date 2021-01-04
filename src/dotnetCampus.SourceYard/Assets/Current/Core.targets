@@ -143,6 +143,10 @@
   
   <!--打包第三步，无论多框架还是单框架只执行一次-->
   <Target Name="SourceYardStep3">
+
+    <!-- 开发者自己有指定路径，但是路径里面不存在应用 -->
+    <Error Text="Can not find SourceYardApplicationFilePath $(SourceYardApplicationFilePath)" Condition="'$(SourceYardApplicationFilePath)' != '' And !Exists($(SourceYardApplicationFilePath))"/>
+
     <PropertyGroup Condition="'$(SourceYardApplicationFilePath)' == ''">
       <!-- 给定默认的 SourceYard 路径名 -->
       <!-- 我们使用 $(MSBuildRuntimeType) 来判断编译器是 .NET Core 的还是 .NET Framework 的。
@@ -151,8 +155,6 @@
       <SourceYardApplicationFilePath Condition=" '$(MSBuildRuntimeType)' != 'Core'">$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe</SourceYardApplicationFilePath>
       <SourceYardApplicationFilePath Condition=" '$(MSBuildRuntimeType)' == 'Core'">dotnet $(MSBuildThisFileDirectory)../tools/netcoreapp2.0/dotnetCampus.SourceYard.dll</SourceYardApplicationFilePath>
     </PropertyGroup>
-
-    <Error Text="Can not find SourceYardApplicationFilePath $(SourceYardApplicationFilePath)" Condition="!Exists($(SourceYardApplicationFilePath))"/>
 
     <Exec
         Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
