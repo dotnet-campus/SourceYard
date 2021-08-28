@@ -142,14 +142,27 @@ namespace dotnetCampus.SourceYard.Utils
                 RepositoryUrl = configuration.GetValue("RepositoryUrl")?.Trim() ?? string.Empty;
             }
 
+            // 安装的源代码包列表
             const string sourceYardPackageReferenceFile = "SourceYardPackageReferenceFile.txt";
-        
             SourceYardPackageReferenceList = GetList(sourceYardPackageReferenceFile);
 
+            // 排除的依赖引用列表
             const string sourceYardExcludePackageReferenceFile =
                 "SourceYardExcludePackageReferenceFile.txt";
             SourceYardExcludePackageReferenceList = GetList(sourceYardExcludePackageReferenceFile);
+
+            // 排除的文件引用列表，这些文件将不会被打入源代码包
+            const string sourceYardExcludeFileItemFile = "SourceYardExcludeFileItemFile.txt";
+            SourceYardExcludeFileItemList = GetList(sourceYardExcludeFileItemFile);
         }
+
+        /// <summary>
+        /// 排除的文件引用列表
+        /// </summary>
+        /// 不要在 SourceYard 里面包含的文件项，这些文件项将在打包时被排除
+        /// 例如有一些文档是写入到项目里面，期望打包的时候，不要将这些文档作为源代码包的引用，以免被输出，或者干扰调试
+        /// 这里面存放的是相对项目的相对路径的文件列表
+        public List<string> SourceYardExcludeFileItemList { get; private set; } = null!;
 
         /// <summary>
         /// 排除的依赖引用列表

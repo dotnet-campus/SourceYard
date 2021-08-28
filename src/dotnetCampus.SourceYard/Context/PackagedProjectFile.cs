@@ -155,6 +155,10 @@ namespace dotnetCampus.SourceYard.Context
             fileList.RemoveAll(temp =>
                 IgnoreFileEndList.Any(t => temp.EndsWith(t, StringComparison.OrdinalIgnoreCase)));
 
+            // 忽略被排除的文件
+            fileList.RemoveAll(temp =>
+                _buildProps.SourceYardExcludeFileItemList.Contains(temp, StringComparer.OrdinalIgnoreCase));
+
             return fileList;
         }
 
