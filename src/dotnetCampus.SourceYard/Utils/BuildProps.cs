@@ -135,6 +135,7 @@ namespace dotnetCampus.SourceYard.Utils
                 IAppConfigurator appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
                 var configuration = appConfigurator.Default;
 
+                // ReSharper disable ExplicitCallerInfoArgument
                 RepositoryType = configuration.GetValue("RepositoryType")?.Trim() ?? string.Empty;
 
                 PackageProjectUrl = configuration.GetValue("PackageProjectUrl")?.Trim() ?? string.Empty;
