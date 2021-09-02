@@ -48,7 +48,7 @@ namespace dotnetCampus.SourceYard
 #endif
             var logger = new Logger();
 
-            logger.Warning(string.Join(";", Directory.GetFiles(Path.GetFullPath("."), "*.*", SearchOption.AllDirectories)));
+            logger.Message(string.Join(";", Directory.GetFiles(Path.GetFullPath("."), "*.*", SearchOption.AllDirectories)));
 
             try
             {
