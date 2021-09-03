@@ -6,10 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.7213-alpha">
+    <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19370-alpha01">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceYardExcludeFileItem Include="foo.coin" />
+    <SourceYardExcludeFileItem Include="Resource\F1.md" />
   </ItemGroup>
 
 </Project>
