@@ -39,6 +39,8 @@
 
       <!-- 表示不要包含的引用依赖列表 -->
       <SourceYardExcludePackageReferenceFile>$(SourcePackingDirectory)SourceYardExcludePackageReferenceFile.txt</SourceYardExcludePackageReferenceFile>
+      <!-- 表示不要包含的文件列表 -->
+      <SourceYardExcludeFileItemFile>$(SourcePackingDirectory)SourceYardExcludeFileItemFile.txt</SourceYardExcludeFileItemFile>
 
       <SourceYardCompilePackageFile>$(SourcePackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
       <SourceYardResourcePackageFile>$(SourcePackingDirectory)SourceYardResourcePackageFile.txt</SourceYardResourcePackageFile>
@@ -134,6 +136,10 @@
     <!-- 写入表示不要包含的引用依赖列表，这部分的 NuGet 包依赖将会忽略 -->
     <WriteLinesToFile File="$(SourceYardExcludePackageReferenceFile)"
                       Lines="@(SourceYardExcludePackageReference)"
+                      Overwrite="true"/>
+    <!-- 写入表示不要被源代码包引用的文件项，这部分的文件将不会被放入源代码 -->
+    <WriteLinesToFile File="$(SourceYardExcludeFileItemFile)"
+                      Lines="@(SourceYardExcludeFileItem)"
                       Overwrite="true"/>
 
     <WriteLinesToFile File="$(SourceYardResourcePackageFile)" Lines="@(_SourceYardResourcePackage)" Overwrite="true"></WriteLinesToFile>

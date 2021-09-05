@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/dotnet-campus/SourceYard</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/dotnet-campus/SourceYard</PackageProjectUrl>
-    <Copyright>Copyright © 2018 dotnet campus All Rights Reserved.</Copyright>
+    <Copyright>Copyright © 2018-2021 dotnet campus All Rights Reserved.</Copyright>
     <Description>SourceYard</Description>
   </PropertyGroup>
 </Project>
