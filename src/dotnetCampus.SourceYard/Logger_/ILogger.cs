@@ -1,14 +1,10 @@
-﻿namespace dotnetCampus.SourceYard
+﻿using dotnetCampus.MSBuildUtils;
+
+namespace dotnetCampus.SourceYard
 {
-    internal interface ILogger
+    internal interface ILogger: IMSBuildLogger
     {
-        void Message(string text);
-
-        void Warning(string text);
-
         void Warning(PackingException exception);
-
-        void Error(string text);
 
         void Error(PackingException exception);
     }
