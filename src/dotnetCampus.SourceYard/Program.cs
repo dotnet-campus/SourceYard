@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -117,7 +116,7 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     return "";
                 }
 
-                file = Path.GetFullPath(file);
+                file = Path.GetFullPath(file!);
                 if (File.Exists(file))
                 {
                     try
@@ -133,14 +132,5 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                 return "";
             }
         }
-
-        //private static void HandleParseError(IEnumerable<Error> errors)
-        //{
-        //    var logger = new Logger();
-        //    foreach (var temp in errors)
-        //    {
-        //        logger.Error(temp.ToString());
-        //    }
-        //}
     }
 }
