@@ -38,7 +38,6 @@ namespace dotnetCampus.SourceYard.Utils
             IsIncludeMaxVersion = isIncludeMaxVersion;
         }
 
-
         /// <summary>
         ///     版本
         /// </summary>

@@ -69,7 +69,6 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
-
                 var buildProps = new BuildProps(logger)
                 {
                     Authors = options.Authors ?? string.Empty,
