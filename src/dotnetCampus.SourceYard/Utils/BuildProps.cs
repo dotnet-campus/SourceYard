@@ -121,8 +121,6 @@ namespace dotnetCampus.SourceYard.Utils
         private string? _description;
         private string? _owner;
 
-    
-
         /// <summary>
         /// 设置打包用到的文件夹，设置时将会自动读取文件
         /// </summary>
