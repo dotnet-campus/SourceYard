@@ -113,7 +113,7 @@ namespace dotnetCampus.SourceYard.Cli
         /// 打包用到的文件夹
         /// </summary>
         [Option(longName: "SourcePackingDirectory")]
-        public string? SourcePackingDirectory { get; set; }
+        public string SourcePackingDirectory { get; set; } = null!;
 
         [Option(longName: "TargetFramework")]
         public string? TargetFramework { get; set; }

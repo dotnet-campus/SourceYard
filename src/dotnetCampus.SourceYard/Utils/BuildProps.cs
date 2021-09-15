@@ -11,6 +11,11 @@ namespace dotnetCampus.SourceYard.Utils
     /// </summary>
     public class BuildProps
     {
+        internal BuildProps(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         ///     公司
         /// </summary>
@@ -122,6 +127,7 @@ namespace dotnetCampus.SourceYard.Utils
         /// <param name="packingDirectory"></param>
         public void SetSourcePackingDirectory(string packingDirectory)
         {
+            _logger.Message($"BuildProps SourcePackingDirectory={packingDirectory}");
             SourcePackingDirectory = packingDirectory;
 
             // 更多信息读取
@@ -180,7 +186,19 @@ namespace dotnetCampus.SourceYard.Utils
         private List<string> GetList(string fileName)
         {
             var file = Path.Combine(SourcePackingDirectory, fileName);
+
+            if (!File.Exists(file))
+            {
+                var sourcePackingDirectory = Directory.CreateDirectory(SourcePackingDirectory);
+                _logger.Warning(
+                    $"BuildProps Can not find file={file}  SourcePackingDirectory FileList={string.Join(";", sourcePackingDirectory.GetFiles().Select(temp => temp.Name))}");
+
+                return new List<string>(0);
+            }
+
             return File.ReadAllLines(file).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
         }
+
+        private readonly ILogger _logger;
     }
 }

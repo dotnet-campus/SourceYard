@@ -29,30 +29,30 @@ namespace dotnetCampus.SourceYard
         {
             Logger = new Logger();
 
-            Logger.Message(text: "初始化打包");
+            Logger.Message(message: "初始化打包");
 
             if (string.IsNullOrEmpty(value: projectFile) || !File.Exists(path: projectFile))
             {
-                Logger.Error(text: $"无法从{projectFile}找到项目文件");
+                Logger.Error(message: $"无法从{projectFile}找到项目文件");
                 return;
             }
 
             if (string.IsNullOrEmpty(value: intermediateDirectory))
             {
                 // 这时的文件夹可以不存在
-                Logger.Error(text: "无法解析文件夹 " + intermediateDirectory);
+                Logger.Error(message: "无法解析文件夹 " + intermediateDirectory);
                 return;
             }
 
             if (string.IsNullOrEmpty(value: packageOutputPath))
             {
-                Logger.Error(text: "打包输出文件夹不能为空");
+                Logger.Error(message: "打包输出文件夹不能为空");
                 return;
             }
 
             if (string.IsNullOrEmpty(value: packageVersion))
             {
-                Logger.Error(text: "打包版本不能为空");
+                Logger.Error(message: "打包版本不能为空");
                 return;
             }
 
@@ -86,7 +86,7 @@ namespace dotnetCampus.SourceYard
                 new NuGetPacker(),
             };
 
-            Logger.Message(text: "初始化打包完成");
+            Logger.Message(message: "初始化打包完成");
         }
 
         internal void Pack()

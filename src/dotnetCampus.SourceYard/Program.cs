@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -64,13 +63,13 @@ namespace dotnetCampus.SourceYard
 编译的文件{options.CompileFile}
 资源文件{options.ResourceFile}
 内容{options.ContentFile}
-页面{options.Page}");
+页面{options.Page}
+SourcePackingDirectory: {options.SourcePackingDirectory}");
 
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
-
-                var buildProps = new BuildProps()
+                var buildProps = new BuildProps(logger)
                 {
                     Authors = options.Authors ?? string.Empty,
                     Company = options.Company ?? string.Empty,
@@ -116,7 +115,7 @@ namespace dotnetCampus.SourceYard
                     return "";
                 }
 
-                file = Path.GetFullPath(file);
+                file = Path.GetFullPath(file!);
                 if (File.Exists(file))
                 {
                     try
@@ -132,14 +131,5 @@ namespace dotnetCampus.SourceYard
                 return "";
             }
         }
-
-        //private static void HandleParseError(IEnumerable<Error> errors)
-        //{
-        //    var logger = new Logger();
-        //    foreach (var temp in errors)
-        //    {
-        //        logger.Error(temp.ToString());
-        //    }
-        //}
     }
 }

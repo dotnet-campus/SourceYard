@@ -1,63 +1,29 @@
-﻿using System;
-using System.Text;
+﻿using dotnetCampus.MSBuildUtils;
 
 namespace dotnetCampus.SourceYard
 {
-    internal class Logger : ILogger
+    internal class Logger : MSBuildConsoleLogger, ILogger
     {
-        public void Message(string text)
-        {
-            Console.WriteLine(text);
-        }
-
-        public void Warning(string text)
-        {
-            var color = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"warning: {text}");
-            Console.ForegroundColor = color;
-        }
-
         public void Warning(PackingException exception)
         {
-            LogCore(exception, "warning");
-        }
+            var message = exception.Message;
+            if (!string.IsNullOrEmpty(exception.Key))
+            {
+                message = exception.Key + ": " + exception.Message;
+            }
 
-        public void Error(string text)
-        {
-            var color = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"error: {text}");
-            Console.ForegroundColor = color;
+            Warning(message, targetFile:exception.File);
         }
 
         public void Error(PackingException exception)
         {
-            LogCore(exception, "error");
-        }
-
-        public void LogCore(PackingException exception, string type)
-        {
-            var color = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            var builder = new StringBuilder();
-            if (!string.IsNullOrWhiteSpace(exception.File))
+            var message = exception.Message;
+            if (!string.IsNullOrEmpty(exception.Key))
             {
-                builder.Append(exception.File);
+                message = exception.Key + ": " + exception.Message;
             }
 
-            builder.Append(type);
-
-            if (!string.IsNullOrWhiteSpace(exception.Key))
-            {
-                builder.Append($" {exception.Key}");
-            }
-
-            builder.Append(": ");
-            builder.Append(exception.Message);
-
-            Console.ForegroundColor = color;
+            Error(message, targetFile: exception.File);
         }
     }
 }
