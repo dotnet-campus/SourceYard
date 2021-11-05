@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
 
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -16,25 +16,37 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="_SourceYardFrameworkAssets"
+          AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <_TfmSpecificFrameworkAssemblyReferences Include="@(ReferencePath->'%(OriginalItemSpec)')"
+                                               Condition="'%(ReferencePath.Pack)' != 'false' AND '%(ReferencePath.ResolvedFrom)' == '{TargetFrameworkDirectory}'">
+      </_TfmSpecificFrameworkAssemblyReferences>
+    </ItemGroup>
+  </Target>
+
   <!--打包第一步，将会多个框架分别执行-->
   <Target Name="SourceYardStep1">
     <PropertyGroup>
       <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
+      <PackingDirectory>$(BaseIntermediateOutputPath)SourcePacking\</PackingDirectory>
 
-      <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
-      <ResourceTextFile>$(SourcePackingDirectory)ResourceFile.txt</ResourceTextFile>
-      <ContentTextFile>$(SourcePackingDirectory)ContentFile.txt</ContentTextFile>
-      <NoneTextFile>$(SourcePackingDirectory)NoneFile.txt</NoneTextFile>
-      <EmbeddedResourceTextFile>$(SourcePackingDirectory)EmbeddedResourceFile.txt</EmbeddedResourceTextFile>
-      <PageTextFile>$(SourcePackingDirectory)PageFile.txt</PageTextFile>
-      <ApplicationDefinitionTextFile>$(SourcePackingDirectory)ApplicationDefinitionFile.txt</ApplicationDefinitionTextFile>
+      <CompileTextFile>$(PackingDirectory)CompileFile.txt</CompileTextFile>
+      <ResourceTextFile>$(PackingDirectory)ResourceFile.txt</ResourceTextFile>
+      <ContentTextFile>$(PackingDirectory)ContentFile.txt</ContentTextFile>
+      <NoneTextFile>$(PackingDirectory)NoneFile.txt</NoneTextFile>
+      <EmbeddedResourceTextFile>$(PackingDirectory)EmbeddedResourceFile.txt</EmbeddedResourceTextFile>
+      <PageTextFile>$(PackingDirectory)PageFile.txt</PageTextFile>
+      <ApplicationDefinitionTextFile>$(PackingDirectory)ApplicationDefinitionFile.txt</ApplicationDefinitionTextFile>
 
-      <DescriptionFile>$(SourcePackingDirectory)DescriptionFile.txt</DescriptionFile>
-      <CopyrightFile>$(SourcePackingDirectory)CopyrightFile.txt</CopyrightFile>
-      <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
+      <DescriptionFile>$(PackingDirectory)DescriptionFile.txt</DescriptionFile>
+      <CopyrightFile>$(PackingDirectory)CopyrightFile.txt</CopyrightFile>
+      <PackageReleaseNotesFile>$(PackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
 
       <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
-      <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
+      <FrameworkReferenceVersionFile>$(SourcePackingDirectory)FrameworkReferenceVersionFile.txt</FrameworkReferenceVersionFile>
+
+      <SourceProjectPackageFile>$(PackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
       <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
 
       <!-- 表示不要包含的引用依赖列表 -->
@@ -42,11 +54,11 @@
       <!-- 表示不要包含的文件列表 -->
       <SourceYardExcludeFileItemFile>$(SourcePackingDirectory)SourceYardExcludeFileItemFile.txt</SourceYardExcludeFileItemFile>
 
-      <SourceYardCompilePackageFile>$(SourcePackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
-      <SourceYardResourcePackageFile>$(SourcePackingDirectory)SourceYardResourcePackageFile.txt</SourceYardResourcePackageFile>
-      <SourceYardContentPackageFile>$(SourcePackingDirectory)SourceYardContentPackageFile.txt</SourceYardContentPackageFile>
-      <SourceYardNonePackageFile>$(SourcePackingDirectory)SourceYardNonePackageFile.txt</SourceYardNonePackageFile>
-      <SourceYardEmbeddedResourcePackageFile>$(SourcePackingDirectory)SourceYardEmbeddedResourcePackageFile.txt</SourceYardEmbeddedResourcePackageFile>
+      <SourceYardCompilePackageFile>$(PackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
+      <SourceYardResourcePackageFile>$(PackingDirectory)SourceYardResourcePackageFile.txt</SourceYardResourcePackageFile>
+      <SourceYardContentPackageFile>$(PackingDirectory)SourceYardContentPackageFile.txt</SourceYardContentPackageFile>
+      <SourceYardNonePackageFile>$(PackingDirectory)SourceYardNonePackageFile.txt</SourceYardNonePackageFile>
+      <SourceYardEmbeddedResourcePackageFile>$(PackingDirectory)SourceYardEmbeddedResourcePackageFile.txt</SourceYardEmbeddedResourcePackageFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -91,7 +103,7 @@
       <SourceYardPackageId Condition="'$(PackageId)' != ''">--PackageId "$(PackageId) "</SourceYardPackageId>
 
       <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath) "</SourceMSBuildProjectFullPath>
-      <SourceIntermediateDirectory>-i "$(SourcePackingDirectory)Package "</SourceIntermediateDirectory>
+      <SourceIntermediateDirectory>-i "$(PackingDirectory)Package "</SourceIntermediateDirectory>
       <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
       <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
       <SourcePackageReferenceVersion>--PackageReferenceVersion "$(PackageReferenceVersionFile)"</SourcePackageReferenceVersion>
@@ -104,8 +116,9 @@
   
   <!--打包第二步，将会多个框架分别执行-->
   <Target Name="SourceYardStep2">
-    
+
     <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
+    <MakeDir Condition="!Exists($(PackingDirectory))" Directories="$(PackingDirectory)"></MakeDir>
 
     <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
     <WriteLinesToFile File="$(ResourceTextFile)" Lines="@(Resource)" Overwrite="true" />
@@ -127,7 +140,10 @@
     <WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;PackageProjectUrl;$(PackageProjectUrl);"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;RepositoryUrl;$(RepositoryUrl);"></WriteLinesToFile>
 
-    <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
+    <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true"/>
+    <WriteLinesToFile File="$(FrameworkReferenceVersionFile)" Lines="@(_TfmSpecificFrameworkAssemblyReferences)" Overwrite="true"/>
+
+
     <WriteLinesToFile File="$(SourceYardPackageReferenceFile)" Lines="$(SourceYardPackageReference)" Overwrite="true"></WriteLinesToFile>
 
     <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardCompilePackage)" Overwrite="true"></WriteLinesToFile>
@@ -166,7 +182,7 @@
     </PropertyGroup>
 
     <Exec
-        Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
+        Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --PackingDirectory $(PackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
     </Exec>
 
     <Message Text="Finish SourceYardStep3"></Message>

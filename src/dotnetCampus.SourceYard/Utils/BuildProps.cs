@@ -114,6 +114,7 @@ namespace dotnetCampus.SourceYard.Utils
         /// 打包用到的文件夹
         /// </summary>
         public string SourcePackingDirectory { get; private set; } = null!;
+        public string PackingDirectory { get; private set; } = null!;
 
         private string? _authors;
         private string? _company;
@@ -124,12 +125,12 @@ namespace dotnetCampus.SourceYard.Utils
         /// <summary>
         /// 设置打包用到的文件夹，设置时将会自动读取文件
         /// </summary>
-        /// <param name="packingDirectory"></param>
-        public void SetSourcePackingDirectory(string packingDirectory)
+        /// <param name="sourcePackingDirectory"></param>
+        public void SetSourcePackingDirectory(string sourcePackingDirectory,string packingDirectory)
         {
-            _logger.Message($"BuildProps SourcePackingDirectory={packingDirectory}");
-            SourcePackingDirectory = packingDirectory;
-
+            _logger.Message($"BuildProps SourcePackingDirectory={sourcePackingDirectory}");
+            SourcePackingDirectory = sourcePackingDirectory;
+            PackingDirectory = packingDirectory;
             // 更多信息读取
             var sourceProjectPackageFile = Path.Combine(packingDirectory, "SourceProjectPackageFile.txt");
 
@@ -149,9 +150,19 @@ namespace dotnetCampus.SourceYard.Utils
                 RepositoryUrl = configuration.GetValue("RepositoryUrl")?.Trim() ?? string.Empty;
             }
 
+
+            // 安装的包列表
+            const string packageReferenceVersionFile = "PackageReferenceVersionFile.txt";
+            PackageReferenceVersionList = GetList(packageReferenceVersionFile);
+
+            // 安装的框架引用
+            const string frameworkReferenceVersionFile = "FrameworkReferenceVersionFile.txt";
+            FrameworkReferenceVersionList = GetList(frameworkReferenceVersionFile);
+
             // 安装的源代码包列表
             const string sourceYardPackageReferenceFile = "SourceYardPackageReferenceFile.txt";
             SourceYardPackageReferenceList = GetList(sourceYardPackageReferenceFile);
+            
 
             // 排除的依赖引用列表
             const string sourceYardExcludePackageReferenceFile =
@@ -164,39 +175,57 @@ namespace dotnetCampus.SourceYard.Utils
         }
 
         /// <summary>
+        /// 安装的库包列表
+        /// </summary>
+        public Dictionary<string, List<string>> PackageReferenceVersionList { get; private set; } = null!;
+
+        /// <summary>
+        /// 安装的框架引用列表
+        /// </summary>
+        public Dictionary<string, List<string>> FrameworkReferenceVersionList { get; private set; } = null!;
+
+        /// <summary>
         /// 排除的文件引用列表
         /// </summary>
         /// 不要在 SourceYard 里面包含的文件项，这些文件项将在打包时被排除
         /// 例如有一些文档是写入到项目里面，期望打包的时候，不要将这些文档作为源代码包的引用，以免被输出，或者干扰调试
         /// 这里面存放的是相对项目的相对路径的文件列表
-        public List<string> SourceYardExcludeFileItemList { get; private set; } = null!;
+        public Dictionary<string, List<string>> SourceYardExcludeFileItemList { get; private set; } = null!;
 
         /// <summary>
         /// 排除的依赖引用列表
         /// </summary>
         /// 有某些 NuGet 引用不想作为源代码的依赖，可以添加到 SourceYardExcludePackageReference 列表
-        public List<string> SourceYardExcludePackageReferenceList { get; private set; } = null!;
+        public Dictionary<string, List<string>> SourceYardExcludePackageReferenceList { get; private set; } = null!;
 
         /// <summary>
         /// 安装的源代码包列表
         /// </summary>
         /// 用于解决 https://github.com/dotnet-campus/SourceYard/issues/60
-        public List<string> SourceYardPackageReferenceList { get; private set; } = null!;
+        public Dictionary<string, List<string>> SourceYardPackageReferenceList { get; private set; } = null!;
+        public List<string> TargetFrameworks { get; set; } = null!;
 
-        private List<string> GetList(string fileName)
+        private Dictionary<string, List<string>> GetList(string fileName)
         {
-            var file = Path.Combine(SourcePackingDirectory, fileName);
-
-            if (!File.Exists(file))
+            Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+            foreach (var targetFramework in TargetFrameworks)
             {
-                var sourcePackingDirectory = Directory.CreateDirectory(SourcePackingDirectory);
-                _logger.Warning(
-                    $"BuildProps Can not find file={file}  SourcePackingDirectory FileList={string.Join(";", sourcePackingDirectory.GetFiles().Select(temp => temp.Name))}");
+                var path= SourcePackingDirectory.Replace("\\SourcePacking\\", $"\\{targetFramework}\\SourcePacking\\");
+                var file = Path.Combine(path, fileName);
 
-                return new List<string>(0);
+                if (!File.Exists(file))
+                {
+                    var sourcePackingDirectory = Directory.CreateDirectory(SourcePackingDirectory);
+                    _logger.Warning(
+                        $"BuildProps Can not find file={file}  SourcePackingDirectory FileList={string.Join(";", sourcePackingDirectory.GetFiles().Select(temp => temp.Name))}");
+
+                    dict.Add(targetFramework, new List<string>(0));
+                }
+
+                dict.Add(targetFramework, File.ReadAllLines(file).Where(temp => !string.IsNullOrEmpty(temp)).ToList());
             }
 
-            return File.ReadAllLines(file).Where(temp => !string.IsNullOrEmpty(temp)).ToList();
+            return dict;
         }
 
         private readonly ILogger _logger;

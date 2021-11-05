@@ -77,7 +77,7 @@ namespace dotnetCampus.SourceYard.Context
         private List<SourceYardPackageFile> GetSourceYardPackageFileList(string file,
             string sourceYardPackageFile)
         {
-            sourceYardPackageFile = Path.Combine(_buildProps.SourcePackingDirectory, sourceYardPackageFile);
+            sourceYardPackageFile = Path.Combine(_buildProps.PackingDirectory, sourceYardPackageFile);
             var sourceYardPackageFileList = ParseSourceYardPackageFile(sourceYardPackageFile);
 
             var fileList = GetFileList(file);
@@ -156,8 +156,9 @@ namespace dotnetCampus.SourceYard.Context
                 IgnoreFileEndList.Any(t => temp.EndsWith(t, StringComparison.OrdinalIgnoreCase)));
 
             // 忽略被排除的文件
+            // TODO::是否也移到TFM无关的路径
             fileList.RemoveAll(temp =>
-                _buildProps.SourceYardExcludeFileItemList.Contains(temp, StringComparer.OrdinalIgnoreCase));
+                _buildProps.SourceYardExcludeFileItemList[_buildProps.TargetFrameworks.First()].Contains(temp, StringComparer.OrdinalIgnoreCase));
 
             return fileList;
         }

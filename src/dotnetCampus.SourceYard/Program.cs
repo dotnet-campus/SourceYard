@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace dotnetCampus.SourceYard
     {
         private static void Main(string[] args)
         {
-            MagicTransformMultiTargetingToFirstTarget(args);
+            //MagicTransformMultiTargetingToFirstTarget(args);
 
             CommandLine.Parse(args).AddStandardHandlers()
                 .AddHandler<Options>(RunOptionsAndReturnExitCode)
@@ -83,10 +84,14 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     PackageIconUrl = options.PackageIconUrl,
                     PackageLicenseUrl = options.PackageLicenseUrl,
                     PackageReleaseNotes = options.PackageReleaseNotesFile,
-                    PackageTags = options.PackageTags
+                    PackageTags = options.PackageTags,
+                    TargetFrameworks = string.IsNullOrEmpty(options.TargetFrameworks) ?
+                        new List<string>() { options.TargetFramework.Trim() } :
+                        options.TargetFrameworks.Split(';').Select(x => x.Trim()).ToList()
+
                 };
 
-                buildProps.SetSourcePackingDirectory(Path.GetFullPath(options.SourcePackingDirectory));
+                buildProps.SetSourcePackingDirectory(Path.GetFullPath(options.SourcePackingDirectory), Path.GetFullPath(options.PackingDirectory));
 
                 new Packer(projectFile: projectFile,
                     intermediateDirectory: intermediateDirectory,
@@ -100,8 +105,7 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     noneFile: options.None,
                     embeddedResource: options.EmbeddedResource,
                     packageId: options.PackageId,
-                    buildProps: buildProps,
-                    packageReferenceVersion: options.PackageReferenceVersion).Pack();
+                    buildProps: buildProps).Pack();
             }
             catch (Exception e)
             {
