@@ -1,5 +1,12 @@
 ﻿<Project>
 
+  <ItemGroup>
+    <PackageReference Update="#(PackageGuid).Source">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>all</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <PropertyGroup Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <_#(PackageGuid)ImportInWpfTempProjectDependsOn>
       _#(PackageGuid)IncludeSourceCodes
