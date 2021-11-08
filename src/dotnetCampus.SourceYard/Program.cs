@@ -70,6 +70,7 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
+                bool isMultiTargeting = options.TargetFrameworks != null && !string.IsNullOrEmpty(options.TargetFrameworks.Trim());
                 var buildProps = new BuildProps(logger)
                 {
                     Authors = options.Authors ?? string.Empty,
@@ -85,9 +86,10 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     PackageLicenseUrl = options.PackageLicenseUrl,
                     PackageReleaseNotes = options.PackageReleaseNotesFile,
                     PackageTags = options.PackageTags,
-                    TargetFrameworks = string.IsNullOrEmpty(options.TargetFrameworks) ?
-                        new List<string>() { options.TargetFramework.Trim() } :
-                        options.TargetFrameworks.Split(';').Select(x => x.Trim()).ToList()
+                    IsMultiTargeting = isMultiTargeting,
+                    TargetFrameworks = isMultiTargeting ?
+                        options.TargetFrameworks.Split(';').Select(x => x.Trim()).ToList() :
+                        new List<string>() { options.TargetFramework.Trim() }
 
                 };
 
