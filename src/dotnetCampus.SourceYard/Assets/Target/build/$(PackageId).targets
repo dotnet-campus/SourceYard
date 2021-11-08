@@ -1,7 +1,7 @@
 ﻿<Project>
 
   <ItemGroup>
-    <PackageReference Update="#(PackageGuid).Source">
+    <PackageReference Update="#(PackageId)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>all</IncludeAssets>
     </PackageReference>
