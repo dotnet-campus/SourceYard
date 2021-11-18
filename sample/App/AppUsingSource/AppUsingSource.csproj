@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TheLib.Source" Version="1.0.2" />
+    <PackageReference Include="TheLib.Source" Version="1.0.3" />
   </ItemGroup>
   <Import Condition="Exists('obj\AppUsingSource.csproj.nuget.g.targets') " Project="obj\AppUsingSource.csproj.nuget.g.targets" />
 </Project>
