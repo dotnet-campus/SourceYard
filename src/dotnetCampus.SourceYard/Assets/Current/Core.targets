@@ -178,7 +178,7 @@
     <WriteLinesToFile File="$(SourceYardEmbeddedResourcePackageFile)" Lines="@(_SourceYardEmbeddedResourcePackage)" Overwrite="true"></WriteLinesToFile>
 
 
-    <!--为了支持多框架项目，需要将当前的路径写入保存-->
+<!--为了支持多框架项目，需要将当前的路径写入保存-->
 
     <Message Text="Finish SourceYardStep2"></Message>
   </Target>
@@ -186,8 +186,10 @@
   <!--打包第三步，无论多框架还是单框架只执行一次-->
   <Target Name="SourceYardStep3">
 
+ 
+
     <Exec
-        Command="$(SourceYardApplicationFilePath) pack $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
+        Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot;">
     </Exec>
 
     <Message Text="Finish SourceYardStep3"></Message>
