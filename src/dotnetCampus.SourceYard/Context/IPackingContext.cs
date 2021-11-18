@@ -58,6 +58,14 @@ namespace dotnetCampus.SourceYard.Context
         PackagedProjectFile PackagedProjectFile { get; }
 
         BuildProps BuildProps { get; }
-        string PackageReferenceVersion { get; }
+
+        /// <summary>
+        /// 多框架的打包内容
+        /// </summary>
+        /// 路径是 obj\Debug\SourceYardMultiTargetingPackageInfoFolder
+        /// 内容如下
+        /// - obj\Debug\SourceYardMultiTargetingPackageInfoFolder\net45.txt
+        /// - obj\Debug\SourceYardMultiTargetingPackageInfoFolder\net5.0.txt
+        MultiTargetingPackageInfo MultiTargetingPackageInfo { get; }
     }
 }

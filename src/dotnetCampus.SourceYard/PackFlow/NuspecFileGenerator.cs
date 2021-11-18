@@ -86,9 +86,10 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = GetDependencies(context.PackageReferenceVersion, 
-                        buildProps.SourceYardPackageReferenceList,
-                        buildProps.SourceYardExcludePackageReferenceList),
+                    Dependencies = default,
+                        //GetDependencies(context.PackageReferenceVersion, 
+                        //buildProps.SourceYardPackageReferenceList,
+                        //buildProps.SourceYardExcludePackageReferenceList),
                     Repository = repository
                 }
             };
@@ -104,6 +105,8 @@ namespace dotnetCampus.SourceYard.PackFlow
         private List<NuspecDependency> GetDependencies(string contextPackageVersion,
             List<string> sourceYardPackageReferenceList, List<string> excludePackageReferenceList)
         {
+            return new List<NuspecDependency>();
+
             var nuspecDependencyList = ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
 
             // 如果在排除列表就移除

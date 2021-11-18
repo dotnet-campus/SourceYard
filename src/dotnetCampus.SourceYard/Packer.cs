@@ -17,8 +17,8 @@ namespace dotnetCampus.SourceYard
             string packageVersion,
             string? packageId,
             BuildProps buildProps,
-            string commonSourcePackingFolder,
-            string multiTargetingPackageInfoFolder,
+            DirectoryInfo commonSourcePackingFolder,
+            MultiTargetingPackageInfo multiTargetingPackageInfo,
             Logger logger
         )
         {
@@ -55,7 +55,7 @@ namespace dotnetCampus.SourceYard
             _intermediateDirectory = Path.GetFullPath(path: intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(path: packageOutputPath);
             _packageVersion = packageVersion;
-            _multiTargetingPackageInfoFolder = multiTargetingPackageInfoFolder;
+            _multiTargetingPackageInfo = multiTargetingPackageInfo;
             //_packageReferenceVersion = Path.GetFullPath(path: packageReferenceVersion);
             BuildProps = buildProps;
             PackageId = packageId;
@@ -129,7 +129,7 @@ namespace dotnetCampus.SourceYard
                         _packageOutputPath,
                         packingFolder,
                         PackagedProjectFile,
-                        _packageReferenceVersion
+                        _multiTargetingPackageInfo
                     )
                     {
                         BuildProps = buildProps,
@@ -161,9 +161,8 @@ namespace dotnetCampus.SourceYard
         private readonly string _packageOutputPath = null!;
 
         private readonly string _packageVersion = null!;
-        private readonly string _multiTargetingPackageInfoFolder;
+        private readonly MultiTargetingPackageInfo _multiTargetingPackageInfo;
 
-        private readonly string _packageReferenceVersion = null!;
         private readonly IPackFlow[] _packers = null!;
 
         private PackagedProjectFile PackagedProjectFile { get; } = null!;

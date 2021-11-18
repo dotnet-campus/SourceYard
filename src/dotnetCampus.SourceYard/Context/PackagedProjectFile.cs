@@ -11,7 +11,7 @@ namespace dotnetCampus.SourceYard.Context
     /// </summary>
     class PackagedProjectFile
     {
-        public PackagedProjectFile(string commonSourcePackingFolder, string projectFolder,
+        public PackagedProjectFile(DirectoryInfo commonSourcePackingFolder, string projectFolder,
             BuildProps buildProps)
         {
             // 通过 commonSourcePackingFolder 可以拿到对应的输出文件路径
@@ -36,7 +36,7 @@ namespace dotnetCampus.SourceYard.Context
 
             string GetFile(string fileName)
             {
-                return Path.Combine(commonSourcePackingFolder, fileName);
+                return Path.Combine(commonSourcePackingFolder.FullName, fileName);
             }
         }
 

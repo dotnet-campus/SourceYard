@@ -8,12 +8,12 @@ namespace dotnetCampus.SourceYard.Context
     {
         public PackingContext(ILogger logger, string projectFile,
             string projectName, string? packageId, string packageVersion, string packageOutputPath, string packingFolder,
-            PackagedProjectFile packagedProjectFile, string packageReferenceVersion)
+            PackagedProjectFile packagedProjectFile, MultiTargetingPackageInfo multiTargetingPackageInfo)
         {
             Logger = logger;
           
             ProjectFile = projectFile;
-            ProjectFolder = Path.GetDirectoryName(projectFile);
+            ProjectFolder = Path.GetDirectoryName(projectFile)!;
             ProjectName = projectName;
             packageId = packageId?.Trim() ?? "";
             if (string.IsNullOrEmpty(packageId))
@@ -28,7 +28,7 @@ namespace dotnetCampus.SourceYard.Context
             PackageGuid = projectName.Replace(".", "");
             PackingFolder = packingFolder;
             PackagedProjectFile = packagedProjectFile;
-            PackageReferenceVersion = packageReferenceVersion;
+            MultiTargetingPackageInfo = multiTargetingPackageInfo;
             PackageVersion = packageVersion;
             PackageOutputPath = packageOutputPath;
         }
@@ -46,7 +46,7 @@ namespace dotnetCampus.SourceYard.Context
         public string ProjectName { get; }
 
         /// <inheritdoc />
-        public string PackageId { get; set; }
+        public string PackageId { get; }
 
         /// <inheritdoc />
         public string PackageGuid { get; set; }
@@ -61,8 +61,7 @@ namespace dotnetCampus.SourceYard.Context
         public string PackingFolder { get; }
 
         public PackagedProjectFile PackagedProjectFile { get; }
-        public string PackageReferenceVersion { get; }
-
+        public MultiTargetingPackageInfo MultiTargetingPackageInfo { get; }
         public BuildProps BuildProps { get; set; } = null!;
     }
 }
