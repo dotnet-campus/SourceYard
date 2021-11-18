@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -157,20 +158,57 @@ namespace dotnetCampus.SourceYard
             // 获取时，需要判断文件夹是否合法
 
             var folder = options.MultiTargetingPackageInfoFolder;
-            var packageInfoFile = Directory.GetFiles(folder, "*.txt").FirstOrDefault();
-            if (string.IsNullOrEmpty(packageInfoFile)
-                // 理论上如果 packageInfoFile 不是空，那么文件一定存在
-                || !File.Exists(packageInfoFile))
+
+            var fileList = new List<(string targetFramework, string sourcePackingFolder)>();
+            foreach (var file in Directory.GetFiles(folder, "*.txt"))
+            {
+                var packageInfo = File.ReadAllText(file!);
+                var sourcePackingFolder = packageInfo.Trim('\r', '\n');
+                sourcePackingFolder = Path.GetFullPath(sourcePackingFolder);
+
+                // 判断此文件是否合法
+                // 判断方法如获取 CompileFile.txt 是否存在
+                var compileFile = Path.Combine(sourcePackingFolder, "CompileFile.txt");
+                if (File.Exists(compileFile))
+                {
+                    var targetFramework = Path.GetFileNameWithoutExtension(file);
+                    fileList.Add((targetFramework, sourcePackingFolder));
+                }
+            }
+
+            if (fileList.Count == 0)
             {
                 logger.Error($"Can not find any TargetFramework info file from \"{folder}\"");
                 Exit(-1);
             }
 
-            var packageInfo = File.ReadAllText(packageInfoFile!);
-            // obj\Debug\net45\SourcePacking\
-            var sourcePackingFolder = packageInfo.Trim('\r', '\n');
-            sourcePackingFolder = Path.GetFullPath(sourcePackingFolder);
-            return sourcePackingFolder;
+            // 如果是单个框架的项目，那么返回即可
+            if (fileList.Count == 1)
+            {
+                return fileList[0].sourcePackingFolder;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(options.TargetFrameworks))
+                {
+                    var sourcePackingFolder = fileList.FirstOrDefault(t=> options.TargetFrameworks!.Contains(t.targetFramework)).sourcePackingFolder;
+
+                    if (sourcePackingFolder is null)
+                    {
+                        logger.Error($"没有找到匹配框架的打包文件 TargetFrameworks={options.TargetFrameworks};SourceTargetFrameworks={string.Join(";", fileList.Select(t => t.targetFramework))}");
+                        Exit(-1);
+
+                        // 在上面的 Exit 将会退出
+                        throw new ArgumentException();
+                    }
+
+                    return sourcePackingFolder;
+                }
+                else
+                {
+                    return fileList[0].sourcePackingFolder;
+                }
+            }
         }
 
         private static string GetIntermediateDirectory(Options options, Logger logger)
