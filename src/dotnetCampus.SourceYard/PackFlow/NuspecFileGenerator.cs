@@ -104,7 +104,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             _log = logger;
             var nuspecGroups = new List<NuspecGroup>();
 
-            foreach (var targetFrameworkPackageInfo in context.MultiTargetingPackageInfo.TargetFrameworkPackageInfoList)
+            foreach (var targetFrameworkPackageInfo in context.MultiTargetingPackageInfo.ValidTargetFrameworkPackageInfoList)
             {
                 var sourcePackingFolder = targetFrameworkPackageInfo.SourcePackingFolder.FullName;
 

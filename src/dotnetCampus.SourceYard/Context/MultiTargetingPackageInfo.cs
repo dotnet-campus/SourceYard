@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using dotnetCampus.SourceYard.Cli;
 
 namespace dotnetCampus.SourceYard.Context
 {
     class MultiTargetingPackageInfo
     {
-        public MultiTargetingPackageInfo(DirectoryInfo multiTargetingPackageInfoFolder)
+        public MultiTargetingPackageInfo(Options options)
         {
+            var multiTargetingPackageInfoFolder = new DirectoryInfo(options.MultiTargetingPackageInfoFolder);
             MultiTargetingPackageInfoFolder = multiTargetingPackageInfoFolder;
             var folder = multiTargetingPackageInfoFolder.FullName;
             var targetFrameworkPackageInfoList = new List<TargetFrameworkPackageInfo>();
@@ -29,10 +32,32 @@ namespace dotnetCampus.SourceYard.Context
             }
 
             TargetFrameworkPackageInfoList = targetFrameworkPackageInfoList;
+
+            var validTargetFrameworkPackageInfoList = targetFrameworkPackageInfoList.ToList();
+            validTargetFrameworkPackageInfoList.RemoveAll(t =>
+            {
+                if (t.IsValid is false)
+                {
+                    return true;
+                }
+
+                if (options.TargetFrameworks != null)
+                {
+                    if (options.TargetFrameworks.Contains(t.TargetFramework) is false)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            ValidTargetFrameworkPackageInfoList = validTargetFrameworkPackageInfoList;
         }
 
         public DirectoryInfo MultiTargetingPackageInfoFolder { get; }
 
+        public IReadOnlyList<TargetFrameworkPackageInfo> ValidTargetFrameworkPackageInfoList { get; }
         public IReadOnlyList<TargetFrameworkPackageInfo> TargetFrameworkPackageInfoList { get; }
     }
 }

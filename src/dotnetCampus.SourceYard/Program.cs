@@ -54,24 +54,24 @@ namespace dotnetCampus.SourceYard
                 logger.Message("Source packaging");
 
                 var projectFile = options.ProjectFile;
-                var multiTargetingPackageInfo = new MultiTargetingPackageInfo(new DirectoryInfo(options.MultiTargetingPackageInfoFolder));
+                var multiTargetingPackageInfo = new MultiTargetingPackageInfo(options);
                 var intermediateDirectory = GetIntermediateDirectory(multiTargetingPackageInfo, options, logger);
                 // 当前多个不同的框架引用不同的文件还不能支持，因此随意获取一个打包文件夹即可
                 // 为什么？逻辑上不好解决，其次，安装的项目的兼容性无法处理
                 // 安装的项目的兼容性无法处理？源代码包有 net45 框架，项目是 net47 框架，如何让项目能兼容使用到 net45 框架？当前没有此生成逻辑 
-                var sourcePackingFolder = GetCommonSourcePackingFolder(multiTargetingPackageInfo, options, logger);
+                var sourcePackingFolder = GetCommonSourcePackingFolder(multiTargetingPackageInfo, logger);
                 var packageOutputPath = options.PackageOutputPath;
                 var packageVersion = options.PackageVersion;
 
-//                logger.Message($@"项目文件 {projectFile}
-//临时文件{intermediateDirectory}
-//输出文件{packageOutputPath}
-//版本{packageVersion}
-//编译的文件{options.CompileFile}
-//资源文件{options.ResourceFile}
-//内容{options.ContentFile}
-//页面{options.Page}
-//SourcePackingDirectory: {options.SourcePackingDirectory}");
+                //                logger.Message($@"项目文件 {projectFile}
+                //临时文件{intermediateDirectory}
+                //输出文件{packageOutputPath}
+                //版本{packageVersion}
+                //编译的文件{options.CompileFile}
+                //资源文件{options.ResourceFile}
+                //内容{options.ContentFile}
+                //页面{options.Page}
+                //SourcePackingDirectory: {options.SourcePackingDirectory}");
 
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
@@ -153,10 +153,10 @@ namespace dotnetCampus.SourceYard
         /// 获取通用的 SourcePacking 文件夹，无视框架版本的不同
         /// </summary>
         /// <returns></returns>
-        private static DirectoryInfo GetCommonSourcePackingFolder(MultiTargetingPackageInfo multiTargetingPackageInfo, Options options, Logger logger)
+        private static DirectoryInfo GetCommonSourcePackingFolder(MultiTargetingPackageInfo multiTargetingPackageInfo, Logger logger)
         {
             // 获取时，需要判断文件夹是否合法
-            var fileList = multiTargetingPackageInfo.TargetFrameworkPackageInfoList.Where(t=>t.IsValid).ToList();
+            var fileList = multiTargetingPackageInfo.ValidTargetFrameworkPackageInfoList;
 
             if (fileList.Count == 0)
             {
@@ -171,29 +171,11 @@ namespace dotnetCampus.SourceYard
             }
             else
             {
-                if (!string.IsNullOrEmpty(options.TargetFrameworks))
-                {
-                    var sourcePackingFolder = fileList.FirstOrDefault(t=> options.TargetFrameworks!.Contains(t.TargetFramework))?.SourcePackingFolder;
-
-                    if (sourcePackingFolder is null)
-                    {
-                        logger.Error($"没有找到匹配框架的打包文件 TargetFrameworks={options.TargetFrameworks};SourceTargetFrameworks={string.Join(";", fileList.Select(t => t.TargetFramework))}");
-                        Exit(-1);
-
-                        // 在上面的 Exit 将会退出
-                        throw new ArgumentException();
-                    }
-
-                    return sourcePackingFolder;
-                }
-                else
-                {
-                    return fileList[0].SourcePackingFolder;
-                }
+                return fileList[0].SourcePackingFolder;
             }
         }
 
-        private static string GetIntermediateDirectory(MultiTargetingPackageInfo multiTargetingPackageInfo,Options options, Logger logger)
+        private static string GetIntermediateDirectory(MultiTargetingPackageInfo multiTargetingPackageInfo, Options options, Logger logger)
         {
             // 多框架和单个框架的逻辑不相同
             var folder = options.MultiTargetingPackageInfoFolder;
@@ -203,7 +185,7 @@ namespace dotnetCampus.SourceYard
             if (string.IsNullOrEmpty(options.TargetFrameworks))
             {
                 // 单个框架的项目
-                var sourcePackingFolder = GetCommonSourcePackingFolder(multiTargetingPackageInfo, options, logger);
+                var sourcePackingFolder = GetCommonSourcePackingFolder(multiTargetingPackageInfo, logger);
                 // 预期是输出 obj\Debug\SourcePacking\Package 文件
                 var intermediateFolder = Path.Combine(sourcePackingFolder.FullName, packageName);
                 return intermediateFolder;
