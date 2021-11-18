@@ -37,6 +37,7 @@
   <Target Name="_SourceYardFrameworkAssets"
           AfterTargets="ResolveReferences">
     <ItemGroup>
+      <!-- 参考 [增加分版本的package引用和framework引用 by Zhuangkh · Pull Request #111 · dotnet-campus/SourceYard](https://github.com/dotnet-campus/SourceYard/pull/111 ) -->
       <_TfmSpecificFrameworkAssemblyReferences Include="@(ReferencePath->'%(OriginalItemSpec)')"
                                                Condition="'%(ReferencePath.Pack)' != 'false' AND '%(ReferencePath.ResolvedFrom)' == '{TargetFrameworkDirectory}'">
       </_TfmSpecificFrameworkAssemblyReferences>
