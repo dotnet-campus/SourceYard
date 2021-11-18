@@ -7,7 +7,7 @@
   <PropertyGroup>
     <!-- 用于给多框架存放各个框架的信息的文件的文件夹，各个框架将会在写入到各自的文件里面 -->
     <!-- 选择 BaseIntermediateOutputPath 是因为开发者可以配置不同的框架采用不同的 obj 文件夹，但是对于不同的框架，大部分都是使用相同的 BaseIntermediateOutputPath 文件夹 -->
-    <_SourceYardMultiTargetingPackageInfoFolder>$(BaseIntermediateOutputPath)\$(Configuration)\SourceYardMultiTargetingPackageInfoFolder\</_SourceYardMultiTargetingPackageInfoFolder>
+    <_SourceYardMultiTargetingPackageInfoFolder>$(BaseIntermediateOutputPath)$(Configuration)\SourceYardMultiTargetingPackageInfoFolder\</_SourceYardMultiTargetingPackageInfoFolder>
     <!-- 
 	     输出形式如：
 		       - obj\Debug\SourceYardMultiTargetingPackageInfoFolder\net45.txt
