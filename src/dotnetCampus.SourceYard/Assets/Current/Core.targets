@@ -19,6 +19,8 @@
   <!--打包第一步，将会多个框架分别执行-->
   <Target Name="SourceYardStep1">
     <PropertyGroup>
+      <!-- 这里不能使用 $(PackingDirectory) 属性，原因是此属性在未打包时是空 -->
+      <!-- 对于多框架来说，这里的 IntermediateOutputPath 路径格式如 obj\Debug\net45\ -->
       <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
 
       <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
