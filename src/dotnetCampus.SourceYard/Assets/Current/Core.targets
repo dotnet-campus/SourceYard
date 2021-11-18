@@ -148,6 +148,7 @@
     <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
 
     <!-- 写入框架信息 -->
+    <!--为了支持多框架项目，需要将当前的路径写入保存-->
     <WriteLinesToFile File="$(_SourceYardMultiTargetingPackageInfoFile)" Lines="$(SourcePackingDirectory)" Overwrite="true"/>
 
     <WriteLinesToFile File="$(CompileTextFile)" Lines="@(Compile)" Overwrite="true" />
@@ -189,9 +190,6 @@
     <WriteLinesToFile File="$(SourceYardContentPackageFile)" Lines="@(_SourceYardContentPackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardNonePackageFile)" Lines="@(_SourceYardNonePackage)" Overwrite="true"></WriteLinesToFile>
     <WriteLinesToFile File="$(SourceYardEmbeddedResourcePackageFile)" Lines="@(_SourceYardEmbeddedResourcePackage)" Overwrite="true"></WriteLinesToFile>
-
-
-<!--为了支持多框架项目，需要将当前的路径写入保存-->
 
     <Message Text="Finish SourceYardStep2"></Message>
   </Target>
