@@ -18,10 +18,11 @@ namespace dotnetCampus.SourceYard
             string? packageId,
             BuildProps buildProps,
             string commonSourcePackingFolder,
-            string multiTargetingPackageInfoFolder
+            string multiTargetingPackageInfoFolder,
+            Logger logger
         )
         {
-            Logger = new Logger();
+            Logger = logger;
 
             Logger.Message(message: "初始化打包");
 

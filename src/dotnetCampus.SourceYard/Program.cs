@@ -109,9 +109,10 @@ namespace dotnetCampus.SourceYard
                     packageId: options.PackageId,
                     buildProps: buildProps,
                     commonSourcePackingFolder: sourcePackingFolder,
-                    multiTargetingPackageInfoFolder: options.MultiTargetingPackageInfoFolder
+                    multiTargetingPackageInfoFolder: options.MultiTargetingPackageInfoFolder,
                     // 多框架下，每个框架有自己的引用路径
                     //packageReferenceVersion: options.PackageReferenceVersion
+                    logger: logger
                 );
 
                 packer.Pack();
