@@ -34,6 +34,15 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="_SourceYardFrameworkAssets"
+          AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <_TfmSpecificFrameworkAssemblyReferences Include="@(ReferencePath->'%(OriginalItemSpec)')"
+                                               Condition="'%(ReferencePath.Pack)' != 'false' AND '%(ReferencePath.ResolvedFrom)' == '{TargetFrameworkDirectory}'">
+      </_TfmSpecificFrameworkAssemblyReferences>
+    </ItemGroup>
+  </Target>
+
   <!--打包第一步，将会多个框架分别执行-->
   <Target Name="SourceYardStep1">
     <PropertyGroup>
