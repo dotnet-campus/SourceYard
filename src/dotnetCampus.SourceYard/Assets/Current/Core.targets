@@ -4,18 +4,6 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
 
-  <!-- 开发者自己有指定路径，但是路径里面不存在应用 -->
-  <Error Text="Can not find SourceYardApplicationFilePath $(SourceYardApplicationFilePath)" Condition="'$(SourceYardApplicationFilePath)' != '' And !Exists($(SourceYardApplicationFilePath))"/>
-
-  <PropertyGroup Condition="'$(SourceYardApplicationFilePath)' == ''">
-    <!-- 给定默认的 SourceYard 路径名 -->
-    <!-- 我们使用 $(MSBuildRuntimeType) 来判断编译器是 .NET Core 的还是 .NET Framework 的。
-         然后选用对应的工具。-->
-    <!--The type of the runtime that is currently executing. Introduced in MSBuild 15. Value may be undefined (prior to MSBuild 15), Full indicating that MSBuild is running on the desktop .NET Framework, Core indicating that MSBuild is running on .NET Core (for example in dotnet build), or Mono indicating that MSBuild is running on Mono.-->
-    <SourceYardApplicationFilePath Condition=" '$(MSBuildRuntimeType)' != 'Core'">$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe</SourceYardApplicationFilePath>
-    <SourceYardApplicationFilePath Condition=" '$(MSBuildRuntimeType)' == 'Core'">dotnet $(MSBuildThisFileDirectory)../tools/netcoreapp2.0/dotnetCampus.SourceYard.dll</SourceYardApplicationFilePath>
-  </PropertyGroup>
-
   <PropertyGroup>
     <!-- 用于给多框架存放各个框架的信息的文件的文件夹，各个框架将会在写入到各自的文件里面 -->
     <!-- 选择 BaseIntermediateOutputPath 是因为开发者可以配置不同的框架采用不同的 obj 文件夹，但是对于不同的框架，大部分都是使用相同的 BaseIntermediateOutputPath 文件夹 -->
@@ -196,8 +184,18 @@
   
   <!--打包第三步，无论多框架还是单框架只执行一次-->
   <Target Name="SourceYardStep3">
-
  
+    <!-- 开发者自己有指定路径，但是路径里面不存在应用 -->
+    <Error Text="Can not find SourceYardApplicationFilePath $(SourceYardApplicationFilePath)" Condition="'$(SourceYardApplicationFilePath)' != '' And !Exists($(SourceYardApplicationFilePath))"/>
+
+    <PropertyGroup Condition="'$(SourceYardApplicationFilePath)' == ''">
+      <!-- 给定默认的 SourceYard 路径名 -->
+      <!-- 我们使用 $(MSBuildRuntimeType) 来判断编译器是 .NET Core 的还是 .NET Framework 的。
+         然后选用对应的工具。-->
+      <!--The type of the runtime that is currently executing. Introduced in MSBuild 15. Value may be undefined (prior to MSBuild 15), Full indicating that MSBuild is running on the desktop .NET Framework, Core indicating that MSBuild is running on .NET Core (for example in dotnet build), or Mono indicating that MSBuild is running on Mono.-->
+      <SourceYardApplicationFilePath Condition=" '$(MSBuildRuntimeType)' != 'Core'">$(MSBuildThisFileDirectory)..\tools\net45\dotnetCampus.SourceYard.exe</SourceYardApplicationFilePath>
+      <SourceYardApplicationFilePath Condition=" '$(MSBuildRuntimeType)' == 'Core'">dotnet $(MSBuildThisFileDirectory)../tools/netcoreapp2.0/dotnetCampus.SourceYard.dll</SourceYardApplicationFilePath>
+    </PropertyGroup>
 
     <Exec
         Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath) $(SourceIntermediateDirectory) $(SourcePackageOutputPath) $(SourceYardPackageVersion) --Compile $(CompileTextFile) --Resource $(ResourceTextFile) --Content $(ContentTextFile) --Page $(PageTextFile) --ApplicationDefinition $(ApplicationDefinitionTextFile) --None $(NoneTextFile) --EmbeddedResource $(EmbeddedResourceTextFile) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) $(SourcePackageReferenceVersion) --SourcePackingDirectory $(SourcePackingDirectory) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot; --MultiTargetingPackageInfoFolder &quot;$(_SourceYardMultiTargetingPackageInfoFolder) &quot;">
