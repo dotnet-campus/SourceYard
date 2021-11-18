@@ -111,14 +111,7 @@ namespace dotnetCampus.SourceYard
                 return;
             }
 
-            //Directory.Build.props
             var buildProps = BuildProps;
-
-            if (string.IsNullOrWhiteSpace(projectName))
-            {
-                Logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
-                return;
-            }
 
             IPackFlow? current = null;
             try
