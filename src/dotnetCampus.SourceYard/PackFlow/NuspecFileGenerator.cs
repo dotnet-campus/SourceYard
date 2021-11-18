@@ -86,14 +86,44 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = default,
-                        //GetDependencies(context.PackageReferenceVersion, 
-                        //buildProps.SourceYardPackageReferenceList,
-                        //buildProps.SourceYardExcludePackageReferenceList),
+                    Dependencies = DependenciesParser.GetDependencies(context, _log),
                     Repository = repository
                 }
             };
         }
+    }
+
+    static class DependenciesParser
+    {
+        /// <summary>
+        /// 获取依赖内容
+        /// </summary>
+        /// <returns></returns>
+        public static List<NuspecGroup> GetDependencies(IPackingContext context, ILogger logger)
+        {
+            _log = logger;
+            var nuspecGroups = new List<NuspecGroup>();
+
+            foreach (var targetFrameworkPackageInfo in context.MultiTargetingPackageInfo.TargetFrameworkPackageInfoList)
+            {
+                var sourcePackingFolder = targetFrameworkPackageInfo.SourcePackingFolder.FullName;
+
+                var packageReferenceVersionFile = Path.Combine(sourcePackingFolder, "PackageReferenceVersionFile.txt");
+
+                var dependencies = GetDependencies(packageReferenceVersionFile, context.BuildProps.SourceYardPackageReferenceList,
+                    context.BuildProps.SourceYardExcludePackageReferenceList);
+
+                nuspecGroups.Add(new NuspecGroup()
+                {
+                    TargetFramework = targetFrameworkPackageInfo.TargetFramework,
+                    Dependencies = dependencies
+                });
+            }
+
+            return nuspecGroups;
+        }
+
+        private static ILogger _log;
 
         /// <summary>
         /// 获取依赖
@@ -102,11 +132,9 @@ namespace dotnetCampus.SourceYard.PackFlow
         /// <param name="sourceYardPackageReferenceList">源代码包</param>
         /// <param name="excludePackageReferenceList">排除的依赖</param>
         /// <returns></returns>
-        private List<NuspecDependency> GetDependencies(string contextPackageVersion,
+        private static List<NuspecDependency> GetDependencies(string contextPackageVersion,
             List<string> sourceYardPackageReferenceList, List<string> excludePackageReferenceList)
         {
-            return new List<NuspecDependency>();
-
             var nuspecDependencyList = ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
 
             // 如果在排除列表就移除
@@ -119,11 +147,9 @@ namespace dotnetCampus.SourceYard.PackFlow
             return nuspecDependencyList;
         }
 
-        private List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
+        private static List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
             List<string> sourceYardPackageReferenceList)
         {
-            return new List<NuspecDependency>();
-
             var nuspecDependencyList = new List<NuspecDependency>();
             var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
             using (var stream = File.OpenText(packageVersionFile))
@@ -147,7 +173,9 @@ namespace dotnetCampus.SourceYard.PackFlow
 
                         // 解决 https://github.com/dotnet-campus/SourceYard/issues/60
                         // 即使有某个包标记了使用 private asset 是 All 的，但是这个包是一个源代码包，那么打包的时候就需要添加他的引用依赖
-                        var includeInSourceYardPackageReference = sourceYardPackageReferenceList.Any(temp => temp.Equals(name, StringComparison.OrdinalIgnoreCase));
+                        var includeInSourceYardPackageReference =
+                            sourceYardPackageReferenceList.Any(temp =>
+                                temp.Equals(name, StringComparison.OrdinalIgnoreCase));
 
                         if ((!isPrivateAssetsAll || includeInSourceYardPackageReference)
                             && !SDKNuget.Contains(name))
@@ -172,7 +200,7 @@ namespace dotnetCampus.SourceYard.PackFlow
         /// <summary>
         /// 包含在 sdk 的库，这些库不应该加入引用
         /// </summary>
-        private string[] SDKNuget { get; } = new[]
+        private static string[] SDKNuget { get; } = new[]
         {
             "Microsoft.NETCore.App",
             "Microsoft.NETCore.Platforms"
