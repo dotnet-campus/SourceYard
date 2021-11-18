@@ -143,6 +143,8 @@
   <!--打包第二步，将会多个框架分别执行-->
   <Target Name="SourceYardStep2">
     
+    <MakeDir Condition="!Exists($(_SourceYardMultiTargetingPackageInfoFolder))" Directories="$(_SourceYardMultiTargetingPackageInfoFolder)"></MakeDir>
+
     <MakeDir Condition="!Exists($(SourcePackingDirectory))" Directories="$(SourcePackingDirectory)"></MakeDir>
 
     <!-- 写入框架信息 -->
