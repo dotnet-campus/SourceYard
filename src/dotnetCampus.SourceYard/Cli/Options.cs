@@ -120,5 +120,11 @@ namespace dotnetCampus.SourceYard.Cli
 
         [Option(longName: "TargetFrameworks")]
         public string? TargetFrameworks { get; set; }
+
+        /// <summary>
+        /// 多框架信息存放的文件夹，即使是单框架项目也会存在此文件夹
+        /// </summary>
+        [Option("MultiTargetingPackageInfoFolder")]
+        public string MultiTargetingPackageInfoFolder { set; get; } = null!;
     }
 }
