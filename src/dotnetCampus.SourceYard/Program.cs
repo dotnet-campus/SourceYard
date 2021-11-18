@@ -49,22 +49,26 @@ namespace dotnetCampus.SourceYard
 
             try
             {
-                logger.Message("开始打源码包");
+                logger.Message("Source packaging");
 
                 var projectFile = options.ProjectFile;
-                var intermediateDirectory = options.IntermediateDirectory;
+                var intermediateDirectory = GetIntermediateDirectory(options, logger);
+                // 当前多个不同的框架引用不同的文件还不能支持，因此随意获取一个打包文件夹即可
+                // 为什么？逻辑上不好解决，其次，安装的项目的兼容性无法处理
+                // 安装的项目的兼容性无法处理？源代码包有 net45 框架，项目是 net47 框架，如何让项目能兼容使用到 net45 框架？当前没有此生成逻辑 
+                var sourcePackingFolder = GetCommonSourcePackingFolder(options, logger);
                 var packageOutputPath = options.PackageOutputPath;
                 var packageVersion = options.PackageVersion;
 
-                logger.Message($@"项目文件 {projectFile}
-临时文件{intermediateDirectory}
-输出文件{packageOutputPath}
-版本{packageVersion}
-编译的文件{options.CompileFile}
-资源文件{options.ResourceFile}
-内容{options.ContentFile}
-页面{options.Page}
-SourcePackingDirectory: {options.SourcePackingDirectory}");
+//                logger.Message($@"项目文件 {projectFile}
+//临时文件{intermediateDirectory}
+//输出文件{packageOutputPath}
+//版本{packageVersion}
+//编译的文件{options.CompileFile}
+//资源文件{options.ResourceFile}
+//内容{options.ContentFile}
+//页面{options.Page}
+//SourcePackingDirectory: {options.SourcePackingDirectory}");
 
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
@@ -86,22 +90,31 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     PackageTags = options.PackageTags
                 };
 
-                buildProps.SetSourcePackingDirectory(Path.GetFullPath(options.SourcePackingDirectory));
+                buildProps.SetSourcePackingDirectory(Path.GetFullPath(sourcePackingFolder));
 
-                new Packer(projectFile: projectFile,
+                var packer = new Packer
+                (
+                    projectFile: projectFile,
                     intermediateDirectory: intermediateDirectory,
                     packageOutputPath: packageOutputPath,
                     packageVersion: packageVersion,
-                    compileFile: options.CompileFile,
-                    resourceFile: options.ResourceFile,
-                    contentFile: options.ContentFile,
-                    page: options.Page,
-                    applicationDefinition: options.ApplicationDefinition,
-                    noneFile: options.None,
-                    embeddedResource: options.EmbeddedResource,
+                    // 不再从 options 读取，多个框架的情况下，需要各自获取
+                    //compileFile: options.CompileFile,
+                    //resourceFile: options.ResourceFile,
+                    //contentFile: options.ContentFile,
+                    //page: options.Page,
+                    //applicationDefinition: options.ApplicationDefinition,
+                    //noneFile: options.None,
+                    //embeddedResource: options.EmbeddedResource,
                     packageId: options.PackageId,
                     buildProps: buildProps,
-                    packageReferenceVersion: options.PackageReferenceVersion).Pack();
+                    commonSourcePackingFolder: sourcePackingFolder,
+                    multiTargetingPackageInfoFolder: options.MultiTargetingPackageInfoFolder
+                    // 多框架下，每个框架有自己的引用路径
+                    //packageReferenceVersion: options.PackageReferenceVersion
+                );
+
+                packer.Pack();
             }
             catch (Exception e)
             {
@@ -130,6 +143,61 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
 
                 return "";
             }
+        }
+
+        /// <summary>
+        /// 获取通用的 SourcePacking 文件夹，无视框架版本的不同
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="logger"></param>
+        /// <returns></returns>
+        private static string GetCommonSourcePackingFolder(Options options, Logger logger)
+        {
+            // 获取时，需要判断文件夹是否合法
+
+            var folder = options.MultiTargetingPackageInfoFolder;
+            var packageInfoFile = Directory.GetFiles(folder, "*.txt").FirstOrDefault();
+            if (string.IsNullOrEmpty(packageInfoFile)
+                // 理论上如果 packageInfoFile 不是空，那么文件一定存在
+                || !File.Exists(packageInfoFile))
+            {
+                logger.Error($"Can not find any TargetFramework info file from \"{folder}\"");
+                Exit(-1);
+            }
+
+            var packageInfo = File.ReadAllText(packageInfoFile!);
+            // obj\Debug\net45\SourcePacking\
+            var sourcePackingFolder = packageInfo.Trim('\r', '\n');
+            sourcePackingFolder = Path.GetFullPath(sourcePackingFolder);
+            return sourcePackingFolder;
+        }
+
+        private static string GetIntermediateDirectory(Options options, Logger logger)
+        {
+            // 多框架和单个框架的逻辑不相同
+            var folder = options.MultiTargetingPackageInfoFolder;
+            folder = Path.GetFullPath(folder);
+            const string packageName = "Package";
+
+            if (string.IsNullOrEmpty(options.TargetFrameworks))
+            {
+                // 单个框架的项目
+                var sourcePackingFolder = GetCommonSourcePackingFolder(options,logger);
+                // 预期是输出 obj\Debug\SourcePacking\Package 文件
+                var intermediateFolder = Path.Combine(sourcePackingFolder, packageName);
+                return intermediateFolder;
+            }
+            else
+            {
+                // 多个框架的项目
+                // 输出 obj\Debug\SourceYardMultiTargetingPackageInfoFolder\Package 文件夹
+                return Path.Combine(folder, packageName);
+            }
+        }
+
+        private static void Exit(int code)
+        {
+            Environment.Exit(code);
         }
     }
 }
