@@ -8,10 +8,10 @@ namespace dotnetCampus.SourceYard.Context
     {
         public PackingContext(ILogger logger, string projectFile,
             string projectName, string? packageId, string packageVersion, string packageOutputPath, string packingFolder,
-            PackagedProjectFile packagedProjectFile)
+            PackagedProjectFile packagedProjectFile, string packageReferenceVersion)
         {
             Logger = logger;
-
+          
             ProjectFile = projectFile;
             ProjectFolder = Path.GetDirectoryName(projectFile);
             ProjectName = projectName;
@@ -28,6 +28,7 @@ namespace dotnetCampus.SourceYard.Context
             PackageGuid = projectName.Replace(".", "");
             PackingFolder = packingFolder;
             PackagedProjectFile = packagedProjectFile;
+            PackageReferenceVersion = packageReferenceVersion;
             PackageVersion = packageVersion;
             PackageOutputPath = packageOutputPath;
         }
@@ -60,6 +61,7 @@ namespace dotnetCampus.SourceYard.Context
         public string PackingFolder { get; }
 
         public PackagedProjectFile PackagedProjectFile { get; }
+        public string PackageReferenceVersion { get; }
 
         public BuildProps BuildProps { get; set; } = null!;
     }

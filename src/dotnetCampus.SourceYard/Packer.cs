@@ -23,7 +23,8 @@ namespace dotnetCampus.SourceYard
             string? noneFile,
             string? embeddedResource,
             BuildProps buildProps,
-            string? packageId
+            string? packageId,
+            string? packageReferenceVersion
         )
         {
             Logger = new Logger();
@@ -59,6 +60,7 @@ namespace dotnetCampus.SourceYard
             _intermediateDirectory = Path.GetFullPath(path: intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(path: packageOutputPath);
             _packageVersion = packageVersion;
+            _packageReferenceVersion = Path.GetFullPath(path: packageReferenceVersion);
             BuildProps = buildProps;
             PackageId = packageId;
 
@@ -136,7 +138,8 @@ namespace dotnetCampus.SourceYard
                         _packageVersion,
                         _packageOutputPath,
                         packingFolder,
-                        PackagedProjectFile
+                        PackagedProjectFile,
+                        _packageReferenceVersion
                     )
                     {
                         BuildProps = buildProps,

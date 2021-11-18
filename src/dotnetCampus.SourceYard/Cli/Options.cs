@@ -110,16 +110,10 @@ namespace dotnetCampus.SourceYard.Cli
         public string? PackageReferenceVersion { get; set; }
 
         /// <summary>
-        /// 打包用到的文件夹(区分tfm的部分)
+        /// 打包用到的文件夹
         /// </summary>
         [Option(longName: "SourcePackingDirectory")]
         public string SourcePackingDirectory { get; set; } = null!;
-
-        /// <summary>
-        /// 打包用到的文件夹(不区分tfm的部分)
-        /// </summary>
-        [Option(longName: "PackingDirectory")]
-        public string PackingDirectory { get; set; } = null!;
 
         [Option(longName: "TargetFramework")]
         public string? TargetFramework { get; set; }

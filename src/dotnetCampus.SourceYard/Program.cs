@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace dotnetCampus.SourceYard
     {
         private static void Main(string[] args)
         {
-            //MagicTransformMultiTargetingToFirstTarget(args);
+            MagicTransformMultiTargetingToFirstTarget(args);
 
             CommandLine.Parse(args).AddStandardHandlers()
                 .AddHandler<Options>(RunOptionsAndReturnExitCode)
@@ -70,7 +69,6 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                 var description = ReadFile(options.DescriptionFile);
                 var copyright = ReadFile(options.CopyrightFile);
 
-                bool isMultiTargeting = options.TargetFrameworks != null && !string.IsNullOrEmpty(options.TargetFrameworks.Trim());
                 var buildProps = new BuildProps(logger)
                 {
                     Authors = options.Authors ?? string.Empty,
@@ -85,15 +83,10 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     PackageIconUrl = options.PackageIconUrl,
                     PackageLicenseUrl = options.PackageLicenseUrl,
                     PackageReleaseNotes = options.PackageReleaseNotesFile,
-                    PackageTags = options.PackageTags,
-                    IsMultiTargeting = isMultiTargeting,
-                    TargetFrameworks = isMultiTargeting ?
-                        options.TargetFrameworks.Split(';').Select(x => x.Trim()).ToList() :
-                        new List<string>() { options.TargetFramework.Trim() }
-
+                    PackageTags = options.PackageTags
                 };
 
-                buildProps.SetSourcePackingDirectory(Path.GetFullPath(options.SourcePackingDirectory), Path.GetFullPath(options.PackingDirectory));
+                buildProps.SetSourcePackingDirectory(Path.GetFullPath(options.SourcePackingDirectory));
 
                 new Packer(projectFile: projectFile,
                     intermediateDirectory: intermediateDirectory,
@@ -107,7 +100,8 @@ SourcePackingDirectory: {options.SourcePackingDirectory}");
                     noneFile: options.None,
                     embeddedResource: options.EmbeddedResource,
                     packageId: options.PackageId,
-                    buildProps: buildProps).Pack();
+                    buildProps: buildProps,
+                    packageReferenceVersion: options.PackageReferenceVersion).Pack();
             }
             catch (Exception e)
             {

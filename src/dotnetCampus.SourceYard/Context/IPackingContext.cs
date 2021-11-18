@@ -58,5 +58,6 @@ namespace dotnetCampus.SourceYard.Context
         PackagedProjectFile PackagedProjectFile { get; }
 
         BuildProps BuildProps { get; }
+        string PackageReferenceVersion { get; }
     }
 }

@@ -86,87 +86,34 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = GetDependencies(buildProps.TargetFrameworks, buildProps.PackageReferenceVersionList, buildProps.SourceYardPackageReferenceList, buildProps.SourceYardExcludePackageReferenceList),
-                    FrameworkAssemblies = GetFrameworkAssemblies(buildProps.FrameworkReferenceVersionList),
+                    Dependencies = GetDependencies(context.PackageReferenceVersion, 
+                        buildProps.SourceYardPackageReferenceList,
+                        buildProps.SourceYardExcludePackageReferenceList),
                     Repository = repository
                 }
             };
         }
 
-        private List<NuspecFrameworkAssembly> GetFrameworkAssemblies(Dictionary<string, List<string>> frameworkReferenceList)
+        /// <summary>
+        /// 获取依赖
+        /// </summary>
+        /// <param name="contextPackageVersion">引用的NuGet包于版本号</param>
+        /// <param name="sourceYardPackageReferenceList">源代码包</param>
+        /// <param name="excludePackageReferenceList">排除的依赖</param>
+        /// <returns></returns>
+        private List<NuspecDependency> GetDependencies(string contextPackageVersion,
+            List<string> sourceYardPackageReferenceList, List<string> excludePackageReferenceList)
         {
-            var assemblies = new List<NuspecFrameworkAssembly>();
-            foreach (var item in frameworkReferenceList)
+            var nuspecDependencyList = ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
+
+            // 如果在排除列表就移除
+            if (excludePackageReferenceList.Count > 0)
             {
-                foreach (var assembly in item.Value)
-                {
-                    assemblies.Add(new NuspecFrameworkAssembly()
-                    {
-                        TargetFramework = item.Key,
-                        AssemblyName = assembly
-                    });
-                }
+                var excludeList = new HashSet<string>(excludePackageReferenceList);
+                nuspecDependencyList.RemoveAll(temp => excludeList.Contains(temp.Id));
             }
 
-            return assemblies;
-        }
-
-        private List<NuspecGroup> GetDependencies(List<string> targetFrameworks,
-            Dictionary<string, List<string>> packageReferenceList,
-            Dictionary<string, List<string>> sourceYardPackageReferenceList,
-            Dictionary<string, List<string>> excludePackageReferenceList)
-        {
-            var groups = new List<NuspecGroup>();
-            var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
-
-            foreach (var targetFramework in targetFrameworks)
-            {
-                var group = new NuspecGroup() { TargetFramework = targetFramework };
-                var nuspecDependencyList = new List<NuspecDependency>();
-                foreach (var line in packageReferenceList[targetFramework])
-                {
-                    var match = packageVersionRegex.Match(line);
-                    if (match.Success)
-                    {
-                        var name = match.Groups[1].Value;
-                        var version = match.Groups[2].Value;
-                        var privateAssets = match.Groups[3].Value;
-
-                        // 在源代码包如果项目引用的是 private asset 的库，那么就不应该添加引用
-                        // 因为源代码是没有框架的依赖，对 sdk 带的库也不添加
-
-                        var isPrivateAssetsAll = privateAssets.IndexOf("all", StringComparison.OrdinalIgnoreCase) >= 0;
-                        // net45 没有下面方法
-                        //var isPrivateAssetsAll = privateAssets.Contains("all", comparer);
-
-                        // 解决 https://github.com/dotnet-campus/SourceYard/issues/60
-                        // 即使有某个包标记了使用 private asset 是 All 的，但是这个包是一个源代码包，那么打包的时候就需要添加他的引用依赖
-                        var includeInSourceYardPackageReference =
-                            sourceYardPackageReferenceList[targetFramework].Any(temp =>
-                                temp.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-                        if ((!isPrivateAssetsAll || includeInSourceYardPackageReference)
-                            && !SDKNuget.Contains(name))
-                        {
-                            nuspecDependencyList.Add(new NuspecDependency()
-                            {
-                                Id = name,
-                                Version = version
-                            });
-                        }
-                    }
-                }
-                if (excludePackageReferenceList.Any())
-                {
-                    var excludeList = new HashSet<string>(excludePackageReferenceList[targetFramework]);
-                    nuspecDependencyList.RemoveAll(temp => excludeList.Contains(temp.Id));
-                }
-
-                group.Dependencies = nuspecDependencyList;
-                groups.Add(group);
-            }
-
-            return groups;
+            return nuspecDependencyList;
         }
 
         private List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
