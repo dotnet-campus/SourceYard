@@ -2,6 +2,7 @@
 
 namespace dotnetCampus.SourceYard.Cli
 {
+    [Verb("Pack")]
     internal class Options
     {
         /// <summary>
