@@ -5,12 +5,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <!-- <ItemGroup> -->
-  <!--   <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19375-alpha"> -->
-  <!--     <PrivateAssets>all</PrivateAssets> -->
-  <!--     <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets> -->
-  <!--   </PackageReference> -->
-  <!-- </ItemGroup> -->
+   <ItemGroup> 
+     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19375-alpha"> 
+       <PrivateAssets>all</PrivateAssets> 
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets> 
+     </PackageReference> 
+   </ItemGroup> 
 
 	<!-- <Target Name="GallikufawhaGebalule" AfterTargets="Build"> -->
 	<!-- 	~1~ <Warning Text="PackingDirectory: $(PackingDirectory)" /> @1@ -->
@@ -26,7 +26,7 @@
     <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
   </ItemGroup>
 
-  <Target Name="_SourceYardFrameworkAssets"
+  <!--<Target Name="_SourceYardFrameworkAssets"
           AfterTargets="ResolveReferences">
     <ItemGroup>
       <_TfmSpecificFrameworkAssemblyReferences Include="@(ReferencePath->'%(OriginalItemSpec)')"
@@ -35,7 +35,7 @@
     </ItemGroup>
 
     <Warning Text="$(TargetFramework):@(_TfmSpecificFrameworkAssemblyReferences)"/>
-  </Target>
+  </Target>-->
 
   <ItemGroup>
     <SourceYardExcludeFileItem Include="foo.coin" />
