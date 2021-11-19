@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace dotnetCampus.SourceYard.PackFlow.Nuspec
+namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles.NuspecContexts
 {
     public class NuspecGroup
     {

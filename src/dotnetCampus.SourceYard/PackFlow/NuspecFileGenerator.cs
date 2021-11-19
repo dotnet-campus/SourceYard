@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 using dotnetCampus.SourceYard.Context;
-using dotnetCampus.SourceYard.PackFlow.Nuspec;
+using dotnetCampus.SourceYard.PackFlow.NuspecFiles;
+using dotnetCampus.SourceYard.PackFlow.NuspecFiles.NuspecContexts;
 
 namespace dotnetCampus.SourceYard.PackFlow
 {

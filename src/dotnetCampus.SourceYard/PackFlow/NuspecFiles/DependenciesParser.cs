@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using dotnetCampus.SourceYard.Context;
-using dotnetCampus.SourceYard.PackFlow.Nuspec;
+using dotnetCampus.SourceYard.PackFlow.NuspecFiles.NuspecContexts;
 
-namespace dotnetCampus.SourceYard.PackFlow
+namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles
 {
     static class DependenciesParser
     {
