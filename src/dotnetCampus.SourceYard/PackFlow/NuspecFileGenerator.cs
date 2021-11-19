@@ -101,7 +101,6 @@ namespace dotnetCampus.SourceYard.PackFlow
         /// <returns></returns>
         public static List<NuspecGroup> GetDependencies(IPackingContext context, ILogger logger)
         {
-            _log = logger;
             var nuspecGroups = new List<NuspecGroup>();
 
             foreach (var targetFrameworkPackageInfo in context.MultiTargetingPackageInfo.ValidTargetFrameworkPackageInfoList)
@@ -110,8 +109,9 @@ namespace dotnetCampus.SourceYard.PackFlow
 
                 var packageReferenceVersionFile = Path.Combine(sourcePackingFolder, "PackageReferenceVersionFile.txt");
 
-                var dependencies = GetDependencies(packageReferenceVersionFile, context.BuildProps.SourceYardPackageReferenceList,
-                    context.BuildProps.SourceYardExcludePackageReferenceList);
+                var buildProps = context.BuildProps;
+                var dependencies = GetDependencies(packageReferenceVersionFile, buildProps.SourceYardPackageReferenceList,
+                    buildProps.SourceYardExcludePackageReferenceList,logger);
 
                 nuspecGroups.Add(new NuspecGroup()
                 {
@@ -123,19 +123,18 @@ namespace dotnetCampus.SourceYard.PackFlow
             return nuspecGroups;
         }
 
-        private static ILogger _log;
-
         /// <summary>
         /// 获取依赖
         /// </summary>
         /// <param name="contextPackageVersion">引用的NuGet包于版本号</param>
         /// <param name="sourceYardPackageReferenceList">源代码包</param>
         /// <param name="excludePackageReferenceList">排除的依赖</param>
+        /// <param name="logger"></param>
         /// <returns></returns>
         private static List<NuspecDependency> GetDependencies(string contextPackageVersion,
-            List<string> sourceYardPackageReferenceList, List<string> excludePackageReferenceList)
+            List<string> sourceYardPackageReferenceList, List<string> excludePackageReferenceList, ILogger logger)
         {
-            var nuspecDependencyList = ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList);
+            var nuspecDependencyList = ParserPackageVersion(contextPackageVersion, sourceYardPackageReferenceList, logger);
 
             // 如果在排除列表就移除
             if (excludePackageReferenceList.Count > 0)
@@ -148,7 +147,7 @@ namespace dotnetCampus.SourceYard.PackFlow
         }
 
         private static List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
-            List<string> sourceYardPackageReferenceList)
+            List<string> sourceYardPackageReferenceList, ILogger logger)
         {
             var nuspecDependencyList = new List<NuspecDependency>();
             var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
@@ -189,7 +188,7 @@ namespace dotnetCampus.SourceYard.PackFlow
                     }
                     else
                     {
-                        _log.Warning($"项目所引用的 NuGet 包包含有无法识别的格式，包信息：{line}");
+                        logger.Warning($"项目所引用的 NuGet 包包含有无法识别的格式，包信息：{line}");
                     }
                 }
             }
