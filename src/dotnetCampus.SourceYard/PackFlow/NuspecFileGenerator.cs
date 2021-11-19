@@ -150,7 +150,7 @@ namespace dotnetCampus.SourceYard.PackFlow
             List<string> sourceYardPackageReferenceList, ILogger logger)
         {
             // 包含在 sdk 的库，这些库不应该加入引用
-            string[] SDKNuget = new[]
+            string[] frameworkSDKNugetList = new[]
             {
                 "Microsoft.NETCore.App",
                 "Microsoft.NETCore.Platforms"
@@ -185,7 +185,7 @@ namespace dotnetCampus.SourceYard.PackFlow
                                 temp.Equals(name, StringComparison.OrdinalIgnoreCase));
 
                         if ((!isPrivateAssetsAll || includeInSourceYardPackageReference)
-                            && !SDKNuget.Contains(name))
+                            && !frameworkSDKNugetList.Contains(name))
                         {
                             nuspecDependencyList.Add(new NuspecDependency()
                             {
