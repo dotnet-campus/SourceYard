@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,20 +21,51 @@ namespace dotnetCampus.SourceYard
                 .Run();
         }
 
+        /// <summary>
+        /// 更改命令行传入内容，用于方便接入后续步骤
+        /// </summary>
+        /// <param name="args"></param>
         private static void MagicTransformMultiTargetingToFirstTarget(string[] args)
         {
             var argDict = dotnetCampus.Cli.CommandLine.Parse(args).ToDictionary(
                             x => x.Key,
                             x => x.Value?.FirstOrDefault()?.Trim());
             var targetFrameworks = argDict["TargetFrameworks"];
-            if (targetFrameworks != null && !string.IsNullOrWhiteSpace(argDict["TargetFrameworks"]))
+            if (targetFrameworks != null && !string.IsNullOrWhiteSpace(targetFrameworks))
             {
-                var first = targetFrameworks.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
-                if (!string.IsNullOrWhiteSpace(first))
+                // 这里必须考虑如下情况
+                /*
+                 * <TargetFrameworks>netcoreapp3.1;net45;net6.0</TargetFrameworks>
+                 *
+                 * <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha10" Condition="'$(TargetFramework)'=='net45'">
+                       <PrivateAssets>all</PrivateAssets>
+                       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+                   </PackageReference>
+                 */
+                // 为什么只有 net45 才安装？原因是只有单个框架打包才有此需求
+                // 此时就不合适获取首个，而是应该获取有带打包的
+
+                string? firstTargetFramework = null;
+
+                var multiTargetingPackageInfoFolder = argDict["MultiTargetingPackageInfoFolder"];
+                if (multiTargetingPackageInfoFolder != null && !string.IsNullOrEmpty(multiTargetingPackageInfoFolder) &&
+                    Directory.Exists(multiTargetingPackageInfoFolder))
+                {
+                    var multiTargetingPackageInfo =
+                        new MultiTargetingPackageInfo(new DirectoryInfo(multiTargetingPackageInfoFolder),
+                            targetFrameworks);
+                    firstTargetFramework = multiTargetingPackageInfo.ValidTargetFrameworkPackageInfoList.FirstOrDefault()?.TargetFramework;
+                }
+                if(string.IsNullOrEmpty(firstTargetFramework))
+                {
+                    firstTargetFramework = targetFrameworks.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                }
+
+                if (!string.IsNullOrWhiteSpace(firstTargetFramework))
                 {
                     for (int i = 0; i < args.Length; i++)
                     {
-                        args[i] = args[i].Replace("\\SourcePacking\\", $"\\{first}\\SourcePacking\\");
+                        args[i] = args[i].Replace("\\SourcePacking\\", $"\\{firstTargetFramework}\\SourcePacking\\");
                     }
                 }
             }

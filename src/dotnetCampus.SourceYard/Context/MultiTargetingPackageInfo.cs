@@ -8,8 +8,12 @@ namespace dotnetCampus.SourceYard.Context
     class MultiTargetingPackageInfo
     {
         public MultiTargetingPackageInfo(Options options)
+            : this(new DirectoryInfo(options.MultiTargetingPackageInfoFolder), options.TargetFrameworks)
         {
-            var multiTargetingPackageInfoFolder = new DirectoryInfo(options.MultiTargetingPackageInfoFolder);
+        }
+
+        public MultiTargetingPackageInfo(DirectoryInfo multiTargetingPackageInfoFolder, string? targetFrameworks)
+        {
             MultiTargetingPackageInfoFolder = multiTargetingPackageInfoFolder;
             var folder = multiTargetingPackageInfoFolder.FullName;
             var targetFrameworkPackageInfoList = new List<TargetFrameworkPackageInfo>();
@@ -41,9 +45,9 @@ namespace dotnetCampus.SourceYard.Context
                     return true;
                 }
 
-                if (options.TargetFrameworks != null)
+                if (targetFrameworks != null)
                 {
-                    if (options.TargetFrameworks.Contains(t.TargetFramework) is false)
+                    if (targetFrameworks.Contains(t.TargetFramework) is false)
                     {
                         return true;
                     }
@@ -54,6 +58,7 @@ namespace dotnetCampus.SourceYard.Context
 
             ValidTargetFrameworkPackageInfoList = validTargetFrameworkPackageInfoList;
         }
+
 
         public DirectoryInfo MultiTargetingPackageInfoFolder { get; }
 
