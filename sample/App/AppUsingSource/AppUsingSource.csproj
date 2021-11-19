@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Condition="Exists('obj\AppUsingSource.csproj.nuget.g.props') " Project="obj\AppUsingSource.csproj.nuget.g.props" />
+  <!--<Import Condition="Exists('obj\AppUsingSource.csproj.nuget.g.props') " Project="obj\AppUsingSource.csproj.nuget.g.props" />-->
 
   <PropertyGroup>
     <TargetFrameworks>net45;net5.0</TargetFrameworks>
@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TheLib.Source" Version="1.0.3-alpha05" />
+    <PackageReference Include="TheLib.Source" Version="1.0.3-alpha06" />
   </ItemGroup>
-  <Import Condition="Exists('obj\AppUsingSource.csproj.nuget.g.targets') " Project="obj\AppUsingSource.csproj.nuget.g.targets" />
+  <!--<Import Condition="Exists('obj\AppUsingSource.csproj.nuget.g.targets') " Project="obj\AppUsingSource.csproj.nuget.g.targets" />-->
 </Project>
