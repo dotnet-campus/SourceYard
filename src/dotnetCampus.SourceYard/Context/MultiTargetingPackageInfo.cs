@@ -48,8 +48,12 @@ namespace dotnetCampus.SourceYard.Context
                 if (targetFrameworks != null && string.IsNullOrWhiteSpace(targetFrameworks) is false)
                 {
                     // 对于单框架，也许 targetFrameworks 的值是空字符串
-                    if (targetFrameworks.Contains(t.TargetFramework) is false)
+                    if (!targetFrameworks.Contains(t.TargetFramework))
                     {
+                        // 例外项是什么？如 TargetFrameworks 包含 4.5.1 版本，但是 TargetFramework 是 4.5 版本，此时判断是对的
+                        // 但是这里其实不需要精确判断，有 4.5.1 版本，自然就支持 4.5 和以下
+
+                        // 是否让 TargetFramework 存放空字符串？也许，但是过不了 t.IsValid 的值
                         return true;
                     }
                 }
