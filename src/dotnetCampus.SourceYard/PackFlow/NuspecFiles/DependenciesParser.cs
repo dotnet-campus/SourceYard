@@ -11,11 +11,44 @@ namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles
     static class DependenciesParser
     {
         /// <summary>
+        /// 获取框架依赖内容
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static List<NuspecFrameworkAssembly> GetFrameworkAssemblies(IPackingContext context)
+        {
+            var nuspecFrameworkAssemblies = new List<NuspecFrameworkAssembly>();
+
+            foreach (var targetFrameworkPackageInfo in context.MultiTargetingPackageInfo
+                .ValidTargetFrameworkPackageInfoList)
+            {
+                var sourcePackingFolder = targetFrameworkPackageInfo.SourcePackingFolder.FullName;
+
+                var frameworkReferenceVersionFile = Path.Combine(sourcePackingFolder, "FrameworkReferenceVersionFile.txt");
+
+                if (File.Exists(frameworkReferenceVersionFile))
+                {
+                    foreach (var assembly in File.ReadAllLines(frameworkReferenceVersionFile).Where(t=>!string.IsNullOrWhiteSpace(t)))
+                    {
+                        nuspecFrameworkAssemblies.Add(new NuspecFrameworkAssembly()
+                        {
+                            TargetFramework = targetFrameworkPackageInfo.TargetFramework,
+                            AssemblyName = assembly
+                        });
+                    }
+                }
+            }
+
+            return nuspecFrameworkAssemblies;
+        }
+
+        /// <summary>
         /// 获取依赖内容
         /// </summary>
         /// <returns></returns>
-        public static List<NuspecGroup> GetDependencies(IPackingContext context, ILogger logger)
+        public static List<NuspecGroup> GetDependencies(IPackingContext context)
         {
+            ILogger logger = context.Logger;
             var nuspecGroups = new List<NuspecGroup>();
 
             foreach (var targetFrameworkPackageInfo in context.MultiTargetingPackageInfo.ValidTargetFrameworkPackageInfoList)
@@ -118,5 +151,6 @@ namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles
 
             return nuspecDependencyList;
         }
+
     }
 }

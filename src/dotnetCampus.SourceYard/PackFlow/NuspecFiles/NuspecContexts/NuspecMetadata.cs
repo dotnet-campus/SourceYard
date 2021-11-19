@@ -24,6 +24,10 @@ namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles.NuspecContexts
         [XmlArrayItem(elementName: "group")]
         public List<NuspecGroup> Dependencies { set; get; } = new List<NuspecGroup>();
 
+        [XmlArray(elementName: "frameworkAssemblies", Namespace = "")]
+        [XmlArrayItem(elementName: "frameworkAssembly")]
+        public List<NuspecFrameworkAssembly> FrameworkAssemblies { set; get; } = new List<NuspecFrameworkAssembly>();
+
         [XmlElement("id")] 
         public string? Id { get; set; }
 

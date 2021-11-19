@@ -83,7 +83,8 @@ namespace dotnetCampus.SourceYard.PackFlow
                     PackageLicenseUrl = buildProps.PackageLicenseUrl,
                     PackageTags = buildProps.PackageTags,
                     PackageReleaseNotes = buildProps.PackageReleaseNotes,
-                    Dependencies = DependenciesParser.GetDependencies(context, _log),
+                    Dependencies = DependenciesParser.GetDependencies(context),
+                    FrameworkAssemblies = DependenciesParser.GetFrameworkAssemblies(context),
                     Repository = repository
                 }
             };
