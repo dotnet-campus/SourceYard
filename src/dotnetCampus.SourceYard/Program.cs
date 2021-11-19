@@ -189,6 +189,7 @@ namespace dotnetCampus.SourceYard
         {
             if (string.IsNullOrWhiteSpace(options.MultiTargetingPackageInfoFolder))
             {
+                // 如果多框架是空的字符串或者是空的，为了后续的判断方便，统一设置为空值
                 options.MultiTargetingPackageInfoFolder = null!;
             }
         }
