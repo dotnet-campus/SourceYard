@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net5.0</TargetFrameworks>
+    <TargetFramework>net45</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
    <ItemGroup> 
-     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha10"> 
+     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha11"> 
        <PrivateAssets>all</PrivateAssets> 
        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets> 
      </PackageReference> 
