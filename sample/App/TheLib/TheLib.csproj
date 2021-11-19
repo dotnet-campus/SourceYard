@@ -6,7 +6,7 @@
   </PropertyGroup>
 
    <ItemGroup> 
-     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha03"> 
+     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha04"> 
        <PrivateAssets>all</PrivateAssets> 
        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets> 
      </PackageReference> 
