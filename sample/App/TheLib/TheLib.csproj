@@ -18,7 +18,7 @@
  <!--  </Target> -->
 
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-    <Reference Include="WindowsBase"></Reference>
+    <!-- <Reference Include="WindowsBase"></Reference> -->
 	  <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
