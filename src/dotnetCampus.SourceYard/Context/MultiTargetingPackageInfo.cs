@@ -45,7 +45,7 @@ namespace dotnetCampus.SourceYard.Context
                     return true;
                 }
 
-                if (targetFrameworks != null && string.IsNullOrWhiteSpace(targetFrameworks) is false)
+                if (targetFrameworks != null && !string.IsNullOrWhiteSpace(targetFrameworks))
                 {
                     // 对于单框架，也许 targetFrameworks 的值是空字符串
                     if (!targetFrameworks.Contains(t.TargetFramework))
