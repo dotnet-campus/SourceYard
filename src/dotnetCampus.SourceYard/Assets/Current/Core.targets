@@ -60,6 +60,7 @@
       <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
 
       <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
+      <FrameworkReferenceVersionFile>$(SourcePackingDirectory)FrameworkReferenceVersionFile.txt</FrameworkReferenceVersionFile>
       <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
       <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
 
@@ -160,6 +161,7 @@
     <WriteLinesToFile File="$(SourceProjectPackageFile)" Lines=">;RepositoryUrl;$(RepositoryUrl);"></WriteLinesToFile>
 
     <WriteLinesToFile File="$(PackageReferenceVersionFile)" Lines="@(_PackageReferenceVersion)" Overwrite="true" />
+    <WriteLinesToFile File="$(FrameworkReferenceVersionFile)" Lines="@(_TfmSpecificFrameworkAssemblyReferences)" Overwrite="true"/>
     <WriteLinesToFile File="$(SourceYardPackageReferenceFile)" Lines="$(SourceYardPackageReference)" Overwrite="true"></WriteLinesToFile>
 
     <WriteLinesToFile File="$(SourceYardCompilePackageFile)" Lines="@(_SourceYardCompilePackage)" Overwrite="true"></WriteLinesToFile>
