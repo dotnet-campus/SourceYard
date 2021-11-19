@@ -1,5 +1,13 @@
 # 行为和配置
 
+## 术语
+
+源代码包： 将源代码打包到 NuGet 文件，也就是 SourceYard 工具的输出文件
+
+库项目： 用于打出源代码包的项目
+
+目标项目： 安装上某个源代码包的项目
+
 ## 特殊配置
 
 在 SourceYard 打出的源代码包中，可以通过一些特殊的配置实现源代码包特殊的功能
@@ -19,7 +27,7 @@
   </ItemGroup>
 ```
 
-可以通过设置 DisableSourcePackageAutoPrivateAssets 属性为 true 禁用当前项目全部安装的源代码包自动设置
+可以通过在 `目标项目` 上设置 DisableSourcePackageAutoPrivateAssets 属性为 true 禁用当前项目全部安装的源代码包自动设置
 
 以上的 `#(PackageId)` 就是对应的安装的源代码包，如 `TheLib.Source` 等
 
