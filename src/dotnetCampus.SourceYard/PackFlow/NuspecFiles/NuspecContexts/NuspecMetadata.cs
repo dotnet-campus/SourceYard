@@ -119,11 +119,13 @@ namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles.NuspecContexts
         [XmlElement("SourceYardPackage")]
         public string? SourceYardPackage { set; get; }
 
-        ///// <summary>
-        ///// 通过这个属性可以在安装源代码包的时候默认选 private assets 这样就可以让安装源代码包的项目被引用的时候，引用的项目不需要再安装源代码包
-        ///// </summary>
-        //[XmlElement("developmentDependency")]
-        //public string? DevelopmentDependency { get; set; } = "true";
+        /// <summary>
+        /// 通过这个属性可以在安装源代码包的时候默认选 private assets 这样就可以让安装源代码包的项目被引用的时候，引用的项目不需要再安装源代码包
+        /// </summary>
+        /// 设置DevelopmentDependency时,不单会设置PrivateAssets为all,同时也会将IncludeAssets设置为runtime; build; native; contentfiles; analyzers; buildtransitive,这会导致不会自动去加载源码包使用的其他nuget库
+        /// https://github.com/dotnet-campus/SourceYard/issues/112
+        [XmlElement("developmentDependency")]
+        public string? DevelopmentDependency { get; set; } = "true";
 
         [XmlElement("repository")]
         public Repository? Repository { set; get; }
