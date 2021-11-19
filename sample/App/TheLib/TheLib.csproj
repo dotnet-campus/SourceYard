@@ -6,7 +6,7 @@
   </PropertyGroup>
 
    <ItemGroup> 
-     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha05"> 
+     <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha06"> 
        <PrivateAssets>all</PrivateAssets> 
        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets> 
      </PackageReference> 
@@ -18,7 +18,7 @@
  <!--  </Target> -->
 
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-    <!-- <Reference Include="WindowsBase"></Reference> -->
+    <Reference Include="WindowsBase"></Reference>
 	  <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
