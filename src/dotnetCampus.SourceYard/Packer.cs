@@ -56,7 +56,6 @@ namespace dotnetCampus.SourceYard
             _packageOutputPath = Path.GetFullPath(path: packageOutputPath);
             _packageVersion = packageVersion;
             _multiTargetingPackageInfo = multiTargetingPackageInfo;
-            //_packageReferenceVersion = Path.GetFullPath(path: packageReferenceVersion);
             BuildProps = buildProps;
             PackageId = packageId;
 
