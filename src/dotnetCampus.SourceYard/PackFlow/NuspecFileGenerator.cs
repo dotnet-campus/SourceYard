@@ -149,8 +149,16 @@ namespace dotnetCampus.SourceYard.PackFlow
         private static List<NuspecDependency> ParserPackageVersion(string packageVersionFile,
             List<string> sourceYardPackageReferenceList, ILogger logger)
         {
+            // 包含在 sdk 的库，这些库不应该加入引用
+            string[] SDKNuget = new[]
+            {
+                "Microsoft.NETCore.App",
+                "Microsoft.NETCore.Platforms"
+            };
+
             var nuspecDependencyList = new List<NuspecDependency>();
             var packageVersionRegex = new Regex(@"Name='(\S+)' Version='([\S|\-]+)' PrivateAssets='(\S*)'");
+
             using (var stream = File.OpenText(packageVersionFile))
             {
                 string? line;
@@ -195,14 +203,5 @@ namespace dotnetCampus.SourceYard.PackFlow
 
             return nuspecDependencyList;
         }
-
-        /// <summary>
-        /// 包含在 sdk 的库，这些库不应该加入引用
-        /// </summary>
-        private static string[] SDKNuget { get; } = new[]
-        {
-            "Microsoft.NETCore.App",
-            "Microsoft.NETCore.Platforms"
-        };
     }
 }
