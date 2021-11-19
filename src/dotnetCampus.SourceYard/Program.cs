@@ -79,6 +79,8 @@ namespace dotnetCampus.SourceYard
 #endif
             var logger = new Logger();
 
+            FixOptions(options);
+
             try
             {
                 logger.Message("Source packaging");
@@ -180,6 +182,18 @@ namespace dotnetCampus.SourceYard
         }
 
         /// <summary>
+        /// 兼容修复
+        /// </summary>
+        /// <param name="options"></param>
+        private static void FixOptions(Options options)
+        {
+            if (string.IsNullOrWhiteSpace(options.MultiTargetingPackageInfoFolder))
+            {
+                options.MultiTargetingPackageInfoFolder = null!;
+            }
+        }
+
+        /// <summary>
         /// 获取通用的 SourcePacking 文件夹，无视框架版本的不同
         /// </summary>
         /// <returns></returns>
@@ -212,7 +226,7 @@ namespace dotnetCampus.SourceYard
             folder = Path.GetFullPath(folder);
             const string packageName = "Package";
 
-            if (string.IsNullOrEmpty(options.TargetFrameworks))
+            if (string.IsNullOrWhiteSpace(options.TargetFrameworks))
             {
                 // 单个框架的项目
                 var sourcePackingFolder = GetCommonSourcePackingFolder(multiTargetingPackageInfo, logger);
