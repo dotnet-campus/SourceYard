@@ -15,7 +15,7 @@ namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static List<NuspecFrameworkAssembly> GetFrameworkAssemblies(IPackingContext context)
+        public static List<NuspecFrameworkAssembly>? GetFrameworkAssemblies(IPackingContext context)
         {
             var nuspecFrameworkAssemblies = new List<NuspecFrameworkAssembly>();
 
@@ -37,6 +37,12 @@ namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles
                         });
                     }
                 }
+            }
+
+            if (nuspecFrameworkAssemblies.Count == 0)
+            {
+                // 如果没有任何框架依赖，那么应该啥都不输出
+                return null;
             }
 
             return nuspecFrameworkAssemblies;
