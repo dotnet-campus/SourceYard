@@ -15,19 +15,14 @@ namespace dotnetCampus.SourceYard
             string intermediateDirectory,
             string packageOutputPath,
             string packageVersion,
-            string? compileFile,
-            string? resourceFile,
-            string? contentFile,
-            string? page,
-            string? applicationDefinition,
-            string? noneFile,
-            string? embeddedResource,
-            BuildProps buildProps,
             string? packageId,
-            string? packageReferenceVersion
+            BuildProps buildProps,
+            DirectoryInfo commonSourcePackingFolder,
+            MultiTargetingPackageInfo multiTargetingPackageInfo,
+            Logger logger
         )
         {
-            Logger = new Logger();
+            Logger = logger;
 
             Logger.Message(message: "初始化打包");
 
@@ -60,20 +55,21 @@ namespace dotnetCampus.SourceYard
             _intermediateDirectory = Path.GetFullPath(path: intermediateDirectory);
             _packageOutputPath = Path.GetFullPath(path: packageOutputPath);
             _packageVersion = packageVersion;
-            _packageReferenceVersion = Path.GetFullPath(path: packageReferenceVersion);
+            _multiTargetingPackageInfo = multiTargetingPackageInfo;
             BuildProps = buildProps;
             PackageId = packageId;
 
             PackagedProjectFile = new PackagedProjectFile
             (
-                compileFile: GetFile(file: compileFile),
-                resourceFile: GetFile(file: resourceFile),
-                contentFile: GetFile(file: contentFile),
-                embeddedResource: GetFile(file: embeddedResource),
-                page: GetFile(file: page),
-                applicationDefinition: GetFile(file: applicationDefinition),
-                noneFile: GetFile(file: noneFile),
-                projectFolder: Path.GetDirectoryName(path: _projectFile),
+                commonSourcePackingFolder,
+                //compileFile: GetFile(file: compileFile),
+                //resourceFile: GetFile(file: resourceFile),
+                //contentFile: GetFile(file: contentFile),
+                //embeddedResource: GetFile(file: embeddedResource),
+                //page: GetFile(file: page),
+                //applicationDefinition: GetFile(file: applicationDefinition),
+                //noneFile: GetFile(file: noneFile),
+                projectFolder: Path.GetDirectoryName(path: _projectFile)!,
                 buildProps: buildProps
             );
 
@@ -114,14 +110,7 @@ namespace dotnetCampus.SourceYard
                 return;
             }
 
-            //Directory.Build.props
             var buildProps = BuildProps;
-
-            if (string.IsNullOrWhiteSpace(projectName))
-            {
-                Logger.Error($"无法从 {projectFile} 解析出正确的项目名称。");
-                return;
-            }
 
             IPackFlow? current = null;
             try
@@ -139,7 +128,7 @@ namespace dotnetCampus.SourceYard
                         _packageOutputPath,
                         packingFolder,
                         PackagedProjectFile,
-                        _packageReferenceVersion
+                        _multiTargetingPackageInfo
                     )
                     {
                         BuildProps = buildProps,
@@ -171,16 +160,12 @@ namespace dotnetCampus.SourceYard
         private readonly string _packageOutputPath = null!;
 
         private readonly string _packageVersion = null!;
-        private readonly string _packageReferenceVersion = null!;
+        private readonly MultiTargetingPackageInfo _multiTargetingPackageInfo;
+
         private readonly IPackFlow[] _packers = null!;
 
         private PackagedProjectFile PackagedProjectFile { get; } = null!;
         private BuildProps BuildProps { get; } = null!;
-
-        private static string GetFile(string? file)
-        {
-            return string.IsNullOrWhiteSpace(file) ? "" : Path.GetFullPath(file);
-        }
 
         /// <summary>
         /// 准备一个空白的文件夹用来放文件

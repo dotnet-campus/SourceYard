@@ -10,11 +10,11 @@ namespace dotnetCampus.SourceYard.Cli
         [Option('p', "project", Description = "The full path of the project file.")]
         public string ProjectFile { get; set; } = null!;
 
-        /// <summary>
-        /// 临时的文件夹的路径
-        /// </summary>
-        [Option('i', "intermediate-directory", Description = "The relative path of the project intermediate output path, commonly the 'obj' folder and value in 'obj'.")]
-        public string IntermediateDirectory { get; set; } = null!;
+        ///// <summary>
+        ///// 临时的文件夹的路径
+        ///// </summary>
+        //[Option('i', "intermediate-directory", Description = "The relative path of the project intermediate output path, commonly the 'obj' folder and value in 'obj'.")]
+        //public string IntermediateDirectory { get; set; } = null!;
 
         /// <summary>
         /// 打包输出的文件夹
@@ -30,29 +30,29 @@ namespace dotnetCampus.SourceYard.Cli
             Description = "The package version value.")]
         public string PackageVersion { get; set; } = "1.0.0";
 
-        /// <summary>
-        /// 项目进行编译的文件的列表，因为参数太多，需要将参数写到文件
-        /// </summary>
-        [Option(longName: "Compile", Description = "编译的文件")]
-        public string? CompileFile { get; set; }
+        ///// <summary>
+        ///// 项目进行编译的文件的列表，因为参数太多，需要将参数写到文件
+        ///// </summary>
+        //[Option(longName: "Compile", Description = "编译的文件")]
+        //public string? CompileFile { get; set; }
 
-        /// <summary>
-        /// 存放资源文件参数的文件
-        /// </summary>
-        [Option(longName: "Resource", Description = "资源文件")]
-        public string? ResourceFile { get; set; }
+        ///// <summary>
+        ///// 存放资源文件参数的文件
+        ///// </summary>
+        //[Option(longName: "Resource", Description = "资源文件")]
+        //public string? ResourceFile { get; set; }
 
-        [Option(longName: "Content")]
-        public string? ContentFile { get; set; }
+        //[Option(longName: "Content")]
+        //public string? ContentFile { get; set; }
 
-        [Option(longName: "Page")]
-        public string? Page { get; set; }
+        //[Option(longName: "Page")]
+        //public string? Page { get; set; }
 
-        [Option(longName: "None")]
-        public string? None { get; set; }
+        //[Option(longName: "None")]
+        //public string? None { get; set; }
 
-        [Option(longName: "EmbeddedResource")]
-        public string? EmbeddedResource { get; set; }
+        //[Option(longName: "EmbeddedResource")]
+        //public string? EmbeddedResource { get; set; }
 
         /// <summary>
         /// 打包的公司内容
@@ -82,8 +82,8 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "DescriptionFile")]
         public string? DescriptionFile { get; set; }
 
-        [Option(longName: "ApplicationDefinition")]
-        public string? ApplicationDefinition { get; set; }
+        //[Option(longName: "ApplicationDefinition")]
+        //public string? ApplicationDefinition { get; set; }
 
         [Option(longName: "Owner")]
         public string? Owner { get; set; }
@@ -106,19 +106,25 @@ namespace dotnetCampus.SourceYard.Cli
         [Option(longName: "PackageId")] 
         public string? PackageId { get; set; }
 
-        [Option(longName: "PackageReferenceVersion")]
-        public string? PackageReferenceVersion { get; set; }
+        //[Option(longName: "PackageReferenceVersion")]
+        //public string? PackageReferenceVersion { get; set; }
 
-        /// <summary>
-        /// 打包用到的文件夹
-        /// </summary>
-        [Option(longName: "SourcePackingDirectory")]
-        public string SourcePackingDirectory { get; set; } = null!;
+        ///// <summary>
+        ///// 打包用到的文件夹
+        ///// </summary>
+        //[Option(longName: "SourcePackingDirectory")]
+        //public string SourcePackingDirectory { get; set; } = null!;
 
         [Option(longName: "TargetFramework")]
         public string? TargetFramework { get; set; }
 
         [Option(longName: "TargetFrameworks")]
         public string? TargetFrameworks { get; set; }
+
+        /// <summary>
+        /// 多框架信息存放的文件夹，即使是单框架项目也会存在此文件夹
+        /// </summary>
+        [Option("MultiTargetingPackageInfoFolder")]
+        public string MultiTargetingPackageInfoFolder { set; get; } = null!;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
 
-namespace dotnetCampus.SourceYard.PackFlow.Nuspec
+namespace dotnetCampus.SourceYard.PackFlow.NuspecFiles.NuspecContexts
 {
     [Serializable]
     [XmlType(typeName: "metadata", Namespace = "")]
@@ -21,8 +21,12 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
         public string? Description { set; get; }
 
         [XmlArray(elementName: "dependencies", Namespace = "")]
-        [XmlArrayItem(elementName: "dependency")]
-        public List<NuspecDependency> Dependencies { set; get; } = new List<NuspecDependency>();
+        [XmlArrayItem(elementName: "group")]
+        public List<NuspecGroup> Dependencies { set; get; } = new List<NuspecGroup>();
+
+        [XmlArray(elementName: "frameworkAssemblies", Namespace = "")]
+        [XmlArrayItem(elementName: "frameworkAssembly")]
+        public List<NuspecFrameworkAssembly>? FrameworkAssemblies { set; get; }
 
         [XmlElement("id")] 
         public string? Id { get; set; }
@@ -118,6 +122,8 @@ namespace dotnetCampus.SourceYard.PackFlow.Nuspec
         /// <summary>
         /// 通过这个属性可以在安装源代码包的时候默认选 private assets 这样就可以让安装源代码包的项目被引用的时候，引用的项目不需要再安装源代码包
         /// </summary>
+        /// 设置DevelopmentDependency时,不单会设置PrivateAssets为all,同时也会将IncludeAssets设置为runtime; build; native; contentfiles; analyzers; buildtransitive,这会导致不会自动去加载源码包使用的其他nuget库
+        /// https://github.com/dotnet-campus/SourceYard/issues/112
         [XmlElement("developmentDependency")]
         public string? DevelopmentDependency { get; set; } = "true";
 

@@ -1,5 +1,14 @@
 ﻿<Project>
 
+  <ItemGroup Condition="$(DisableSourcePackageAutoPrivateAssets) != 'true'">
+    <!-- 用于修复设置了 DevelopmentDependency 将不自动添加依赖 -->
+    <!-- 参阅 https://github.com/dotnet-campus/SourceYard/issues/112 -->
+    <PackageReference Update="#(PackageId)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>all</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <PropertyGroup Condition="!$(DefineConstants.Contains('#(PackageGuid)SOURCE_REFERENCE')) ">
     <_#(PackageGuid)ImportInWpfTempProjectDependsOn>
       _#(PackageGuid)IncludeSourceCodes

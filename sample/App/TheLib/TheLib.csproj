@@ -1,16 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworks>net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19370-alpha01">
+    <PackageReference Include="dotnetCampus.SourceYard" Version="0.1.19393-alpha13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <!-- <Target Name="GallikufawhaGebalule" AfterTargets="Build"> -->
+  <!-- 	~1~ <Warning Text="PackingDirectory: $(PackingDirectory)" /> @1@ -->
+  <!-- 	<Warning Text="IntermediateOutputPath: $(IntermediateOutputPath)" /> -->
+  <!--  </Target> -->
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <Reference Include="WindowsBase"></Reference>
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net5.0'">
+    <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
+  </ItemGroup>
+
+  <!--<Target Name="_SourceYardFrameworkAssets"
+          AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <_TfmSpecificFrameworkAssemblyReferences Include="@(ReferencePath->'%(OriginalItemSpec)')"
+                                               Condition="'%(ReferencePath.Pack)' != 'false' AND '%(ReferencePath.ResolvedFrom)' == '{TargetFrameworkDirectory}'">
+      </_TfmSpecificFrameworkAssemblyReferences>
+    </ItemGroup>
+
+    <Warning Text="$(TargetFramework):@(_TfmSpecificFrameworkAssemblyReferences)"/>
+  </Target>-->
 
   <ItemGroup>
     <SourceYardExcludeFileItem Include="foo.coin" />

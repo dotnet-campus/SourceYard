@@ -13,6 +13,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <DevelopmentDependency>true</DevelopmentDependency>
+      
+    <!-- 设置支持的运行时版本，当前 dotnet core 设置为 2.0 是古老的版本，需要通过如下配置让只安装新版本的设备可以运行 -->
+    <!-- [选择要使用哪个 .NET 版本](https://docs.microsoft.com/zh-cn/dotnet/core/versions/selection) -->
+    <!-- 如果缺少所请求的主要版本，则前滚到下一个可用的更高主要版本和最低的次要版本 -->
+    <RollForward>Major</RollForward>
  
     <!-- 因为只把主软件复制过去，依赖的库没有复制，所以不使用这个方法 -->
     <!-- 在下面可以看到使用的是复制整个文件夹 -->
@@ -34,7 +39,7 @@
     <PackageReference Include="dotnetCampus.CommandLine.Source" Version="3.3.0" PrivateAssets="All" />
     <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.6.9" PrivateAssets="All" />
     <PackageReference Include="Walterlv.NullableAttributes.Source" Version="6.0.0" PrivateAssets="All" />
-    <PackageReference Include="dotnetCampus.MSBuildUtils.Source" Version="1.1.0">
+    <PackageReference Include="dotnetCampus.MSBuildUtils.Source" Version="1.1.1-alpha01">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
