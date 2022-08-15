@@ -121,7 +121,7 @@
       <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath)"</SourceMSBuildProjectFullPath>
      
       <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
-      <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
+      <SourcePackageOutputPath Condition="'$(SourcePackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
 
     </PropertyGroup>
 
