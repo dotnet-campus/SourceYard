@@ -106,21 +106,21 @@
 			<SourceYardRepositoryUrl Condition="$(RepositoryUrl) != ''">RepositoryUrl "$(RepositoryUrl)"</SourceYardRepositoryUrl>
             <SourceYardRepositoryType Condition="$(RepositoryType) != ''">RepositoryType "$(RepositoryType)"</SourceYardRepositoryType>
             <SourceYardPackageProjectUrl Condition="$(PackageProjectUrl) != ''">PackageProjectUrl "$(PackageProjectUrl)"</SourceYardPackageProjectUrl>-->
-      <SourceYardPackageLicenseUrl Condition="$(PackageLicenseUrl) != ''">--PackageLicenseUrl "$(PackageLicenseUrl) "</SourceYardPackageLicenseUrl>
+      <SourceYardPackageLicenseUrl Condition="$(PackageLicenseUrl) != ''">--PackageLicenseUrl "$(PackageLicenseUrl)"</SourceYardPackageLicenseUrl>
 
       <SourceYardCopyright Condition="$(Copyright) != ''">--CopyrightFile "$(CopyrightFile)"</SourceYardCopyright>
 
       <SourceYardPackageVersion Condition="$(PackageVersion) != ''">-v $(PackageVersion)</SourceYardPackageVersion>
 
-      <SourceYardDescription Condition="$(Description) != ''">--DescriptionFile "$(DescriptionFile) "</SourceYardDescription>
+      <SourceYardDescription Condition="$(Description) != ''">--DescriptionFile "$(DescriptionFile)"</SourceYardDescription>
 
       <SourceYardTitle Condition="$(Title) != ''">--Title "$(Title)"</SourceYardTitle>
       <SourceYardOwner Condition="$(Owner) != ''">--Owner "$(Owner)"</SourceYardOwner>
-      <SourceYardPackageTags Condition="$(PackageTags) != ''">--PackageTags "$(PackageTags) "</SourceYardPackageTags>
+      <SourceYardPackageTags Condition="$(PackageTags) != ''">--PackageTags "$(PackageTags)"</SourceYardPackageTags>
       <SourceYardPackageReleaseNotes Condition="$(PackageReleaseNotes) != ''"> --PackageReleaseNotesFile $(PackageReleaseNotesFile)</SourceYardPackageReleaseNotes>
-      <SourceYardPackageId Condition="'$(PackageId)' != ''">--PackageId "$(PackageId) "</SourceYardPackageId>
+      <SourceYardPackageId Condition="'$(PackageId)' != ''">--PackageId "$(PackageId)"</SourceYardPackageId>
 
-      <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath) "</SourceMSBuildProjectFullPath>
+      <SourceMSBuildProjectFullPath>-p "$(MSBuildProjectFullPath)"</SourceMSBuildProjectFullPath>
      
       <SourcePackageOutputPath Condition="'$(PackageOutputPath)' != ''">-n "$(PackageOutputPath) "</SourcePackageOutputPath>
       <SourcePackageOutputPath Condition="'$(PackageOutputPath)' == '' and $(OutputPath) != ''">-n "$(OutputPath) "</SourcePackageOutputPath>
