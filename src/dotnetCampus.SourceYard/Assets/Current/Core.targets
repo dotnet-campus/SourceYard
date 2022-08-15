@@ -7,7 +7,8 @@
   <PropertyGroup>
     <!-- 用于给多框架存放各个框架的信息的文件的文件夹，各个框架将会在写入到各自的文件里面 -->
     <!-- 选择 BaseIntermediateOutputPath 是因为开发者可以配置不同的框架采用不同的 obj 文件夹，但是对于不同的框架，大部分都是使用相同的 BaseIntermediateOutputPath 文件夹 -->
-    <_SourceYardMultiTargetingPackageInfoFolder>$(BaseIntermediateOutputPath)$(Configuration)\SourceYardMultiTargetingPackageInfoFolder\</_SourceYardMultiTargetingPackageInfoFolder>
+    <_SourceYardMultiTargetingPackageInfoFolder>$([System.IO.Path]::Combine($(BaseIntermediateOutputPath),$(Configuration),"SourceYardMultiTargetingPackageInfoFolder"))</_SourceYardMultiTargetingPackageInfoFolder>
+   
     <!-- 
 	     输出形式如：
 		       - obj\Debug\SourceYardMultiTargetingPackageInfoFolder\net45.txt
@@ -41,7 +42,7 @@
   <Target Name="SourceYardStep1">
     <PropertyGroup>
       <!-- 用于将各个框架的信息写入的文件 -->
-      <_SourceYardMultiTargetingPackageInfoFile>$(_SourceYardMultiTargetingPackageInfoFolder)$(TargetFramework).txt</_SourceYardMultiTargetingPackageInfoFile>
+      <_SourceYardMultiTargetingPackageInfoFile>$([System.IO.Path]::Combine($(BaseIntermediateOutputPath),$(_SourceYardMultiTargetingPackageInfoFolder),"$(TargetFramework).txt"))</_SourceYardMultiTargetingPackageInfoFile>
 
       <!-- 这里不能使用 $(PackingDirectory) 属性，原因是此属性在未打包时是空 -->
       <!-- 对于多框架来说，这里的 IntermediateOutputPath 路径格式如 obj\Debug\net45\ -->
@@ -75,6 +76,10 @@
       <SourceYardNonePackageFile>$(SourcePackingDirectory)SourceYardNonePackageFile.txt</SourceYardNonePackageFile>
       <SourceYardEmbeddedResourcePackageFile>$(SourcePackingDirectory)SourceYardEmbeddedResourcePackageFile.txt</SourceYardEmbeddedResourcePackageFile>
     </PropertyGroup>
+
+    <Warning Text="_SourceYardMultiTargetingPackageInfoFolder=$(_SourceYardMultiTargetingPackageInfoFolder)"></Warning>
+    <Warning Text="_SourceYardMultiTargetingPackageInfoFile=$(_SourceYardMultiTargetingPackageInfoFile)"></Warning>
+    <Warning Text="SourcePackingDirectory=$(SourcePackingDirectory)"></Warning>
 
     <ItemGroup>
       <!-- 这个 ItemGroup 里面存放的是加入到额外的文件引用里面 -->
