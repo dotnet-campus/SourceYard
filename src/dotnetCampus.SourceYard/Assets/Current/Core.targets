@@ -200,7 +200,7 @@
     </PropertyGroup>
 
     <Exec
-        Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath)  $(SourcePackageOutputPath) $(SourceYardPackageVersion) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot; --MultiTargetingPackageInfoFolder &quot;$(_SourceYardMultiTargetingPackageInfoFolder) &quot;">
+        Command="$(SourceYardApplicationFilePath) $(SourceMSBuildProjectFullPath)  $(SourcePackageOutputPath) $(SourceYardPackageVersion) $(SourceYardAuthors) $(SourceYardRepositoryUrl) $(SourceYardRepositoryType) $(SourceYardPackageProjectUrl) $(SourceYardCopyright) $(SourceYardDescription) $(SourceYardTitle) $(SourceYardPackageLicenseUrl) $(SourceYardPackageReleaseNotes) $(SourceYardPackageTags) $(SourceYardOwner) $(SourceYardPackageId) --TargetFrameworks &quot;$(TargetFrameworks) &quot; --TargetFramework &quot;$(TargetFramework) &quot; --MultiTargetingPackageInfoFolder &quot;$(_SourceYardMultiTargetingPackageInfoFolder)&quot;">
     </Exec>
 
     <Message Text="Finish SourceYardStep3"></Message>
