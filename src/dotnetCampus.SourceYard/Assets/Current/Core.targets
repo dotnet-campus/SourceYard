@@ -42,7 +42,7 @@
   <Target Name="SourceYardStep1">
     <PropertyGroup>
       <!-- 用于将各个框架的信息写入的文件 -->
-      <_SourceYardMultiTargetingPackageInfoFile>$([System.IO.Path]::Combine($(BaseIntermediateOutputPath),$(_SourceYardMultiTargetingPackageInfoFolder),"$(TargetFramework).txt"))</_SourceYardMultiTargetingPackageInfoFile>
+      <_SourceYardMultiTargetingPackageInfoFile>$([System.IO.Path]::Combine($(_SourceYardMultiTargetingPackageInfoFolder),"$(TargetFramework).txt"))</_SourceYardMultiTargetingPackageInfoFile>
 
       <!-- 这里不能使用 $(PackingDirectory) 属性，原因是此属性在未打包时是空 -->
       <!-- 对于多框架来说，这里的 IntermediateOutputPath 路径格式如 obj\Debug\net45\ -->
@@ -76,6 +76,8 @@
       <SourceYardNonePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardNonePackageFile.txt"))</SourceYardNonePackageFile>
       <SourceYardEmbeddedResourcePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardEmbeddedResourcePackageFile.txt"))</SourceYardEmbeddedResourcePackageFile>
     </PropertyGroup>
+
+    <Warning Text="SourceYardMultiTargetingPackageInfoF=$(_SourceYardMultiTargetingPackageInfoFile)"></Warning>
 
     <ItemGroup>
       <!-- 这个 ItemGroup 里面存放的是加入到额外的文件引用里面 -->
