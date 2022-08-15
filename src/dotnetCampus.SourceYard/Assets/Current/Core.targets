@@ -77,8 +77,6 @@
       <SourceYardEmbeddedResourcePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardEmbeddedResourcePackageFile.txt"))</SourceYardEmbeddedResourcePackageFile>
     </PropertyGroup>
 
-    <Warning Text="SourceYardMultiTargetingPackageInfoF=$(_SourceYardMultiTargetingPackageInfoFile)"></Warning>
-
     <ItemGroup>
       <!-- 这个 ItemGroup 里面存放的是加入到额外的文件引用里面 -->
       <!-- 用于支持附加文件功能 -->
