@@ -46,40 +46,36 @@
 
       <!-- 这里不能使用 $(PackingDirectory) 属性，原因是此属性在未打包时是空 -->
       <!-- 对于多框架来说，这里的 IntermediateOutputPath 路径格式如 obj\Debug\net45\ -->
-      <SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</SourcePackingDirectory>
+      <SourcePackingDirectory>$([System.IO.Path]::Combine($(BaseIntermediateOutputPath),$(IntermediateOutputPath),"SourcePacking"))</SourcePackingDirectory>
 
-      <CompileTextFile>$(SourcePackingDirectory)CompileFile.txt</CompileTextFile>
-      <ResourceTextFile>$(SourcePackingDirectory)ResourceFile.txt</ResourceTextFile>
-      <ContentTextFile>$(SourcePackingDirectory)ContentFile.txt</ContentTextFile>
-      <NoneTextFile>$(SourcePackingDirectory)NoneFile.txt</NoneTextFile>
-      <EmbeddedResourceTextFile>$(SourcePackingDirectory)EmbeddedResourceFile.txt</EmbeddedResourceTextFile>
-      <PageTextFile>$(SourcePackingDirectory)PageFile.txt</PageTextFile>
-      <ApplicationDefinitionTextFile>$(SourcePackingDirectory)ApplicationDefinitionFile.txt</ApplicationDefinitionTextFile>
+      <CompileTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"CompileFile.txt"))</CompileTextFile>
+      <ResourceTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"ResourceFile.txt"))</ResourceTextFile>
+      <ContentTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"ContentFile.txt"))</ContentTextFile>
+      <NoneTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"NoneFile.txt"))</NoneTextFile>
+      <EmbeddedResourceTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"EmbeddedResourceFile.txt"))</EmbeddedResourceTextFile>
+      <PageTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"PageFile.txt"))</PageTextFile>
+      <ApplicationDefinitionTextFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"ApplicationDefinitionFile.txt"))</ApplicationDefinitionTextFile>
 
-      <DescriptionFile>$(SourcePackingDirectory)DescriptionFile.txt</DescriptionFile>
-      <CopyrightFile>$(SourcePackingDirectory)CopyrightFile.txt</CopyrightFile>
-      <PackageReleaseNotesFile>$(SourcePackingDirectory)PackageReleaseNotesFile.txt</PackageReleaseNotesFile>
+      <DescriptionFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"DescriptionFile.txt"))</DescriptionFile>
+      <CopyrightFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"CopyrightFile.txt"))</CopyrightFile>
+      <PackageReleaseNotesFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"PackageReleaseNotesFile.txt"))</PackageReleaseNotesFile>
 
-      <PackageReferenceVersionFile>$(SourcePackingDirectory)PackageReferenceVersionFile.txt</PackageReferenceVersionFile>
-      <FrameworkReferenceVersionFile>$(SourcePackingDirectory)FrameworkReferenceVersionFile.txt</FrameworkReferenceVersionFile>
-      <SourceProjectPackageFile>$(SourcePackingDirectory)SourceProjectPackageFile.txt</SourceProjectPackageFile>
-      <SourceYardPackageReferenceFile>$(SourcePackingDirectory)SourceYardPackageReferenceFile.txt</SourceYardPackageReferenceFile>
+      <PackageReferenceVersionFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"PackageReferenceVersionFile.txt"))</PackageReferenceVersionFile>
+      <FrameworkReferenceVersionFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"FrameworkReferenceVersionFile.txt"))</FrameworkReferenceVersionFile>
+      <SourceProjectPackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceProjectPackageFile.txt"))</SourceProjectPackageFile>
+      <SourceYardPackageReferenceFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardPackageReferenceFile.txt"))</SourceYardPackageReferenceFile>
 
       <!-- 表示不要包含的引用依赖列表 -->
-      <SourceYardExcludePackageReferenceFile>$(SourcePackingDirectory)SourceYardExcludePackageReferenceFile.txt</SourceYardExcludePackageReferenceFile>
+      <SourceYardExcludePackageReferenceFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardExcludePackageReferenceFile.txt"))</SourceYardExcludePackageReferenceFile>
       <!-- 表示不要包含的文件列表 -->
-      <SourceYardExcludeFileItemFile>$(SourcePackingDirectory)SourceYardExcludeFileItemFile.txt</SourceYardExcludeFileItemFile>
+      <SourceYardExcludeFileItemFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardExcludeFileItemFile.txt"))</SourceYardExcludeFileItemFile>
 
-      <SourceYardCompilePackageFile>$(SourcePackingDirectory)SourceYardCompilePackageFile.txt</SourceYardCompilePackageFile>
-      <SourceYardResourcePackageFile>$(SourcePackingDirectory)SourceYardResourcePackageFile.txt</SourceYardResourcePackageFile>
-      <SourceYardContentPackageFile>$(SourcePackingDirectory)SourceYardContentPackageFile.txt</SourceYardContentPackageFile>
-      <SourceYardNonePackageFile>$(SourcePackingDirectory)SourceYardNonePackageFile.txt</SourceYardNonePackageFile>
-      <SourceYardEmbeddedResourcePackageFile>$(SourcePackingDirectory)SourceYardEmbeddedResourcePackageFile.txt</SourceYardEmbeddedResourcePackageFile>
+      <SourceYardCompilePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardCompilePackageFile.txt"))</SourceYardCompilePackageFile>
+      <SourceYardResourcePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardResourcePackageFile.txt"))</SourceYardResourcePackageFile>
+      <SourceYardContentPackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardContentPackageFile.txt"))</SourceYardContentPackageFile>
+      <SourceYardNonePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardNonePackageFile.txt"))</SourceYardNonePackageFile>
+      <SourceYardEmbeddedResourcePackageFile>$([System.IO.Path]::Combine($(SourcePackingDirectory),"SourceYardEmbeddedResourcePackageFile.txt"))</SourceYardEmbeddedResourcePackageFile>
     </PropertyGroup>
-
-    <Warning Text="_SourceYardMultiTargetingPackageInfoFolder=$(_SourceYardMultiTargetingPackageInfoFolder)"></Warning>
-    <Warning Text="_SourceYardMultiTargetingPackageInfoFile=$(_SourceYardMultiTargetingPackageInfoFile)"></Warning>
-    <Warning Text="SourcePackingDirectory=$(SourcePackingDirectory)"></Warning>
 
     <ItemGroup>
       <!-- 这个 ItemGroup 里面存放的是加入到额外的文件引用里面 -->
@@ -216,7 +212,7 @@
 
   <Target Name="_SourceYardClean">
     <PropertyGroup>
-      <_SourcePackingDirectory>$(IntermediateOutputPath)SourcePacking\</_SourcePackingDirectory>
+      <_SourcePackingDirectory>$([System.IO.Path]::Combine($(IntermediateOutputPath),"SourcePacking"))</_SourcePackingDirectory>
     </PropertyGroup>
     <RemoveDir Directories="$(_SourcePackingDirectory)" />
   </Target>
