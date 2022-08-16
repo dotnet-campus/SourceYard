@@ -93,6 +93,10 @@ namespace dotnetCampus.SourceYard
                 // 安装的项目的兼容性无法处理？源代码包有 net45 框架，项目是 net47 框架，如何让项目能兼容使用到 net45 框架？当前没有此生成逻辑 
                 var sourcePackingFolder = GetCommonSourcePackingFolder(multiTargetingPackageInfo, logger);
                 var packageOutputPath = options.PackageOutputPath;
+                if (!string.IsNullOrEmpty(packageOutputPath))
+                {
+                    packageOutputPath = packageOutputPath.Trim();
+                }
                 var packageVersion = options.PackageVersion;
 
                 //                logger.Message($@"项目文件 {projectFile}

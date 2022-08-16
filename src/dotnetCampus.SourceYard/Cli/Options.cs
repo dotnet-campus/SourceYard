@@ -7,7 +7,7 @@ namespace dotnetCampus.SourceYard.Cli
         /// <summary>
         /// 项目文件所在的路径
         /// </summary>
-        [Option('p', "project", Description = "The full path of the project file.")]
+        [Option('p', "Project", Description = "The full path of the project file.")]
         public string ProjectFile { get; set; } = null!;
 
         ///// <summary>
@@ -19,13 +19,13 @@ namespace dotnetCampus.SourceYard.Cli
         /// <summary>
         /// 打包输出的文件夹
         /// </summary>
-        [Option('n', "package-output-path", Description = "The package output full path of the project.")]
+        [Option('n', "PackageOutputPath", Description = "The package output full path of the project.")]
         public string PackageOutputPath { get; set; } = null!;
 
         /// <summary>
         /// 当前项目的打包版本
         /// </summary>
-        [Option('v', "package-version",
+        [Option('v', "PackageVersion",
             // 默认不需要加上打包版本
             Description = "The package version value.")]
         public string PackageVersion { get; set; } = "1.0.0";

@@ -43,6 +43,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+
+    <!-- 现在 CI 上没有 .NET Framework 4.5 的支持，需要手动加上 Microsoft.NETFramework.ReferenceAssemblies 才能修复构建。详细请看 https://blog.walterlv.com/post/support-old-netfx-on-vs2022-or-later -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework)=='net45'">
