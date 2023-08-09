@@ -10,6 +10,9 @@
           WPF 临时项目不会 Import NuGet 中的 props 和 targets 可能是 WPF 的 Bug，也可能是刻意如此。
           所以我们通过一个属性开关 `ShouldFixNuGetImportingBugForWpfProjects` 来决定是否修复这个错误。-->
         <ShouldFixNuGetImportingBugForWpfProjects Condition=" '$(ShouldFixNuGetImportingBugForWpfProjects)' == '' ">True</ShouldFixNuGetImportingBugForWpfProjects>
+
+        <!-- 如果在 SDK 里面默认开启了 IncludePackageReferencesDuringMarkupCompilation 选项，意味着 WPF 层已经兼容处理了，这里就不能重复兼容处理，否则将会出现包含了重复的 Compile 项构建失败 -->
+        <ShouldFixNuGetImportingBugForWpfProjects Condition=" '$(IncludePackageReferencesDuringMarkupCompilation)' == 'True' ">False</ShouldFixNuGetImportingBugForWpfProjects>
     </PropertyGroup>
 
     <PropertyGroup>
